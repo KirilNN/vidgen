@@ -1,0 +1,50 @@
+# GPU override for the vidgen compose stack.
+#
+# Apply alongside the base file when running ai-gpu workloads:
+#   docker compose -f docker-compose.yml -f compose.gpu.override.yml \
+#     --profile core --profile ai-gpu up -d
+#
+# Architecture reference: docs/architecture.md §4.2.
+#
+# This file is intentionally a skeleton. Later tickets (T-041 WhisperX,
+# T-070 Ollama large models, F4 video enhancement workers) will uncomment
+# the `deploy.resources.reservations.devices` block on the specific services
+# that need GPUs, swapping each `ai-cpu` image for its `ai-gpu` equivalent.
+#
+# The device reservation syntax below follows the Compose Specification
+# (https://github.com/compose-spec/compose-spec/blob/main/deploy.md#devices):
+#   - capabilities must include `gpu`
+#   - `driver: nvidia` for NVIDIA GPUs; omit/replace for ROCm
+#   - `count: all` requests every visible GPU; use an integer to cap it
+#   - `device_ids: ["0"]` pins a specific GPU
+#
+# Keep this file in sync with the placeholder service names in
+# docker-compose.yml — Compose will error on overrides that target unknown
+# services.
+
+name: vidgen
+
+services:
+  ai-gpu-placeholder:
+    # Uncomment the block below once a real GPU-requiring service replaces
+    # the placeholder. Until then, the override is a no-op so that
+    # `docker compose -f docker-compose.yml -f compose.gpu.override.yml config`
+    # validates cleanly on machines without a GPU runtime.
+    #
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    #
+    # For ROCm hosts, swap the `deploy.resources` block above for direct
+    # device mounts:
+    #
+    # devices:
+    #   - /dev/kfd
+    #   - /dev/dri
+    # group_add:
+    #   - video
+    profiles: [ai-gpu]

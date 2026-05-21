@@ -1,0 +1,97 @@
+# vidgen — Docker Compose stack (scaffold from T-003)
+#
+# This file defines the *profile structure* only. Each profile carries a tiny
+# placeholder service (`busybox`, ~5 MB, multi-arch) running `/bin/true` so
+# that `docker compose --profile <name> config` and `up -d` validate end-to-end
+# before later tickets wire in the real services per docs/architecture.md §4.1.
+#
+# Profiles (architecture.md §4.1):
+#   core      Postgres, Redis, MinIO, Keycloak, Caddy, API, Web  (always on)
+#   media     ffmpeg-worker, mlt-worker, remotion-worker
+#   ai-cpu    whisper-cpu, piper, ollama (small), argos-translate, rembg, lama
+#   ai-gpu    whisperx-gpu, xtts-gpu, sam2, propainter, livepoortrait, vllm
+#   realtime  LiveKit SFU, Hocuspocus, NATS JetStream
+#   obs       Prometheus, Grafana, Loki, Tempo, OpenTelemetry collector
+#   dev       Mailpit, MinIO console, pgAdmin, Temporal Web
+#
+# GPU usage: see compose.gpu.override.yml for the device-reservation skeleton.
+# Run with:
+#   docker compose --env-file .env up -d                       # default (no profile == no services)
+#   docker compose --profile core --profile media --profile ai-cpu up -d
+#   docker compose --profile core --profile ai-gpu -f docker-compose.yml -f compose.gpu.override.yml up -d
+#   docker compose down -v                                     # tear down + remove volumes
+
+name: vidgen
+
+# Named volumes the later real services will mount.
+# Declared now so that the compose file is the single source of truth for
+# durable state. Empty until T-010 (pg_data), T-012 (minio_data), T-017
+# (redis_data), and T-070 (models) wire them in.
+volumes:
+  pg_data:
+  minio_data:
+  models:
+  redis_data:
+
+# Single user-defined bridge network. All services (placeholder or real) join
+# this network so they can reach each other by service name.
+networks:
+  appnet:
+    driver: bridge
+
+# Reusable anchor: the smallest multi-arch no-op container, used as a stand-in
+# until each profile gets real services. `busybox` is ~5 MB, available for
+# linux/amd64, linux/arm64, linux/arm/v7, etc., and `/bin/true` exits 0
+# immediately — perfect for `compose config` validation and a clean `up -d`
+# without consuming resources. (The ticket text suggested `tianon/true`, but
+# that image is amd64-only and breaks the Apple-Silicon developer workflow;
+# busybox preserves the no-op intent on every supported architecture.)
+x-placeholder: &placeholder
+  image: busybox:1.36
+  command: ["true"]
+  restart: "no"
+  networks: [appnet]
+
+services:
+  # --- core ---------------------------------------------------------------
+  core-placeholder:
+    <<: *placeholder
+    container_name: vidgen-core-placeholder
+    profiles: [core]
+
+  # --- media --------------------------------------------------------------
+  media-placeholder:
+    <<: *placeholder
+    container_name: vidgen-media-placeholder
+    profiles: [media]
+
+  # --- ai-cpu -------------------------------------------------------------
+  ai-cpu-placeholder:
+    <<: *placeholder
+    container_name: vidgen-ai-cpu-placeholder
+    profiles: [ai-cpu]
+
+  # --- ai-gpu -------------------------------------------------------------
+  # Real services here will require compose.gpu.override.yml to attach a GPU.
+  ai-gpu-placeholder:
+    <<: *placeholder
+    container_name: vidgen-ai-gpu-placeholder
+    profiles: [ai-gpu]
+
+  # --- realtime ----------------------------------------------------------
+  realtime-placeholder:
+    <<: *placeholder
+    container_name: vidgen-realtime-placeholder
+    profiles: [realtime]
+
+  # --- obs ---------------------------------------------------------------
+  obs-placeholder:
+    <<: *placeholder
+    container_name: vidgen-obs-placeholder
+    profiles: [obs]
+
+  # --- dev ---------------------------------------------------------------
+  dev-placeholder:
+    <<: *placeholder
+    container_name: vidgen-dev-placeholder
+    profiles: [dev]
