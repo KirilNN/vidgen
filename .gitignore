@@ -9,6 +9,9 @@ Thumbs.db
 node_modules/
 dist/
 build/
+.next/
+.turbo/
+*.tsbuildinfo
 coverage/
 __pycache__/
 *.pyc
