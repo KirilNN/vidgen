@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
+import globals from "globals";
 
 export default tseslint.config(
   {
@@ -28,6 +29,15 @@ export default tseslint.config(
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/consistent-type-imports": "warn",
+    },
+  },
+  {
+    // Node-runtime files: scripts/, root config, *.mjs / *.cjs at any level.
+    // Without this, plain JS lints with no-undef tripping on `process`,
+    // `console`, etc.
+    files: ["scripts/**/*.{js,mjs,cjs}", "**/*.config.{js,mjs,cjs}", "*.{js,mjs,cjs}"],
+    languageOptions: {
+      globals: { ...globals.node },
     },
   },
   prettier,

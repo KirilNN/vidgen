@@ -1,12 +1,16 @@
 .DS_Store
 Thumbs.db
 *.log
+# ----- env files (T-004) -----------------------------------------------------
+# Per @vidgen/config conventions, layered .env* files are loaded by
+# dotenv-flow and must never be committed. Only `.env.example` is tracked.
 .env
 .env.*
 !.env.example
 .vscode/
 .idea/
 node_modules/
+.pnpm-store/
 dist/
 build/
 .next/
