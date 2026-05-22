@@ -1,9 +1,17 @@
 {
-  "name": "@vidgen/api",
+  "name": "@vidgen/openapi",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./openapi.yaml": "./openapi.yaml"
+  },
+  "files": [
+    "src",
+    "openapi.yaml"
+  ],
   "scripts": {
     "lint": "eslint src --max-warnings=0",
     "type-check": "tsc --noEmit -p tsconfig.json",
@@ -12,11 +20,11 @@
     "clean": "rm -rf dist .turbo *.tsbuildinfo"
   },
   "dependencies": {
-    "@vidgen/config": "workspace:*",
-    "@vidgen/openapi": "workspace:*"
+    "yaml": "^2.6.1"
   },
   "devDependencies": {
-    "tsx": "^4.19.2",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
 }
