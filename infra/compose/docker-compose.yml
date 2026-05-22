@@ -36,6 +36,10 @@ volumes:
   minio_data:
   models:
   redis_data:
+  # Shared one-shot prep volume so `keycloak-init` (T-013) can hand the
+  # rendered realm import file to the `keycloak` server container without
+  # forcing the server image to know about our env-var conditionals.
+  keycloak_realm:
 
 # Single user-defined bridge network. All services (placeholder or real) join
 # this network so they can reach each other by service name.
@@ -111,6 +115,173 @@ services:
       timeout: 5s
       retries: 20
       start_period: 10s
+
+  # MinIO — S3-compatible object storage (T-012).
+  #
+  # Architecture references:
+  #   - §5.1 — buckets media-raw / media-derived / media-chunks / public
+  #   - §E2  — source media immutable, derivatives rebuildable
+  #            (versioning ON on media-raw)
+  #
+  # Image pinning policy:
+  #   Pin a dated RELEASE tag. MinIO publishes multi-arch (amd64+arm64)
+  #   images per release; this lets Apple-Silicon devs run the same image
+  #   as the server fleet. Renovate/Dependabot can bump.
+  minio:
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    container_name: vidgen-minio
+    profiles: [core]
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-change-me}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-change-me}
+      # Region label, only matters for SDK clients that send it back to us.
+      MINIO_REGION: ${MINIO_REGION:-us-east-1}
+      # Surface the console at /minio/* when behind a reverse proxy (T-014).
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL:-http://localhost:9001}
+    ports:
+      # 9000 = S3 API; 9001 = web console.
+      # The console binding is dev-only — Caddy (T-014) will front it at
+      # https://minio.localhost and the host binding will go away.
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks: [appnet]
+    healthcheck:
+      # The server exposes a cluster-aware /minio/health/live endpoint.
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9000/minio/health/live || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # MinIO bootstrap sidecar (T-012). One-shot: creates the four buckets,
+  # enables versioning on media-raw, attaches the public-read policy.
+  # Exits 0 on success; non-zero on failure (surfaces in `docker compose ps -a`).
+  minio-init:
+    image: minio/mc:RELEASE.2024-11-21T17-21-54Z
+    container_name: vidgen-minio-init
+    profiles: [core]
+    restart: "no"
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_INTERNAL_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-change-me}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-change-me}
+      MINIO_BUCKET_RAW: ${MINIO_BUCKET_RAW:-media-raw}
+      MINIO_BUCKET_DERIVED: ${MINIO_BUCKET_DERIVED:-media-derived}
+      MINIO_BUCKET_CHUNKS: ${MINIO_BUCKET_CHUNKS:-media-chunks}
+      MINIO_BUCKET_PUBLIC: ${MINIO_BUCKET_PUBLIC:-public}
+      MINIO_PUBLIC_POLICY_FILE: /etc/minio/public-readonly.json
+    entrypoint: ["/bin/sh", "/etc/minio/init.sh"]
+    volumes:
+      - ./minio/init.sh:/etc/minio/init.sh:ro
+      - ./minio/public-readonly.json:/etc/minio/public-readonly.json:ro
+    networks: [appnet]
+
+  # Keycloak DB + realm prep sidecar (T-013). One-shot, before keycloak:
+  #   - Creates the dedicated keycloak DB + role inside the T-010 cluster
+  #     (idempotent; the T-010 init scripts only run on first cluster boot
+  #     and would skip an existing pg_data volume).
+  #   - Renders the realm import file to a shared volume, conditionally
+  #     stripping the dev test user when ENV != dev.
+  keycloak-init:
+    image: postgres:16-alpine
+    container_name: vidgen-keycloak-init
+    profiles: [core]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENV: ${ENV:-dev}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_SUPERUSER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_SUPERUSER_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-vidgen}
+      KEYCLOAK_DB_NAME: ${KEYCLOAK_DB_NAME:-keycloak}
+      KEYCLOAK_DB_USER: ${KEYCLOAK_DB_USER:-keycloak}
+      KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-change-me}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-change-me}
+      KEYCLOAK_CLIENT_SECRET_API: ${KEYCLOAK_CLIENT_SECRET_API:-change-me}
+      KEYCLOAK_REALM_SRC: /realm-src/realm-export.json
+      KEYCLOAK_IMPORT_DIR: /shared/realm
+    entrypoint: ["/bin/sh", "/etc/keycloak/init.sh"]
+    volumes:
+      - ./keycloak/init.sh:/etc/keycloak/init.sh:ro
+      - ./keycloak/realm-export.json:/realm-src/realm-export.json:ro
+      - keycloak_realm:/shared/realm
+    networks: [appnet]
+
+  # Keycloak server (T-013). Uses the realm file that keycloak-init wrote
+  # to the shared volume. We deliberately use `start-dev` here — it auto-
+  # configures dev defaults (HTTP-only on 8080, dev cache, etc.) which is
+  # exactly what Mode A wants. The production-mode (`start`) command will
+  # land with T-211 / T-212 alongside the proxy + TLS config.
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    container_name: vidgen-keycloak
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak-init:
+        condition: service_completed_successfully
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: ${KEYCLOAK_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER:-keycloak}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-change-me}
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      # Initial admin credentials, used only on first boot to bootstrap the
+      # master realm superuser. After that the admin is in the DB.
+      # Keycloak 26 renamed the env vars from KEYCLOAK_ADMIN[_PASSWORD] to
+      # KC_BOOTSTRAP_ADMIN_USERNAME/PASSWORD; we pass both for forward and
+      # backward compatibility with operator scripts.
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-change-me}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-change-me}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-change-me}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-change-me}
+      # KEYCLOAK_CLIENT_SECRET_API is not consumed by the server — the
+      # client secret lives in the DB after import. `keycloak-init` is the
+      # one that materializes it into the realm file via jq.
+    command:
+      - "start-dev"
+      - "--import-realm"
+    volumes:
+      - keycloak_realm:/opt/keycloak/data/import:ro
+    ports:
+      # Dev-only host binding; Caddy (T-014) will front this at
+      # https://auth.localhost.
+      - "${KEYCLOAK_HTTP_PORT:-8080}:8080"
+    networks: [appnet]
+    healthcheck:
+      # Keycloak 26 ships UBI-minimal: no curl/wget/nc. Use bash's /dev/tcp
+      # to GET the master-realm discovery doc and check for HTTP 200 in the
+      # response status line. This proves the listener is up and the realm
+      # importer has finished (the smoke script in scripts/keycloak-smoke.sh
+      # makes the stronger assertion that realm `app` and the two clients
+      # also exist).
+      test:
+        - "CMD-SHELL"
+        - "exec 3<>/dev/tcp/localhost/8080 && printf 'GET /realms/master/.well-known/openid-configuration HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n' >&3 && head -1 <&3 | grep -q '200 OK'"
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
 
   # --- media --------------------------------------------------------------
   media-placeholder:
