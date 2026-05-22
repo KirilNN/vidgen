@@ -19,6 +19,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\" --ignore-path .prettierignore",
     "sdk:gen": "bash scripts/gen-sdk.sh",
     "sdk:check": "bash scripts/check-sdk-fresh.sh",
+    "db:migrate": "pnpm --filter @vidgen/api db:migrate",
+    "db:generate": "pnpm --filter @vidgen/api db:generate",
     "clean": "turbo run clean && rm -rf node_modules .turbo",
     "prepare": "node scripts/husky-install.mjs"
   },

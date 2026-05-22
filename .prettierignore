@@ -5,6 +5,10 @@ build
 .turbo
 coverage
 pnpm-lock.yaml
+.pnpm-store
 *.gen.ts
 *.gen.tsx
 docs/
+# drizzle-kit writes these on every `db:generate`; they're machine-generated
+# snapshots / journals and reformatting them creates pointless diffs.
+services/api/migrations/meta/

@@ -9,13 +9,20 @@
     "type-check": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+    "clean": "rm -rf dist .turbo *.tsbuildinfo",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:check": "drizzle-kit check"
   },
   "dependencies": {
     "@vidgen/config": "workspace:*",
-    "@vidgen/openapi": "workspace:*"
+    "@vidgen/openapi": "workspace:*",
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
+    "dotenv-flow": "^4.1.0",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.19.2",
     "vitest": "^2.1.8"
   }

@@ -1,0 +1,500 @@
+Agent completed. agent_id: descript-comparisons, agent_type: research, status: completed, description: Research Descript comparison pages, elapsed: 218s, total_turns: 0, duration: 184s
+
+I now have all data needed. The marketing-video page body is primarily media/visual content rendered dynamically; its static text is confirmed as the pricing/contact CTA captured. All other pages are fully extracted. Here is the complete structured report:
+
+---
+
+# 📋 Descript Competitor Research: Structured Findings Report
+
+---
+
+## SECTION 1 — COMPARE PAGES
+
+---
+
+### 1.1 Descript vs. OpusClip
+**Source:** `https://www.descript.com/compare/descript-vs-opus-clip`
+
+**Positioning headline:** *"Descript is OpusClip plus everything else"* — frames OpusClip as a single-purpose clip tool, Descript as the complete end-to-end workflow platform.
+
+**Key differentiator narrative:** OpusClip only clips; Descript offers pre-production, recording, long-form editing, design, and publishing in one place.
+
+**Feature-by-feature comparison table:**
+
+| Feature | Descript | OpusClip |
+|---|---|---|
+| Processing/month | **30 hours** | 5 hours |
+| AI video clips | ✅ | ✅ |
+| AI video highlight reel | ✅ | ❌ |
+| Video quality | 4K | 4K |
+| Unlimited edit & download | ✅ | ❌ (30-day limit for unsaved projects) |
+| Animated captions | ✅ | ✅ |
+| Fully-powered multi-track editor | ✅ | ❌ |
+| Stock media library | ✅ | ❌ |
+| Studio sound | ✅ | ❌ |
+| Eye contact correction | ✅ | ❌ |
+| Slides → video | ✅ | ❌ |
+| SOC 2 Type II | ✅ | ✅ |
+| GDPR compliant | ✅ | ✅ |
+| SSO/SAML | ✅ | ✅ |
+| SCIM | ✅ | ❌ |
+| Data encryption | **256-bit AES** | 128-bit |
+| User provisioning | ✅ | ❌ |
+| Integrations | ✅ | ❌ |
+| Seat limits | Unlimited | Unlimited |
+| Storage | Unlimited | Unlimited |
+
+**Exclusive Descript advantages vs. OpusClip:** Multi-track editor, stock media library, Studio Sound, eye contact correction, Slides→video, SCIM, stronger encryption (256-bit vs 128-bit), user provisioning, integrations, 6x more processing time, AI highlight reel, no project expiry.
+
+---
+
+### 1.2 Descript vs. Riverside
+**Source:** `https://www.descript.com/compare/descript-vs-riverside`
+
+**Positioning headline:** *"Descript wins out over Riverside"* — acknowledges parity on recording, attacks on editing quality, AI depth, and enterprise controls.
+
+**Key differentiator narrative:** Riverside is recording-first; Descript integrates recording with full text-based editing, AI tools, and a more powerful enterprise tier. Descript is *"the original text-based editor."*
+
+**Feature-by-feature comparison table:**
+
+| Feature | Descript | Riverside |
+|---|---|---|
+| Recording time | **15h (25h Business, unlimited Enterprise)** | 15 hours |
+| Max resolution | 4K | 4K |
+| People per session | 10 | 10 |
+| Progressive uploads per guest | ✅ | ✅ |
+| Separate audio/video tracks per guest | ✅ | ✅ |
+| AI text-to-speech | **All plans** | Pro only |
+| Automatic transcriptions | ✅ | ✅ |
+| Multi-track timeline editor | ✅ | ✅ |
+| Filler word removal | ✅ | ✅ |
+| Blur background | ✅ | ✅ |
+| Green screen background | ✅ | ✅ |
+| Studio sound | ✅ | ❌ |
+| Eye contact correction | ✅ | ❌ |
+| AI speakers | ✅ | ❌ |
+| AI avatars | ✅ | ❌ |
+| Underlord editing | ✅ | ❌ |
+| Slides → video | ✅ | ❌ |
+| SOC 2 Type II | ✅ | ✅ |
+| GDPR compliant | ✅ | ❌ |
+| SSO/SAML | ✅ | ✅ |
+| SCIM | ✅ | ❌ |
+| Data encryption | **256-bit AES** | 128-bit |
+| User provisioning | ✅ | ✅ |
+| Integrations | ✅ | ✅ |
+| Seat limits | Unlimited | **Limited** |
+| Storage | Unlimited | Unlimited |
+| Price (Creator tier) | $24/user/mo | $24/user/mo |
+
+**Exclusive Descript advantages vs. Riverside:** Studio Sound, eye contact correction, AI speakers, AI avatars, Underlord editing assistant, Slides→video, SCIM, GDPR compliance, stronger encryption, unlimited seats, AI text-to-speech on all plans (vs. Pro-only), more recording hours on higher plans.
+
+---
+
+### 1.3 Descript vs. Camtasia
+**Source:** `https://www.descript.com/compare/descript-vs-camtasia`
+
+**Positioning headline:** *"Descript helps you make video fast and in the cloud. Camtasia doesn't."* — targets enterprise video production teams for whom version control, cloud collaboration, and scale are critical.
+
+**Key differentiator narrative:** Camtasia is desktop/local; Descript is cloud-native. Three specific attack vectors: translation (20+ languages vs. 7), AI clips for microlearning/social, cloud hosting with auto-updating embedded links.
+
+**Feature-by-feature comparison table:**
+
+| Feature | Descript | Camtasia + Audiate |
+|---|---|---|
+| Text-based editing | ✅ | ✅ |
+| Translation | **20+ languages** | 7 languages |
+| AI clips | ✅ | ❌ |
+| Smart transitions | ✅ | ❌ |
+| Custom layouts | ✅ | ✅ |
+| Slides → video | ✅ | ❌ |
+| Instant sharing with a link | ✅ | ❌ |
+| Eye contact correction | ✅ | ❌ |
+| Simultaneous editing support | ✅ | ❌ |
+| Easy, web-based login | ✅ | ❌ |
+| Studio sound | ✅ | ❌ |
+| SOC 2 Type II | ✅ | ❌ |
+| GDPR compliant | ✅ | ✅ |
+| SSO/SAML | ✅ | ❌ |
+| SCIM | ✅ | ❌ |
+| Data encryption | **256-bit AES (cloud)** | Local only |
+| User provisioning | ✅ | ❌ |
+| Integrations | ✅ | ❌ |
+| Seat limits | Unlimited | N/A |
+| Storage | Unlimited | Local only |
+
+**Exclusive Descript advantages vs. Camtasia:** Virtually every enterprise/cloud feature — SOC 2, SSO/SAML, SCIM, cloud storage, collaborative editing, smart transitions, AI clips, eye contact, cloud hosting with live-update embeds, Slides→video, far broader translation coverage.
+
+**Notable Descript claim:** *"We also cost the same"* — direct price parity assertion.
+
+---
+
+### 1.4 Descript vs. Google Vids
+**Source:** `https://www.descript.com/compare/descript-vs-google-vids`
+
+**Positioning headline:** *"Make video at a scale that Google Vids just can't"* — frames Google Vids as limited and lacking AI depth.
+
+**Key differentiator narrative:** Google Vids lacks transcription, text-based editing, AI-assisted editing, voice cloning, and translation entirely. Descript at $24/mo delivers far more for the same or less cost.
+
+**Feature-by-feature comparison table:**
+
+| Feature | Descript | Google Vids |
+|---|---|---|
+| Transcription | ✅ | ❌ |
+| Text-based editing | ✅ | ❌ |
+| Translation | ✅ | ❌ |
+| AI-assisted editing | ✅ | ❌ |
+| Voice clone | ✅ | ❌ |
+| Layouts | ✅ | ✅ |
+| Slides → video | ✅ | Limited |
+| Stock media library | ✅ | ✅ |
+| Multi-track timeline editor | ✅ | ✅ |
+| Studio sound | ✅ | ❌ |
+| SOC 2 Type II | ✅ | ✅ |
+| GDPR compliant | ✅ | ✅ |
+| SSO/SAML | ✅ | ✅ |
+| SCIM | ✅ | ✅ |
+| Data encryption | 256-bit AES | 256-bit AES |
+| User provisioning | ✅ | ✅ |
+| Integrations | ✅ | ✅ |
+| Seat limits | Unlimited | Unlimited |
+| Storage | Unlimited | Unlimited |
+
+**Key insight:** Google Vids matches Descript on enterprise security tier — both have SOC 2, GDPR, SSO/SAML, SCIM, and 256-bit AES. Descript's attack is entirely on AI capability: transcription, text-based editing, AI editing, voice clone, and translation are all exclusive to Descript.
+
+---
+
+### 1.5 Descript vs. Canva
+**Source:** `https://www.descript.com/compare/descript-vs-canva`
+
+**Positioning headline:** *"Canva turns design templates into quick videos. Descript makes complex video editing simple."*
+
+**Key differentiator narrative:** Canva is a design tool bolted onto video; Descript is a video-native editing platform. Canva offers only "text overlays and old-fashioned timeline editing." Descript's AI voice clone (for fixing mistakes without re-recording) is highlighted as the killer differentiator.
+
+**Feature-by-feature comparison table:**
+
+| Feature | Descript | Canva |
+|---|---|---|
+| Recording | ✅ | ❌ |
+| Max resolution | 4K | 4K |
+| Cloud-based video | ✅ | ✅ |
+| Free shareable links | ✅ | ✅ |
+| Remote recording capabilities | ✅ | ❌ |
+| Multi-track timeline editing | ✅ | Basic only |
+| Automatic transcriptions | ✅ | ❌ |
+| AI audio enhancement | ✅ | ❌ |
+| Filler word removal | ✅ | ❌ |
+| Eye contact correction | ✅ | ❌ |
+| Overdub (generative audio) | ✅ | ❌ |
+| Green screen background | ✅ | ✅ |
+| Stock media library | ✅ | ✅ |
+| Design templates | ✅ | ✅ |
+| Slides → video | ✅ | ❌ |
+| Brand kit/consistency | ✅ | ✅ |
+| Comments & collaboration | ✅ | ✅ |
+| Underlord editing | ✅ | ❌ |
+| SOC 2 Type II | ✅ | ✅ |
+| GDPR compliant | ✅ | ✅ |
+| SSO/SAML | ✅ | ✅ |
+| SCIM | ✅ | ✅ |
+| Data encryption | 256-bit AES | 256-bit AES |
+| User provisioning | ✅ | ✅ |
+| Integrations | ✅ | ✅ |
+| Seat limits | Unlimited | Unlimited |
+| Storage | Unlimited | Unlimited |
+
+**Key insight:** Canva matches Descript on all enterprise/security features. Descript's advantage is entirely on video production depth: recording capability, remote recording, transcription, AI audio, filler word removal, eye contact correction, voice cloning (Overdub), Slides→video, and Underlord AI editing.
+
+---
+
+## SECTION 2 — USE-CASE PAGES
+
+---
+
+### 2.1 Marketing Video
+**Source:** `https://www.descript.com/use-case/marketing-video`
+
+**Headline:** *"Make good marketing video. Make it fast."*
+**Tagline:** Record, edit, and share product launch or feature release video — single person using AI-powered, text-based editing.
+
+**Capabilities recommended:**
+- AI-powered text-based editing (no video expertise required)
+- Record → edit → share in one tool
+- AI tools for fast turnaround
+- Brand Studio (team-wide access to custom layouts, fonts, colors, logo)
+- Translation and dubbing in **30+ languages** (Business plan)
+- AI credits for content generation
+- Custom avatars (photo upload or text prompt — Business plan)
+
+**Workflow described:** Implicitly record → edit via transcript → brand → share/embed link. The page is visually heavy and the detailed feature callout copy is JS-rendered, but the pricing tiers surfaced confirm the key workflows.
+
+**Enterprise/team note:** *"Teams of 10+ get enterprise-level security and dedicated account support."*
+
+---
+
+### 2.2 Webinar Recording
+**Source:** `https://www.descript.com/use-case/webinar-recording`
+
+**Headline:** *"Give your webinar some staying power"*
+**Core pitch:** Turn raw webinar recordings into polished, shareable/embeddable video.
+
+**Workflow described:** Import recording → Underlord AI cleans up audio and edits content → apply custom branded layouts → share/embed via instant link (with auto-update on any edit).
+
+**Key feature callouts:**
+1. **Underlord AI editing** — removes ums/uhs, edits rambling/digressions, perfects audio quality
+2. **Custom layouts with Brand Studio** — brand colors, fonts, logo; title cards and end cards; team-wide consistency
+3. **Instant share/embed link** — changes auto-propagate everywhere the video is embedded; no need to re-upload or change the URL
+
+---
+
+### 2.3 Tutorial Video
+**Source:** `https://www.descript.com/use-case/tutorial-video`
+
+**Headline:** *"Make tutorial videos, quickly and easily"*
+
+**Workflow described:** Record in Descript → auto-transcription → edit by editing text → add screen annotations → apply brand layouts → translate/dub for global audiences.
+
+**Key feature callouts:**
+1. **Arrows, circles, underlines, zooms, pans** — click-and-drag annotation shapes to direct viewer attention
+2. **Custom layouts with Brand Studio** — brand consistency across all tutorial content; team access
+3. **Translation (30+ languages)** — caption translation OR full AI audio dubbing to reach global learners
+
+---
+
+### 2.4 Product Demo
+**Source:** `https://www.descript.com/use-case/product-demo`
+
+**Headline:** *"If you can type, you can make product demo videos"*
+
+**Workflow described:** Record screen + webcam in Descript → auto-transcript → text-based editing → arrange visuals using "Scenes" (slide-deck metaphor) → brand with custom layouts → add AI translation for global reach.
+
+**Key feature callouts:**
+1. **Screen + self recording in one tool** — no separate recorder needed
+2. **Scenes** — visual arrangement like a slide deck, within the editor
+3. **Brand Studio** — custom logos, fonts, colors applied per video; team-wide consistency
+4. **AI translation + dubbing** — 30+ languages for global audience reach
+
+---
+
+### 2.5 Educational Video
+**Source:** `https://www.descript.com/use-case/educational-video`
+
+**Headline:** *"Make better training video, faster, with AI"*
+
+**Workflow described:** Create canvas layouts (slide-deck style) → record → Underlord first-pass AI edit (filler words, retakes, audio) → add B-roll from stock library → share/embed with auto-updating link.
+
+**Key feature callouts:**
+1. **Canvas editor (Scenes/Slides metaphor)** — create training content like a slide deck with animations and dynamic elements; more engaging than static slide presentations
+2. **Underlord AI first-pass edit** — auto-removes filler words, retakes, enhances audio ("sounds like you recorded in a studio")
+3. **Stock media library** — millions of videos, background music, sound effects, GIFs; animated arrows and circles for callouts
+4. **Auto-updating embed link** — publish once; edits (e.g., when product changes) propagate everywhere automatically
+
+---
+
+### 2.6 Case Studies
+**Source:** `https://www.descript.com/use-case/case-studies`
+
+**Headline:** *"Actually-good case study videos, actually made by you"*
+
+**Workflow described:** Record customer conversation in Descript Rooms → auto-transcript → text-based editing to shape narrative → Underlord AI audio cleanup → apply branded layout → share.
+
+**Key feature callouts:**
+1. **Descript Rooms** — crystal-clear recording with automatic backup; recording is immediately available in Descript post-session, transcribed and ready to edit
+2. **Text-based editing for narrative shaping** — edit transcript to structure the customer success story; no technical expertise required
+3. **Underlord AI** — removes ums/uhs, enhances audio for professional quality in a few clicks
+4. **Brand Studio / custom layouts** — built on canvas like a slide; saved for reuse; team-wide consistency
+
+---
+
+## SECTION 3 — ENTERPRISE, SECURITY & SOLUTIONS PAGES
+
+---
+
+### 3.1 Enterprise
+**Source:** `https://www.descript.com/enterprise`
+
+**Headline:** *"Scale your video production, not your team"*
+**Claimed uplift:** *"2.5x more video output"* with enterprise access to Descript's AI-powered editing.
+
+**Enterprise use cases promoted:**
+- Sales enablement
+- Customer support (how-to/tutorial videos; update by typing when product changes)
+- Marketing (webinar recordings, demo videos, social clips)
+- Learning & development (training videos)
+- Sales (custom product demos, pitch videos)
+- Customer success (onboarding + product training)
+
+**Enterprise-exclusive features (explicitly labeled "Enterprise only"):**
+
+| Feature | Details |
+|---|---|
+| **AI Avatars** | Realistic AI avatars from Descript's gallery or uploaded photo; create full videos by typing; **Enterprise plan only** |
+| **Custom Models (Underlord trained on your content)** | AI assistant trained on company's best work — scripts, clip-finding, social posts. **Enterprise only** |
+| **AI translation** | Native-sounding AI voices in **30+ languages** |
+
+**Enterprise plan features (from pricing module):**
+- Advanced Security + SSO/SCIM
+- Granular brand controls
+- Custom AI credits
+- Custom media minutes
+- **Custom legal terms**
+- Custom AI Controls
+- Flexible licensing model
+- Flexible billing
+
+---
+
+### 3.2 Security
+**Source:** `https://www.descript.com/security`
+
+**Headline:** *"Security and privacy at Descript"*
+
+**Compliance certifications explicitly stated:**
+- ✅ **SOC 2** (aligned with SOC 2 standards and guidelines — note: comparison pages say "SOC 2 Type II")
+- ✅ **GDPR** compliant
+- ✅ **CCPA** compliant
+- ✅ **Privacy by Design** framework
+
+**⚠️ Notable absence:** No mention of HIPAA compliance anywhere on the security page.
+
+**Data security details:**
+
+| Area | Detail |
+|---|---|
+| **Data at rest** | AES-256 encryption |
+| **Data in transit** | HTTPS with TLS 1.2 |
+| **Secret management** | Encrypted storage from Google and Amazon; MFA required for employees on all critical systems |
+| **Physical security** | Formal plan approved by leadership; dedicated designated manager; locked-door office access control |
+| **AI security** | All AI features are **opt-in**; AI voices require **user consent**; Descript does **not** auto-collect data from user systems; AI behavior tested + monitored; annual security reviews + vulnerability scans |
+| **Vulnerability scanning** | Formal process; continuous scanning; vulnerabilities prioritized as critical/high/medium/low with defined resolution timelines |
+
+**Trust report:** Descript advertises a publicly-viewable trust report (linked from the security page) where enterprise prospects can search specific compliance requirements and request further details.
+
+**No mention of:** Data residency options, specific cloud infrastructure provider (beyond Google/Amazon secret management), HIPAA, ISO 27001, or FedRAMP.
+
+---
+
+### 3.3 Customers Page
+**Source:** `https://www.descript.com/customers`
+
+**Note:** This page is heavily JavaScript-rendered; static content was minimal. The page tagline: *"Every day, people use Descript—at work, at home, in places they'd prefer not to tell us about—to create content. These are their stories."*
+
+The page serves as a customer story/case study index. Named enterprise clients visible from the **Media team page** (see 3.5 below) include: BBC, New York Times, NPR, Vox, Reuters.
+
+---
+
+### 3.4 Teams: Media
+**Source:** `https://www.descript.com/teams/media`
+
+**Headline:** *"Built for digital newsrooms moving at newsroom speed"*
+
+**Named customers:** BBC, New York Times, NPR, Vox, Reuters
+
+**Positioning:** Enables reporters, editors, and producers to self-serve — create podcasts, video, and social clips — **without waiting on a central production team.**
+
+**Key capability callouts for media/newsrooms:**
+
+1. **Distributed reporter-driven workflows** — *"Stories ship when the reporter is ready — not when production is free"* — Underlord acts as AI co-editor; takes product shots and screen recordings → finished polished video, directed by the reporter
+
+2. **One-edit, multi-format output** — *"A correspondent files a story from Berlin. By tomorrow, it's a podcast, a YouTube explainer, and three social clips — all from the same edit."*
+
+3. **Newsroom-quality audio without audio engineers** — Studio Sound cleans field recordings and press conferences; transcript-based editing catches every quote; described as *"editorial rigor without Avid-level infrastructure"*
+
+**Workflow described:** Reporter records → Underlord auto-edits → one edit repurposed into podcast + YouTube video + social clips → Studio Sound applied for audio quality.
+
+---
+
+### 3.5 Teams: Tech
+**Source:** `https://www.descript.com/teams/tech`
+
+**Headline:** *"Make video at the speed of GTM"*
+**Use cases called out:** Demos, launches, podcasts, customer stories
+
+**Core positioning:** Eliminates bottlenecks of team capacity, production expertise, and time as reasons tech companies avoid video.
+
+**Workflow described (3 stages):**
+1. **GTM creates, creative polishes** — Marketing teams make v1s via text-based editing; creative/brand team handles final polish and brand review (handoff model)
+2. **Product video → full campaign** — One product video spun out into sales enablement assets, website clips, and social content with no duplicated effort
+3. **Keep brand standard while shipping at product speed** — Descript + Brand Studio allows marketing to match product release cadence without compromising brand quality
+
+---
+
+### 3.6 Enterprise: Learning & Development
+**Source:** `https://www.descript.com/enterprise/learning-and-development`
+
+**Headline:** *"Scale your training program with video"*
+
+**Core pitch:** Text-based editing + AI means L&D teams focus on learning objectives, not production mechanics. Reshoots become a relic of the past.
+
+**Key feature callouts:**
+
+| Feature | Description |
+|---|---|
+| **Text-based editing** | Policy/content changes handled by editing text, not re-recording and re-editing timelines |
+| **AI avatars** | On-camera-avoidance + multilingual delivery in **20+ languages**; no presenter required |
+| **Built-in screen recorder** | Update screen recordings easily; Scenes structure lets you update only what changed |
+| **Eye contact correction** | Trainers can read a script while recording; AI makes it appear they maintained eye contact |
+| **Studio Sound** | Removes background noise, echo; enhances voice clarity; no microphone or soundproofing required |
+| **Easy branding with layouts** | Custom layouts with logos, fonts, colors; applied in one click per video; team-wide Brand Studio access |
+| **Collaborative commenting** | Share link → stakeholders comment directly in the transcript; no video export needed for reviews |
+| **Cloud-hosted video + auto-updating URL** | Publish updates; the URL stays the same; embedded videos auto-update |
+| **Brand Studio** | Central hub for brand assets; no emailing for font files |
+| **Zoom import** | Import webinars directly from Zoom; ready to edit in seconds; auto-nix filler words and silences |
+| **Translation** | AI voices in **30+ languages** for global training delivery |
+
+**Workflow described:** Record (or import from Zoom) → Underlord first-pass AI edit (filler words, silence, audio) → apply branded layout → review via transcript comments → publish with cloud link (edits auto-propagate).
+
+---
+
+## SECTION 4 — CROSS-CUTTING OBSERVATIONS
+
+### 4.1 Descript's Consistent Competitive Moat Claims
+
+The following features appear as Descript-exclusive across **all 5 compare pages** and **all use-case pages**:
+
+| Core Differentiator | Present in |
+|---|---|
+| **Text-based editing** (Descript-invented) | All compare pages, all use-case pages |
+| **Underlord AI editing assistant** | All compare pages, all use-case pages |
+| **Studio Sound** | vs. OpusClip, Riverside, Camtasia, Google Vids |
+| **Eye contact correction** | vs. OpusClip, Riverside, Camtasia, Canva |
+| **Slides → video** | All 5 compare pages |
+| **SCIM provisioning** | vs. OpusClip, Riverside, Camtasia |
+| **256-bit AES encryption** (vs. competitors' 128-bit) | vs. OpusClip, Riverside |
+| **AI translation (20–30+ languages)** | vs. Camtasia (7 langs), Google Vids (none), OpusClip (none) |
+| **AI voice clone / Overdub** | vs. Canva, Google Vids |
+| **AI avatars** | vs. Riverside |
+| **Brand Studio** | All use-case pages |
+| **Cloud hosting + auto-updating embed links** | vs. Camtasia, across use-case pages |
+
+### 4.2 Security Posture Summary
+
+| Certification/Feature | Status |
+|---|---|
+| SOC 2 Type II | ✅ Confirmed |
+| GDPR | ✅ Confirmed |
+| CCPA | ✅ Confirmed |
+| Privacy by Design | ✅ Confirmed |
+| Data at rest encryption | AES-256 |
+| Data in transit encryption | HTTPS / TLS 1.2 |
+| SSO/SAML | ✅ (Enterprise plan) |
+| SCIM | ✅ (Enterprise plan) |
+| User provisioning | ✅ (Enterprise plan) |
+| Custom legal terms | ✅ (Enterprise plan) |
+| AI opt-in controls | ✅ |
+| Trust report (public) | ✅ Available |
+| HIPAA | ❌ Not mentioned anywhere |
+| ISO 27001 | ❌ Not mentioned |
+| FedRAMP | ❌ Not mentioned |
+| Data residency options | ❌ Not mentioned |
+| Pen test reports | ❌ Not mentioned (only "vulnerability scans" referenced) |
+
+### 4.3 Gaps & Uncertainties
+
+- **Marketing-video page body content** is heavily JS-rendered; feature callouts in the hero section were not accessible as static text. Content confirmed from meta description and pricing CTAs only. The page appears similar in structure to the other use-case pages based on pricing section.
+- **Customers page** is entirely JS-rendered; no individual customer stories, logos, or specific data points were accessible. Named enterprise clients (BBC, NYT, NPR, Vox, Reuters) are confirmed from the `/teams/media` page.
+- **Language count inconsistency:** The Enterprise page and L&D page reference **30+ languages** in some sections and **20+ languages** in others — appears to be a site copy inconsistency, likely 30+ is the current accurate figure.
+- **HIPAA absence** is notable given enterprise healthcare interest; not claimed anywhere across all 17 pages.
+- **Pricing figures** for Enterprise are not disclosed (custom only); $24/user/month is the stated Creator/Business comparable price point used in the Riverside and Google Vids comparisons.
+- **"2.5x more video output"** claim on the Enterprise page has no citation or methodology shown on the page.
+- **AI model provenance** (whose LLMs power Underlord, transcription, translation) is not disclosed on any of the 17 pages.

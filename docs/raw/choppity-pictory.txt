@@ -1,0 +1,628 @@
+Agent completed. agent_id: choppity-pictory, agent_type: research, status: completed, description: Research Choppity and Pictory, elapsed: 330s, total_turns: 0, duration: 322s
+
+I now have exhaustive data from both products. Let me compile the comprehensive structured report.
+
+---
+
+# 🔬 DEEP COMPETITOR RESEARCH REPORT
+
+## PRODUCT A: CHOPPITY (choppity.com)
+
+---
+
+### 1. Identity & Positioning
+
+| Field | Data |
+|---|---|
+| **Product name** | Choppity |
+| **Tagline** | "Turn podcasts and long-form videos into 30+ short viral clips with AI" |
+| **Primary value prop** | AI-powered short-form clip generation for social media — automates transcription, clipping, framing, captioning, and publishing from long-form video |
+| **Company** | Mizko Media Pty Ltd (revealed in Privacy Policy) |
+| **Funding** | 100% bootstrapped — explicitly stated: "No venture capital. No growth-at-all-costs playbook." |
+| **Founder** | Michael Wong — YouTuber with 215K YouTube subscribers, 400K total cross-platform following |
+| **Location** | UK + US data storage (per privacy policy); appears UK-based |
+| **Named customers / testimonials** | AutoTrader (Callum B., Product Lead), SmartLead.ai (Vaibhav, Founder), EfficientApp (Alex B., YouTuber/Founder), AwesomeCast (Tech Podcast) |
+| **Stats cited** | 100,000+ users worldwide; 800K+ clips created; 200K+ hours saved |
+| **Review score** | Not prominently cited |
+
+---
+
+### 2. Feature Catalog (Exhaustive)
+
+**Core AI Video Editing Features:**
+
+| Feature | Description | Technical Details |
+|---|---|---|
+| **Short Clips Generator** | AI scans long-form video for high-impact moments (jokes, hooks, insights, reactions) and auto-generates 20–50+ short clips | Semantic understanding, emotional cues, relevancy scoring |
+| **Find Specific Moments** | Natural-language search over transcript to locate keywords, topics, emotions, reactions | Relevancy percentage score per result; searches entire video end-to-end |
+| **AI Video Editor** | Full-pipeline auto-editing: transcription → clipping → framing → captions → formatting | No timeline needed; 5–15 min processing per hour of video |
+| **ClipAnything (Keyword Search & Clip)** | Type a phrase, jump to exact moment, 1-click clip generation | Branded "Magic Reframe™" for auto-framing the resulting clip |
+| **Transcript-Based Editing** | Delete/edit words in transcript → video cuts itself automatically; captions update in real time | Can also insert B-roll/images/emojis anchored to exact transcript position |
+| **AI Animated Captions** | Auto-generated 97%+ accuracy captions with word-by-word animations, font/color/shadow customization | 97 languages supported; keyword highlighting with brand colors |
+| **Automated Framing (AI Auto-Reframing)** | Detects speakers/faces/motion and reframes any video into portrait, square, or landscape | 9:16, 1:1, 16:9 export; detects and reframes landscape B-rolls to portrait |
+| **Automated Tracking (Speaker Tracking)** | AI follows faces, gestures, and body movement across frame | Multi-speaker split-screen auto-generation; works for panels/interviews |
+| **Profanity Censoring** | Detects swear words in transcript; 1-click bleep/mute/volume-reduce; caption masking | Three styles: classic bleep, silent mute, volume-adjusted; text replacements: symbols/asterisks/underscores |
+
+**Content Management Features:**
+
+| Feature | Description |
+|---|---|
+| **Content Planner (Ideas Board)** | Kanban + table/list view for ideas → drafts → approvals; rich notes per card; platform-specific post previews |
+| **Content Calendar** | See planned/scheduled/published posts by date, platform, status, campaign |
+| **Social Media Scheduler** | Post now or schedule to YouTube, TikTok, Instagram, Facebook, X (Twitter), LinkedIn; preview before publishing |
+
+**Media & Input/Output:**
+
+| Feature | Description |
+|---|---|
+| **YouTube Import** | Paste YouTube URL to import + process directly — no download required |
+| **File Upload** | MP4, MOV, AVI, WebM supported; up to 5 GB via API |
+| **B-roll / Image / Music / SFX Upload** | Insert custom media anchored to transcript position |
+| **Custom Font Upload** | Upload and apply brand fonts |
+| **Brand Templates** | Save custom fonts, colors, logo, caption style as reusable brand template |
+| **Transcript Download** | Export raw transcript |
+| **Screen Recorder** | Screen + webcam + audio recording in-app (launched Jan 2026); AI auto-zoom based on speech; AI reframes landscape → portrait for short-form |
+
+**API:**
+
+| Detail | Value |
+|---|---|
+| Base URL | `https://api2.choppity.com/v1` |
+| Versioning | `/v1` |
+| Max upload size | 5 GB per file |
+| Webhooks | asset.creation.succeeded, asset.analysis.succeeded/failed, project.render.succeeded/failed, post.published/scheduled/failed |
+| Capabilities | Submit video URL or presigned upload, generate AI clips, trigger renders, receive signed MP4 URLs, social publishing |
+
+**Free Tools (SEO landing pages, functional tools):**
+
+YouTube Clipper, subtitle generator, AI auto-reframing tool, speaker tracking tool, AI video editor tool, animated subtitle generator, audio-to-text converter, profanity censor tool, clip-anything tool, Instagram/Facebook/TikTok/YouTube caption generators, transcript tools (fast transcription, MP4-to-text, interview/meeting/lecture transcript), podcast clip generator, podcast name generator, podcast episode title generator, Hormozi caption style generator, script extractors (YouTube, Instagram, TikTok, Facebook, Free Video)
+
+---
+
+### 3. Pricing Matrix
+
+| Plan | Monthly Price | Annual Price (50% off) | Seats | Upload/Month | Storage | Brand Templates | Downloads |
+|---|---|---|---|---|---|---|---|
+| **Free** | $0 | $0 | 1 | 1 hr | 2 GB | 1 | 0 |
+| **Starter** | $15/mo | $7.50/mo | 1 | 3 hrs | 40 GB | 1 | Unlimited |
+| **Pro** | $28/mo | $14/mo | 2 | 5 hrs | 100 GB | 4 | Unlimited |
+| **Enterprise** | Contact | Contact | Unlimited | Unlimited | Unlimited | Unlimited | Unlimited |
+
+**Add-on — Creator Pack:** 0.5 hrs/month upload + 10 GB storage (purchasable via slider)
+
+**Team Plan** (3+ seats): Each seat = 3 hrs/month upload + 60 GB storage + 3 custom templates (1 member per seat)
+
+**Feature gating:**
+- Free: No social media scheduler, 0 downloads, only 1 template
+- Starter+: Social media scheduler, unlimited downloads, custom fonts, B-roll/SFX uploads, all AI features, 97 languages
+- Enterprise only: API, iframe embedding, whitelabelling, SSO, unlimited usage, Master Service Agreement, dedicated Slack channel, priority support
+
+**Guarantees:** 14-day money-back guarantee; no credit card required to sign up
+
+---
+
+### 4. AI Capabilities
+
+| Capability | Details |
+|---|---|
+| **Transcription** | 97%+ accuracy; 97 languages supported |
+| **AI Clipping** | Semantic moment detection (emotional cues, hooks, humor, insights); relevancy scoring |
+| **AI Captions** | Animated word-by-word; 97 languages; Alex Hormozi-style presets; keyword highlighting |
+| **Automated Framing** | Face/body detection for auto-crop; split-screen for multi-speaker |
+| **Speaker Tracking** | Real-time face/gesture tracking; smooth speaker switching |
+| **Profanity Detection** | AI audio analysis identifies profanity; bleep/mute/mask in captions |
+| **AI Search** | Natural language search over full transcript; emotion/topic/reaction detection |
+| **Screen Recorder AI** | Speech-triggered zoom in/out; layout rebuilding for portrait output |
+| **Specific AI models named** | None explicitly named on site |
+| **Translation/dubbing** | Not mentioned; 97 languages for caption generation only (not translation/dubbing) |
+| **TTS / Voice generation** | No TTS mentioned |
+| **Generative visuals/avatars** | Not mentioned |
+
+---
+
+### 5. Recording / Capture
+
+| Capability | Details |
+|---|---|
+| **Screen recorder** | Yes — screen + webcam + audio in-app (launched Jan 2, 2026) |
+| **AI-assisted zoom** | Yes — auto-zoom based on spoken content |
+| **Portrait reframing** | Yes — auto-converts landscape screen recording to portrait/vertical |
+| **Multi-guest recording** | Not mentioned |
+| **Mobile capture** | Not mentioned |
+| **Webcam only** | Implied (screen + camera feed) |
+
+---
+
+### 6. Editing Surfaces
+
+| Surface | Details |
+|---|---|
+| **Transcript-based editor** | Primary editing UI: highlight/delete text → video trims; insert B-roll/images at timestamp |
+| **Timeline** | Not the primary interface; full video editor available for power users |
+| **Caption editor** | Live preview; font/color/animation/position customization |
+| **Brand template editor** | Save font, colors, logo once; auto-applied |
+| **Content planner** | Kanban + table/list views |
+| **Content calendar** | Date/platform/status/campaign view |
+
+---
+
+### 7. Integrations & Ecosystem
+
+| Integration | Details |
+|---|---|
+| **YouTube** | Import via URL; direct publishing/scheduling |
+| **TikTok** | Direct publishing/scheduling |
+| **Instagram** | Direct publishing/scheduling (Reels) |
+| **Facebook** | Direct publishing/scheduling |
+| **X (Twitter)** | Direct publishing/scheduling |
+| **LinkedIn** | Direct publishing/scheduling |
+| **API** | REST API at api2.choppity.com/v1; webhook support; for developers/agencies |
+| **No-code tools** | n8n flows mentioned (API page); Zapier not mentioned |
+| **Browser extension** | Not mentioned |
+| **Mobile app (iOS/Android)** | Not mentioned |
+| **Desktop app** | Not mentioned — web-only |
+| **Iframe embedding** | Enterprise only |
+| **Whitelabelling** | Enterprise only |
+
+---
+
+### 8. Collaboration & Team Features
+
+| Feature | Details |
+|---|---|
+| **Team workspaces** | Dedicated team workspaces |
+| **Seats** | Starter: 1 seat; Pro: 2 seats; Enterprise: unlimited |
+| **Roles & permissions** | Assign roles (editor, manager, stakeholder) |
+| **Usage tracking** | Track usage per team member; allocate resources |
+| **Content planning** | Shared ideas board, content calendar |
+| **Real-time editing** | Not mentioned |
+| **Comments** | Not mentioned explicitly |
+| **Brand management** | Shared brand templates |
+
+---
+
+### 9. Security / Compliance
+
+| Aspect | Status |
+|---|---|
+| **SOC 2** | Not mentioned ❌ |
+| **ISO 27001** | Not mentioned ❌ |
+| **GDPR** | Implied (UK data processing compliance, right to access/delete) |
+| **HIPAA** | Not mentioned ❌ |
+| **SSO** | Enterprise only ✅ |
+| **SAML/SCIM** | Not mentioned |
+| **Encryption** | "commercially acceptable means" (vague) |
+| **Data residency** | UK and US (per privacy policy) |
+| **MSA** | Enterprise only |
+| **Privacy policy entity** | Mizko Media Pty Ltd |
+
+---
+
+### 10. Platform Support
+
+| Platform | Status |
+|---|---|
+| **Web (browser)** | ✅ Primary platform |
+| **Native Mac desktop** | ❌ Not mentioned |
+| **Native Windows desktop** | ❌ Not mentioned |
+| **iOS** | ❌ Not mentioned |
+| **Android** | ❌ Not mentioned |
+| **Browser extension** | ❌ Not mentioned |
+| **API** | ✅ Available (Enterprise and developer plans) |
+| **Mobile-friendly web** | Not confirmed |
+
+---
+
+### 11. Use Cases Promoted
+
+| Use Case | Description |
+|---|---|
+| **Podcasters** | Turn podcast episodes into 30+ short clips automatically |
+| **YouTubers** | Repurpose long videos into Shorts/Reels/TikToks |
+| **Content creators** | Avoid burnout; 80% reduction in editing time |
+| **Marketing agencies** | Serve multiple clients; 20–50+ clips per video |
+| **Churches / Pastors** | Turn sermons into weekly social content globally |
+| **Coaches** | Repurpose coaching content into short clips |
+| **Course creators** | Repurpose educational content for social discovery |
+| **Ecommerce** | Product video repurposing |
+| **Real estate agencies** | Property video repurposing |
+| **Sales** | Short-form video for outreach/demos |
+| **Social media marketers** | Consistent multi-platform posting |
+| **Non-profits** | Content creation on limited budgets |
+
+---
+
+### 12. Differentiators (Claimed)
+
+- **Built by a creator, for creators** — founder-led authenticity; "100% bootstrapped"
+- **Semantic AI clipping** — understands emotional cues, not just keywords
+- **Relevancy scoring** on every AI-generated clip
+- **Magic Reframe™** — branded auto-framing technology
+- **Profanity censoring** with caption masking — unique feature not common in competitors
+- **All-in-one workflow** — planner → calendar → editor → publisher in one tool
+- **End-to-end content ops** for teams (planner + calendar + scheduler in one platform)
+- **API with webhooks** — developer-first integration for content automation pipelines
+- **97 languages** for captions
+- Ships updates every week (public changelog at /whats-new)
+
+---
+
+### 13. Gaps / Not Mentioned
+
+- ❌ **No text-to-video** (Choppity only works from *existing* video; cannot generate video from text/prompts)
+- ❌ **No generative AI visuals** (no AI image/video generation)
+- ❌ **No AI avatars**
+- ❌ **No voiceover / TTS** (no AI narration voices)
+- ❌ **No voice cloning / dubbing / translation**
+- ❌ **No stock media library** (no built-in royalty-free footage, music tracks)
+- ❌ **No mobile apps** (iOS/Android not mentioned)
+- ❌ **No SOC 2 or ISO 27001 certification**
+- ❌ **No HIPAA compliance**
+- ❌ **No SCIM/SAML** (only SSO at Enterprise)
+- ❌ **No blog-to-video or URL-to-video** (input must be video file)
+- ❌ **No PowerPoint/slide-to-video**
+- ❌ **No ChatGPT/GPT integration**
+- ❌ **No Zapier/Make integration** (only API)
+- ❌ **No comparison pages** ("vs Descript" is a blog post written as if objective but clearly Choppity-owned)
+- ❌ **No native desktop apps**
+- ❌ **Scheduler currently only confirmed for YouTube** (others "rolling out progressively")
+- ❌ **No music licensing / built-in soundtrack library**
+- ❌ **No SCORM export or LMS integration**
+
+---
+---
+
+## PRODUCT B: PICTORY (pictory.ai)
+
+---
+
+### 1. Identity & Positioning
+
+| Field | Data |
+|---|---|
+| **Product name** | Pictory |
+| **Tagline** | "Generate Videos in Minutes from Text" |
+| **Primary value prop** | All-in-one AI video creation from text/prompts/URLs/audio/PPT/images — with generative visuals, AI avatars, voices, captions, and stock media library |
+| **Company** | Pictory Corp (US-based, production data hosted in United States) |
+| **Funding** | Not disclosed |
+| **Customer logos** | Pearson, Kajabi, Coursera, Royal Canin, D2L (Brightspace), Colibri Group |
+| **Partners** | Google, Amazon, Microsoft, OpenAI, ElevenLabs, Getty Images, StoryBlocks, Melodie/Melod.ie, Zapier, Make |
+| **Stats cited** | "Trusted by over 20,000 companies of all sizes"; 23.4K customers; 500+ 5-star reviews |
+| **Review score** | 4.7/5 on Capterra; awards from GetApp, Software Advice, Capterra Shortlist 2025 |
+
+---
+
+### 2. Feature Catalog (Exhaustive)
+
+**Core Input-to-Video Modes:**
+
+| Feature | Description | Details |
+|---|---|---|
+| **Text to Video** | Type a script or prompt → AI generates a complete video with visuals, voiceover, and captions | Uses AI-matched stock visuals + AI voices; proprietary "ReelFast technology" |
+| **URL to Video** | Paste any webpage URL → AI scrapes and converts content to video script → video | Blog posts, product pages, homepages; 30 sec to 15 min output |
+| **Script to Video** | Paste pre-written scripts/articles → AI storyboard video | Same pipeline as text-to-video |
+| **Blog to Video** | Submit a blog URL → auto-generated video with captions and voiceover | HTML articles supported; PDF/Word/Docs NOT supported |
+| **Audio to Video** | Upload audio recording → AI creates video with visuals and captions | Podcasts, voiceovers, interviews |
+| **PPT to Video** | Upload PowerPoint → AI converts slides to narrated video | Upload, summarize, customize |
+| **Image to Video** | Upload image + prompt → animated video clip | "Start with a single image, add a quick prompt" |
+| **URL to Video** | Turn any webpage into a video | |
+
+**AI Generation Tools:**
+
+| Feature | Description |
+|---|---|
+| **AI Studio** | Built-in generative AI workspace: text-to-image, text-to-video clip generation (custom visuals on demand inside the editor) |
+| **AI Script Generator** | Generate professional video scripts from topic/idea/keywords; set platform (YouTube/TikTok/Instagram/LinkedIn), tone, duration, goal |
+| **Ad Script Generator** | Generate ad scripts for any platform; set goal (sales/awareness/traffic), tone, length (30s–3min) |
+| **AI Avatars** | AI digital presenters shown inside video scenes; styled/positioned per scene; available on Professional+ plans; presented as available but "launching soon" on homepage |
+| **Pictory GPT** | ChatGPT plugin — type a prompt in ChatGPT → auto-generates script + video |
+
+**AI Editing & Enhancement:**
+
+| Feature | Description |
+|---|---|
+| **Storyboard Editor** | Visual scene-by-scene editing; AI auto-detects scenes and segments |
+| **Transcript-based editing** | Delete sentences from transcript → removes from video; same paradigm as Choppity |
+| **Video Highlights / Auto-Summarize** | AI extracts short highlight clips from Zoom, Teams, webinars, podcasts |
+| **Smart Scene Detection** | Auto-breaks video into editable scenes |
+| **Auto Captions** | Burns in captions automatically; drives 12% longer view time per their claim; supports multiple languages |
+| **Silence/Filler Word Removal** | Smart screen recorder: AI removes pauses and filler words from recordings |
+| **Brand Kit** | Colors, fonts, logos — applied consistently across all videos |
+| **Text Animation Controls** | Entry/exit effects: Fade, Typewriter, etc. |
+
+**Media Library:**
+
+| Asset Type | Details |
+|---|---|
+| **Video clips** | 10M+ (Starter: 5M from Getty+Storyblocks; Professional+: 18M) |
+| **Images** | Included in media library count |
+| **Music tracks** | 15,000 from Melodie/Melod.ie — royalty-free |
+| **AI voices** | ElevenLabs integration (29 languages); Starter: 60 min/mo; Professional: 120 min/mo; Team: 240 min/mo |
+| **Standard voices** | Unlimited on Professional+; 7 languages |
+| **Voice cloning** | Professional+ only |
+| **Custom voiceover upload** | Upload your own voice recording; auto-sync |
+
+**Screen Recording:**
+
+| Feature | Details |
+|---|---|
+| **Smart Screen Recorder** | Screen + webcam + voice in one click |
+| **AI Silence Removal** | Auto-removes silences and pauses |
+| **AI Filler Word Removal** | Removes filler words from recording |
+| **Auto Captions** | Applied to screen recordings |
+| **Brand Elements** | Add logos, branding to recording |
+
+**Enterprise / Advanced:**
+
+| Feature | Details |
+|---|---|
+| **API** | Available at Enterprise tier; automates dynamic/personalized video creation at scale |
+| **Pictory Central** | Enterprise-only interactive video hosting: AI-generated chapters, quizzes/knowledge checks, clickable CTAs, SCORM export (LMS-ready) |
+| **Personalization at Scale** | Videos tailored by role/region/account/individual |
+| **SSO** | Enterprise only |
+
+---
+
+### 3. Pricing Matrix
+
+**Annual pricing (save up to 40%):**
+
+| Plan | Annual Price | Monthly Price | Seats | Video Minutes/mo | Storage | Brand Kits | ElevenLabs AI Voice/mo | Standard Voices | Stock Library | AI Credits |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Free Trial** | $0 | $0 | 1 | 3 video projects only | — | — | — | — | — | — |
+| **Starter** | $29/mo | ~$36/mo | 1 | 200 min | 5 GB | 1 | 60 min (29 languages) | — | 5M Getty+Storyblocks | 100 |
+| **Professional** | $59/mo | ~$79/mo | 1 | 600 min | 20 GB | 5 | 120 min (29 languages) | Unlimited (7 languages) | 18M Getty+Storyblocks | 500 (promo: 1,000) |
+| **Team** | $199/mo | ~$249/mo | 3+ | 1,800 min/shared | 100 GB | 10 | 240 min (29 languages) | Unlimited (7 languages) | 18M Getty+Storyblocks | 2,400 |
+| **Enterprise** | Custom | Custom | 10+ | Custom | Custom | Unlimited | Custom | Unlimited (7 languages) | 18M Getty+Storyblocks | Custom |
+
+**Feature gating by tier:**
+- **Starter only:** Basic AI tools; no voice cloning; no custom avatars; no video summarization; no team features
+- **Professional+:** Voice cloning, custom avatars, advanced AI tools, video summarization
+- **Team+:** Team workspace, shared assets, professional onboarding
+- **Enterprise only:** SSO, dedicated success manager, expert consulting, uploaded asset indexing, custom templates, done-for-you video, early beta access, Pictory Central interactive hosting, SCORM export, API
+
+**Inclusions with annual plans:**
+- Consultation with video expert ($210 value) — all annual plans
+- "YouTube Mastery" course — Starter/Professional/Team annual
+- "Video Marketing Made Easy" course — Professional/Team annual
+
+**Other notes:**
+- No refunds on paid plans; 14-day free trial
+- Video minutes = exported minutes only (not counting preview/sharing)
+- Unused quota does NOT roll over — resets on 1st of month
+- Team plan minutes are shared across all members
+- Additional video minutes purchasable in-app
+
+---
+
+### 4. AI Capabilities
+
+| Capability | Details |
+|---|---|
+| **TTS / AI Voices** | ElevenLabs integration; 29 languages; per-plan minute quotas (60/120/240/custom) |
+| **Standard voices** | Unlimited on Professional+ plans; available in 7 languages (not named) |
+| **Voice cloning** | Professional+ only |
+| **AI avatars** | Digital presenters in video scenes; Professional+ only; styled/positioned per scene |
+| **Dubbing/translation** | "Multilingual captions and AI voiceovers" mentioned; translation languages for captions: French, German, Italian, Spanish, Dutch, Japanese, Korean, Russian, Hindi, Tamil, Telugu (11+ named, more coming). Note: "Currently only English is supported [for some features] but more languages added soon" |
+| **AI captions** | Auto-generated; burned in; language support varies |
+| **AI Script Generator** | Generates scripts from topics/keywords; platform + tone + goal-driven |
+| **Ad Script Generator** | Generates conversion-optimized ad copy |
+| **Text-to-Video (Generative)** | Full video from text/prompts using AI visuals and stock footage |
+| **AI Studio** | Generative text-to-image and text-to-video clip generation inside the editor |
+| **AI image generation** | From text prompts inside AI Studio |
+| **AI clip generation** | From text prompts inside AI Studio |
+| **Pictory GPT** | ChatGPT plugin for video creation from chat |
+| **Video summarization** | Auto-extract highlights from long-form recordings (Professional+) |
+| **Smart scene detection** | AI segments video into editable scenes |
+| **Filler word / silence removal** | Via Smart Screen Recorder |
+| **AI named models** | ElevenLabs (voices), OpenAI (GPT integration), Google, Amazon, Microsoft (as partners/tech stack) |
+
+---
+
+### 5. Recording / Capture
+
+| Capability | Status |
+|---|---|
+| **Screen recorder** | ✅ Smart Screen Recorder — screen + webcam + voice |
+| **AI silence removal** | ✅ |
+| **AI filler word removal** | ✅ |
+| **Auto captions** | ✅ |
+| **Multi-guest recording** | ❌ Not mentioned |
+| **Mobile capture** | ❌ Not mentioned |
+| **AI zoom/reframing** | ❌ Not mentioned for screen recorder |
+
+---
+
+### 6. Editing Surfaces
+
+| Surface | Details |
+|---|---|
+| **Storyboard editor** | Primary visual scene-by-scene editing (thumbnail grid of scenes) |
+| **Transcript/text-based editor** | Delete sentences → removes from video; same paradigm as Choppity but applied to full video editing |
+| **AI Studio** | Integrated generative AI panel within the editor |
+| **Brand Kit** | Centralized brand controls |
+| **Script editor** | Pre-video script creation and editing |
+| **Timeline** | Not prominently marketed; scene-based is primary |
+
+---
+
+### 7. Integrations & Ecosystem
+
+| Integration | Details |
+|---|---|
+| **Zapier** | ✅ Listed as partner; automate publishing from CRM updates, form submissions |
+| **Make (Integromat)** | ✅ Listed as partner |
+| **Chrome extension** | ✅ Mentioned for automated publishing |
+| **API** | ✅ Enterprise only — "automate dynamic and personalized video creation at scale" |
+| **ElevenLabs** | ✅ Direct integration for AI voices |
+| **Getty Images** | ✅ Licensed stock footage and images |
+| **StoryBlocks** | ✅ Licensed stock footage |
+| **Melodie/Melod.ie** | ✅ Licensed music tracks (15K tracks) |
+| **OpenAI** | ✅ Partner; Pictory GPT (ChatGPT plugin) |
+| **Google** | ✅ Partner |
+| **Amazon** | ✅ Partner |
+| **Microsoft** | ✅ Partner |
+| **Pabbly** | ✅ Listed in sitemap images |
+| **Social publishing** | Not explicitly confirmed (no direct scheduler mentioned unlike Choppity) |
+| **Mobile app** | ❌ Not mentioned — web/cloud only |
+| **Desktop app** | ❌ Not mentioned — "no software to download and install" |
+| **LMS / SCORM** | ✅ Enterprise only (Pictory Central) |
+
+---
+
+### 8. Collaboration & Team Features
+
+| Feature | Details |
+|---|---|
+| **Team workspace** | ✅ Shared assets, projects, brand kits (Team+ plans) |
+| **Seats** | Starter: 1; Professional: 1; Team: 3+; Enterprise: 10+ |
+| **Shared asset library** | ✅ Team+ |
+| **Real-time collaboration** | ✅ "Work together in real-time" (per marketing copy) |
+| **Roles / Permissions** | ✅ "Assign roles" mentioned in Team plan |
+| **Comments** | Not explicitly mentioned |
+| **Brand management** | ✅ Centralized brand kits; Unlimited kits at Enterprise |
+| **Professional onboarding** | ✅ Team+ (team training included) |
+| **Dedicated success manager** | ✅ Enterprise only |
+| **Personalization at scale** | ✅ Enterprise — video personalized by role/region/account/individual |
+
+---
+
+### 9. Security / Compliance
+
+| Aspect | Status |
+|---|---|
+| **SOC 2** | ✅ Certified — badge shown on Enterprise page ("21972-312_SOC_NonCPA") |
+| **ISO 27001** | ✅ Certified — badge shown on Enterprise page |
+| **GDPR** | Privacy policy references data subject rights; US-based hosting |
+| **HIPAA** | ❌ Not mentioned |
+| **SSO** | ✅ Enterprise only ("using your existing identity provider") |
+| **SAML** | ❌ Not explicitly mentioned (SSO referenced but protocol not specified) |
+| **SCIM** | ❌ Not mentioned |
+| **Encryption** | Not detailed |
+| **Data residency** | United States (production data) |
+| **Company stated security** | "Certified for enterprise-grade security and global compliance" (Enterprise page) |
+| **Payments** | Stripe + PayPal with "latest security technology" |
+
+---
+
+### 10. Platform Support
+
+| Platform | Status |
+|---|---|
+| **Web (browser)** | ✅ Primary platform; runs in cloud, any computer |
+| **Native Mac desktop** | ❌ "No software to download and install" |
+| **Native Windows desktop** | ❌ |
+| **iOS** | ❌ Not mentioned |
+| **Android** | ❌ Not mentioned |
+| **Browser extension (Chrome)** | ✅ Mentioned for publishing workflows |
+| **API** | ✅ Enterprise only |
+| **Mobile-friendly** | Implied (cloud-based), not confirmed |
+
+---
+
+### 11. Use Cases Promoted
+
+| Use Case | Description |
+|---|---|
+| **Marketing campaigns** | Generate explainer videos, product teasers from campaign concepts |
+| **Corporate training / L&D** | Turn training content into video; microlearning; compliance updates; onboarding |
+| **Sales enablement** | Product updates, objection handling, deal stage training videos |
+| **Educational tutorials** | Turn lesson ideas into teaching videos with narration |
+| **Social media content** | Short-form videos for brand awareness |
+| **Bloggers** | Blog URL → video (increase engagement on existing posts) |
+| **YouTubers** | Script-to-video; AI-powered channel growth |
+| **Course creators** | PPT/text → video; ReelFast for course material |
+| **Webinar / podcast repurposing** | Auto-highlight extraction into short branded clips |
+| **Agency / team video production** | Shared workspaces; personalization at scale |
+| **Enterprise communications** | CEO updates, quarterly business reviews, policy videos |
+
+---
+
+### 12. Differentiators (Claimed)
+
+- **SOC 2 + ISO 27001 certified** — enterprise-grade trust signals that Choppity lacks
+- **Text-to-video from scratch** — no pre-existing video required (pure generative)
+- **AI Studio** — embedded generative AI for custom images + video clips on demand
+- **AI avatars** — digital presenters without filming
+- **ElevenLabs voice integration** — 29-language high-quality TTS
+- **Voice cloning** — Professional+ feature
+- **Massive licensed stock library** — 10–18M videos/images (Getty + StoryBlocks) + 15K music tracks (Melodie)
+- **7 input modalities**: text, URL, audio, image, PPT, script, screen recording
+- **Pictory Central** — enterprise-only interactive video hosting with SCORM, quizzes, and CTAs (unique L&D/LMS play)
+- **Pictory GPT** — ChatGPT plugin for video creation via chat
+- **ReelFast technology** — proprietary fast video creation claim
+- **"Up to 80% cost reduction"** in video production (Enterprise claim)
+- **Trusted by 20,000+ companies** and named enterprise customers (Pearson, Coursera, etc.)
+- **Zapier + Make integrations** — no-code automation without needing API access
+
+---
+
+### 13. Gaps / Not Mentioned
+
+- ❌ **No direct social media scheduling/publishing** (no native TikTok/Instagram/YouTube scheduler like Choppity)
+- ❌ **No profanity censoring / bleep feature**
+- ❌ **No AI speaker tracking / active speaker detection** (no face-tracking for multi-speaker)
+- ❌ **No automated portrait reframing** (no 9:16 conversion from landscape recordings)
+- ❌ **No auto-generated viral clip scoring** with relevancy percentages
+- ❌ **No content planning board (Kanban/ideas board)**
+- ❌ **No content calendar**
+- ❌ **HIPAA** — not mentioned
+- ❌ **SAML/SCIM** — not detailed
+- ❌ **Mobile app (iOS/Android)** — not mentioned
+- ❌ **Native desktop app** — not mentioned
+- ❌ **Free plan** — only 3-project free trial (not ongoing free tier)
+- ❌ **No free tier for ongoing use** — Choppity has 1 hr/month free forever
+- ❌ **Standard voices only in 7 languages** (limited for non-English creators on Starter tier)
+- ❌ **Blog/HTML-only for URL import** — "PDF, Word, Google Docs NOT currently supported"
+- ❌ **Comparison pages** — none found
+- ❌ **About/company page** — not publicly accessible (/about returns 404)
+- ❌ **Funding disclosure** — not stated
+
+---
+---
+
+## ⚡ SIDE-BY-SIDE DIFFERENTIATION SUMMARY
+
+| Dimension | Choppity | Pictory |
+|---|---|---|
+| **Core positioning** | Long-video → short-clip repurposing engine | Text/any-input → video creation platform |
+| **Primary user** | Podcasters, YouTubers, content creators, agencies | Marketers, L&D teams, course creators, enterprise |
+| **AI generation** | No (works from existing video only) | Yes — text/prompt → video from scratch |
+| **Generative visuals** | No | Yes (AI Studio: images + video clips) |
+| **AI avatars** | No | Yes (Professional+) |
+| **Voice/TTS** | No | Yes (ElevenLabs, 29 languages, voice cloning) |
+| **Profanity censor** | ✅ Unique feature | ❌ None |
+| **Speaker tracking** | ✅ Face/gesture tracking + active speaker switching | ❌ None |
+| **Auto portrait reframing (9:16)** | ✅ Core feature | ❌ None |
+| **Stock media library** | ❌ None built-in | ✅ 18M videos + 15K music tracks |
+| **Social publishing/scheduling** | ✅ YouTube, TikTok, IG, FB, X, LinkedIn | ❌ Not mentioned |
+| **Content calendar/planner** | ✅ Full ideas board + calendar | ❌ None |
+| **API** | ✅ Available + webhooks | ✅ Enterprise only |
+| **Zapier/Make** | ❌ Not mentioned | ✅ Available |
+| **ChatGPT plugin** | ❌ | ✅ Pictory GPT |
+| **Screen recorder** | ✅ With AI zoom/reframing | ✅ Smart Screen Recorder (no AI reframing) |
+| **SOC 2** | ❌ | ✅ |
+| **ISO 27001** | ❌ | ✅ |
+| **SSO** | Enterprise only | Enterprise only |
+| **SCORM/LMS** | ❌ | ✅ Enterprise only |
+| **Free tier** | ✅ 1 hr/month forever | ❌ 3-project trial only |
+| **Pricing entry (annual)** | $7.50/mo | $29/mo |
+| **Funding** | Bootstrapped | Undisclosed |
+| **Enterprise logos** | AutoTrader, SmartLead.ai | Pearson, Coursera, Kajabi, Royal Canin |
+| **# input modalities** | 2 (video upload, YouTube URL) | 7 (text, URL, audio, image, PPT, script, screen) |
+| **Language support** | 97 languages (captions) | 29 languages (ElevenLabs TTS); 7 (standard voices); 11 named (captions/translation) |
+| **Platform** | Web only | Web only + Chrome extension |
+| **Mobile app** | ❌ | ❌ |
+
+---
+
+## ⚠️ Research Gaps & Uncertainties
+
+1. **Choppity pricing FAQ discrepancy**: Solutions/podcasters page references "$12/month Starter" but official pricing page shows $15/month — the FAQ page may be stale/outdated. The pricing page is the authoritative source.
+2. **Pictory monthly (non-annual) prices**: The pricing page showed crossed-out prices ($35 → $25 and $119 → $35) that appeared to be promotional discounts, making the true monthly non-annual prices ambiguous. Treat annual prices as verified; monthly prices may vary.
+3. **Pictory AI avatars status**: Homepage says "launching soon" but Professional plan lists "Custom Avatars" as included, and enterprise page says avatars are "built into workflow." The feature appears live but may be in progressive rollout.
+4. **Pictory translation languages**: The pricing FAQ said "French, German, Italian, Spanish, Dutch, Japanese, Korean, Russian, Hindi, Tamil, Telugu" for translation but also said "currently only English is supported" for another feature — these two statements may refer to different features (translation vs. TTS voiceover). Needs clarification.
+5. **Choppity scheduler platform support**: The FAQ says "currently supports direct publishing to YouTube, with additional platform integrations rolling out progressively" — contradicts the homepage showing TikTok/IG/FB/X/LinkedIn publishing as available. The changelog shows YouTube, TikTok, and LinkedIn were launched Jan 2026. Instagram and Facebook direct integration status is unconfirmed.
+6. **Pictory security page**: No standalone `/security` page found; security claims come from the Enterprise page only.
+7. **Both products have no mobile apps** — confirmed by absence of any mention and "no software to download" language.
+8. **Pictory API documentation** was not publicly findable (only referenced as available for Enterprise).
