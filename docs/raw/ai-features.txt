@@ -1,0 +1,563 @@
+Agent completed. agent_id: descript-ai-features, agent_type: research, status: completed, description: Research Descript AI features pages, elapsed: 421s, total_turns: 0, duration: 416s
+
+I now have comprehensive data from all sources. Let me compile the complete structured report.
+
+---
+
+# 🎬 Descript Feature Research — Full Structured Report
+
+*Sources: descript.com page content (markdown), Builder.io CMS API (JSON), Descript changelog feed. All claims sourced from verified page content.*
+
+---
+
+## 1. UNDERLORD — AI Video Agent / "Vibe Editing"
+
+**One-line positioning:** Agentic AI video co-editor that reads your content, plans tasks, and executes edits on command.
+
+### Capabilities
+- **Natural-language video editing:** Type commands like "Edit this down to 2 minutes, focusing on when I talked about Freud" or "Make the trailer for this webinar recording"
+- **Script writing & feedback:** Writes scripts from prompts, edits based on feedback, or reviews your existing script and gives feedback
+- **Content conversion:** Turns docs, slides, blog posts, LinkedIn posts, screen recordings, and code of conduct documents into video content
+- **Bulk edits:** Executes multiple tedious edits simultaneously (e.g., center every speaker, bleep language, add lower thirds across a whole video)
+- **Context-aware suggestions:** Reads your script and video content to decide what to do next; makes suggestions proactively
+- **Smart cutting:** Can cut to "most exciting parts" or "best moments for maximum engagement"
+- **Stock media placement:** Fills in media placeholders with stock footage automatically
+- **Camera layout automation:** Adds camera layouts every time a specific feature/topic is referenced
+- **Speaker isolation:** Copies all parts where a specific speaker is talking into a new composition
+- **Animated callouts:** Adds animated callouts to specific content segments (e.g., ethics training principles)
+- **Zoom / jump-cut masking:** Adds zooms to hide jump cuts
+- **Chat history:** Persists per-user, per-project; syncs across browsers and devices; auto-titles past sessions
+- **Context picker:** `@` button lets you pin files, scenes, timestamps, or layers to a request so Underlord targets the right elements
+- **Improved edit review:** After every editing turn, a second AI pass checks the diff against what was requested, looking for unintended deletions, missed targets, overcorrections, or out-of-scope operations — auto-corrects if something's wrong
+- **Reasoning models:** Uses reasoning models for complex tasks (script writing, episode planning, multi-step edits)
+- **API access:** Available via Descript API (open beta); supports Model Context Protocol (MCP) connections for use with Claude, ChatGPT, etc.
+
+### Use Case Examples (Verbatim from page)
+- "This how-to video has good content but bad energy—HELP!"
+- "Turn my CEO's rant about AI & productivity into a thought leadership video"
+- "Create a '5 common mistakes dentists make' video using the examples in this LinkedIn post"
+- "Create a :30 video for Facebook about…"
+- "Create a short video reviewing our code of conduct (below), but make it like a TED Talk from 2009"
+- "Whip up an avatar-hosted explainer. Edit down a webinar and create promo clips."
+
+### Sub-Features (also available manually)
+- Text-based editing (video editing via transcript)
+- Scenes + layouts (design-like canvas)
+- AI actions (Eye Contact, Studio Sound, Remove Filler Words, Remove Retakes)
+
+### Tier Availability
+- Free: Limited use
+- Hobbyist: Access (basic)
+- Creator: Full access (20+ AI tools included)
+- Business/Enterprise: Full access
+
+---
+
+## 2. CREATE CLIPS — AI Short-Form Clip Generator
+
+**One-line positioning:** AI identifies your best moments and turns long-form video/podcast into platform-ready clips.
+
+### Capabilities
+- **One-click clip creation:** Hit "Create Clips" — Descript AI finds best moments from the recording; user picks favorites
+- **Viral potential scoring:** Underlord is trained on what works on social to identify "moments most likely to rack up the views"
+- **Manual refinement after AI selection:** Full Descript video editor available post-clip creation for fine-tuning
+- **Aspect ratio conversion:** Quickly change aspect ratios for different platforms (crop and drag to fit)
+- **Style templates:** 4 pre-built styles available — Bold, Editorial, Simple, Vintage
+- **Brand customization:** Drag-and-drop captions, shapes, images; adjust layouts, fonts, styles
+- **Media enrichment:** Add music, sound effects, B-roll, or images to clips
+- **Platform targeting:** YouTube Shorts, TikTok, Instagram Reels, LinkedIn (confirmed by user examples in carousel)
+
+### Target Platforms
+- YouTube, TikTok, Instagram Reels, LinkedIn (evidenced by creator demos on page)
+
+### Limitations
+- No explicit mention of minimum/maximum video length for clip detection
+- Requires uploading/importing video to Descript first (not a standalone web tool)
+
+### Tier Availability
+- Hobbyist and above (listed under AI tools in Hobbyist: "Create Clips")
+- Free: Not available
+
+---
+
+## 3. AI YOUTUBE DESCRIPTION — Auto-generate YouTube descriptions
+
+**One-line positioning:** One-click AI writing of YouTube video descriptions from the video transcript.
+
+### Capabilities
+- Generates concise, compelling YouTube descriptions automatically from video content
+- Output ready to copy-paste into YouTube
+- Saves time after video production is done
+
+### How It Works
+- Operates from the transcript/content of the video already in Descript
+- One-click generation
+- Output: description text suitable for YouTube
+
+### Limitations / Notes
+- Minimal page content available (JS-rendered page with thin static content)
+- No explicit mention of SEO optimization, keyword inclusion, or character limits
+- No mention of chapter/timestamp generation (that feature is separate — Podcast Show Notes and Chapter Generator do that)
+
+### Tier Availability
+- Available on all paid plans (grouped under "AI tools" starting at Hobbyist)
+
+---
+
+## 4. AI PODCAST SHOW NOTES — Auto-generate show notes with chapters
+
+**One-line positioning:** One-click generation of a podcast episode summary plus timestamped chapter markers.
+
+### Capabilities
+- Generates a **tight, compelling summary** of the podcast episode
+- Generates **chapters with timestamps** automatically
+- Output ready to copy-paste into hosting providers
+- Targets discoverability on **Spotify and Apple Podcasts**
+
+### How It Works
+- Works from the transcript of the episode already in Descript
+- One-click: generates both summary and chapter markers simultaneously
+- Output: episode description + chapter list with timestamps
+
+### Sub-Features (mentioned in related AI feature grid)
+- Chapter Generator is a separate but related feature (`/ai/chapter-generator`) — creates, names, and inserts chapter markers
+
+### Tier Availability
+- Available on Hobbyist and above
+
+---
+
+## 5. AI TRANSLATE VIDEO — AI Video Translation & Dubbing
+
+**One-line positioning:** Translate and dub video voice + subtitles into 25–30+ languages in one click.
+
+### Capabilities
+- **Automatic voice translation/dubbing:** Translates spoken audio to another language using AI-generated voice
+- **Caption/subtitle translation:** Also translates on-screen text/captions
+- **Full-video translation:** Translates voice, captions, and video as a package
+- **Proofread included:** Business plan offers "translate and dub video in 30+ languages with proofread"
+- **Operates natively inside Descript:** No external tool required
+
+### Specific Languages Shown (Demo Section)
+Chinese, English, French, German, Hindi, Italian, Japanese, Korean, Polish, Spanish (10 in demo)
+
+### Language Count Claims
+- Feature page headline: "25+ languages"
+- Business plan pricing: "30+ languages with proofread"
+- *(Discrepancy: "25+" on feature page vs "30+" on Business tier — page content was last updated at different times)*
+
+### Limitations
+- **Business plan only** (not available on Free, Hobbyist, or Creator)
+- Available as a free trial via "free video translator" CTA but full feature gated to Business
+
+### Tier Availability
+- **Business plan and above only**
+- Enterprise: Custom AI Controls available
+
+---
+
+## 6. EYE CONTACT — AI Gaze Correction
+
+**One-line positioning:** AI redirects your eye contact to face the camera even when you're reading a script or looking away.
+
+### Capabilities
+- Adjusts the speaker's gaze to appear as if looking directly at the camera
+- Works when reading from a script on screen, a teleprompter, or notes
+- **Non-destructive:** Does NOT alter original footage; toggle on/off anytime
+- Can be applied selectively (only to specific segments where gaze wanders)
+- **One-click application** with toggle in properties panel
+- Eliminates need for physical teleprompter hardware
+- Eliminates multiple retakes from script-reading drift
+
+### Sub-features / Benefits
+- "No more retakes or memorizing" — read script freely without worrying about camera
+- "No teleprompter necessary" — achieves professional direct-to-camera intimacy
+- "Easy on the eyes" — non-destructive; toggle on/off or partial application
+
+### Limitations
+- No explicit mentions of: performance with glasses, hats, extreme side angles, or low lighting
+- Requires clear detection of a person/face for effect to work
+- Does not correct full head turn (implied: gaze correction within a range of natural drift)
+
+### Tier Availability
+- Hobbyist and above
+
+---
+
+## 7. GREEN SCREEN — AI Background Removal & Replacement
+
+**One-line positioning:** AI-powered background removal and replacement — no physical green screen required.
+
+### Capabilities
+- **AI subject isolation:** Isolates the human subject and removes everything else automatically
+- **No physical green screen required:** Pure AI background removal
+- **Non-destructive:** Original clip remains untouched; toggle effect on/off anytime
+- **Background swap:** Place subject over any video, image, or GIF background
+- **Stock library access:** Built-in library of videos, GIFs, and images for backgrounds
+- **Works with multiple media types:** Videos, GIFs, and images (source material)
+- **Layer-based compositing:** Right-click to send background layer to back; position foreground on top
+
+### How It Works (Step-by-step from page)
+1. Upload media (MP4, AVI, MOV, WMV, MKV, FLV)
+2. Open properties panel → Effects & Green Screen
+3. Descript AI isolates subject; remove everything else
+4. Add new background layer; send to back; adjust positioning
+5. Export
+
+### Supported Input Formats
+- **Video:** MP4, AVI, MOV, WMV, MKV, FLV
+- **Other input types:** Videos, GIFs, and images (as source for green screen effect)
+
+### Requirements
+- "Clear person for Descript's AI to detect" — needs visible human subject
+
+### Tier Availability
+- Free plan: Limited (100 AI credits/month)
+- All plans via AI credits
+
+---
+
+## 8. AUTOMATIC MULTICAM — AI Speaker-Switching Video Edit
+
+**One-line positioning:** AI automatically edits multi-camera video to keep the active speaker on screen.
+
+### Capabilities
+- **Speaker detection:** AI identifies who is speaking at any moment
+- **Auto-cuts to active speaker:** Switches camera angle to whoever is talking
+- **Reaction shots:** Adds reaction shots when one person has been talking for a while
+- **Wide/group shots:** Switches to show the whole group during rapid-fire conversation (nuanced cut decisions)
+- **Brand template support:** Apply brand colors, logo, fonts as a template; add to every video with one click
+- **Rooms integration:** Designed to work with videos recorded in Descript Rooms (multi-person recording feature)
+- **Layout management:** Sets up video layout automatically
+
+### How It Works
+- Record in Descript Rooms (multi-person recording)
+- Run "Automatic Multicam"
+- AI lays out video with speaker-tracking cuts
+
+### Nuanced AI Decisions
+- Not just "cut to speaker" — also adds reaction shots contextually
+- Shows full group during back-and-forth exchanges
+
+### Tier Availability
+- Free: Available with AI credits
+- All paid plans included
+
+---
+
+## 9. VIDEO REGENERATE — AI Lip-Sync & Voice Correction for Video *(Beta)*
+
+**One-line positioning:** Fix words, update stats, or correct mistakes in recorded video by typing changes — AI clones your voice AND syncs your mouth movements.
+
+### Capabilities
+- **Voice clone generation:** Creates an AI clone of your voice from your recording
+- **Lip/mouth sync:** Changes mouth movements to match the new/corrected text
+- **Type-to-correct:** Edit the transcript text → AI generates new voice + matching mouth video
+- **Seamless blending:** AI matches the generated audio to the surrounding recorded media (tone, pace, environment)
+- **Ownership safeguard:** Requires identity verification (confirm it's your voice); you own your clone; can share or keep private
+- **No re-recording needed:** Fix factual errors, update statistics, correct mispronounced words, clarify points — all without going back to camera
+
+### Use Cases
+- Correcting a wrong word or stat without re-recording
+- Fixing awkward phrasings post-recording
+- Updating evergreen content (changing numbers, names, dates)
+
+### Limitations / Beta Status
+- Labeled **Beta** on the page
+- Works for corrections/modifications — not for generating entirely new on-camera performances from scratch
+- Requires sufficient source footage for voice cloning
+- Identity verification required before use
+
+### Tier Availability
+- Hobbyist and above (listed as "video regenerate" in Hobbyist AI Speech features)
+
+### Distinction from Regenerate Speech
+- **Video Regenerate** = audio correction + mouth/lip-sync video (full audio+visual)
+- **Regenerate Speech** = audio repair/tone fix only (no video changes)
+
+---
+
+## 10. AI GENERATE VIDEO — Text-to-Video / B-roll Generation
+
+**One-line positioning:** Generate custom AI video (B-roll, title cards, scene cutaways, shorts) from a text prompt, directly inside Descript.
+
+### Capabilities
+- **Prompt-to-video generation:** Type a prompt to create video segments
+- **Script-based style matching:** Ask Underlord to create a style matching the tone of your script for contextually relevant B-roll
+- **Custom style creation:** Write a prompt or drop in a reference image to create a reusable style
+- **Style library:** 20+ video styles developed and tested by Descript designers (pre-built, vetted aesthetics)
+- **Consistent style application:** Use the same prompt for a consistent look across clips
+- **Multi-model selector:** Always has latest AI video generation models; can select the model that fits your needs
+
+### Specific AI Models Available (as of 2025-2026)
+- **Veo 3.1** (Google) — photorealistic generation + audio to match
+- **Pixverse 4.5**
+- **Hailuo 02**
+- **Seedance 2.0** — character consistency, motion physics, multi-shot generation
+- **GPT Image 2** (OpenAI) — notable for character consistency, text-heavy images, infographic compositions
+
+### Use Cases Listed on Page
+- Bespoke B-roll
+- Short-form social videos
+- Animated title cards
+- Stylized background loops
+- Scene cutaways
+
+### Tier Availability
+- Creator and above ("Generate video with the latest AI models" listed as Creator feature)
+- Business/Enterprise: Also included
+
+---
+
+## 11. EDIT FOR CLARITY — AI Content/Pacing Trimmer
+
+**One-line positioning:** One-click AI that cuts filler words, tangents, meandering sections, and unnecessary content from unscripted recordings.
+
+### Capabilities
+- Removes "ums," "uhs," and filler words
+- Cuts long tangents and meandering blather
+- Removes "scruff and fluff" — non-essential filler content
+- Works on interview shows, unscripted podcasts, and unscripted video
+- Operates at the content level (not just word-level) — cuts entire tangents/segments
+
+### How It Works
+- One-click operation
+- AI analyzes the transcript for content that is obviously non-essential
+- Executes cuts automatically, leaving core messages and compelling moments intact
+
+### Positioning Note
+- Positioned as the first step in editing any unscripted content — "first, cut out all the stuff you obviously don't want"
+- Distinct from Remove Filler Words (which is word-level: "um," "uh") — Edit for Clarity is broader content-level
+
+### Tier Availability
+- Free: Available with limited credits
+- All paid plans included
+
+---
+
+## 12. STUDIO SOUND — AI Audio Enhancement / Noise Removal
+
+**One-line positioning:** AI-powered regenerative audio enhancement — removes background noise and improves voice quality in one click, on any recording.
+
+### Capabilities
+- **Background noise removal:** Removes leaf blowers, barking dogs, ambient hum, HVAC, etc.
+- **Echo removal:** Eliminates room echo and reverb
+- **Voice enhancement:** Makes voices clearer and more present
+- **Works on any recording location:** Bedroom, phone, Bluetooth, airport, while walking — any environment
+- **Works with any file type:** Any audio or video file format accepted by Descript (implied: all supported formats)
+- **One-click:** Simple toggle application
+
+### Technical Differentiator (Important)
+> *"Studio Sound's AI is regenerative. Other noise reduction and audio processing tools work by filtering or subtracting sound—leaving your voice sounding tinny or dampened. Studio Sound isolates your audio, then regenerates it, removing echoes, background noise, and making you sound better."*
+
+- **Not a filter:** Doesn't subtract/filter audio (which causes "tinny" degradation)
+- **Regenerative approach:** Isolates voice, regenerates cleaned audio — preserves vocal quality
+
+### Sub-feature: An AI Voice Enhancer
+- The section heading labels it "An AI voice enhancer" — not just noise reduction
+
+### Use Cases Listed
+- Phone call recordings
+- Voiceovers
+- Interviews
+- Conference call recordings
+- Guest recordings from any environment
+
+### Tier Availability
+- Free: Available with limited AI credits
+- Hobbyist and above: Full access (listed as "Studio Sound" in AI tools)
+
+---
+
+## 13. FILLER WORDS — Automatic Filler Word Removal
+
+**One-line positioning:** One-click removal of "ums," "uhs," "you knows," and a dozen other filler words from recordings.
+
+### Capabilities
+- Purges recordings of **"ums," "uhs," "you knows,"** and a dozen other filler words
+- One-click operation
+- Works across audio and video recordings
+- Transcript-based (identifies filler words in the text, removes corresponding audio/video segment)
+- Saves hours compared to manual editing
+
+### Supporting Claims (Cited Research)
+- Page cites external research:
+  - [The Independent](https://www.independent.co.uk/life-style/uk-british-slang-urban-dictionary-filler-words-a8555681.html): speakers avoiding filler words sound more **educated**
+  - [BYU Schwa Lab](https://schwa.byu.edu/files/2014/12/F2014-Robbins.pdf): speakers avoiding filler words sound more **persuasive**
+
+### Filler Word Types Removed
+- "um," "uh," "you know" — and "a dozen other filler words" (exact list not specified on page)
+
+### Tier Availability
+- Hobbyist and above ("Remove Filler Words" listed in Hobbyist AI tools)
+- Free: Not available (not in Free tier AI tools list)
+
+---
+
+## 14. REMOVE RETAKES — AI Best-Take Selector
+
+**One-line positioning:** AI automatically identifies and removes all bad takes from scripted recordings in one click, keeping only the best version.
+
+### Capabilities
+- Detects retakes in scripted recordings (where the speaker re-records the same lines)
+- Removes all suboptimal takes automatically
+- Keeps the best version of each scripted section
+- Operates after recording — record freely until you get the perfect take, then clean up instantly
+
+### How It Works
+- Works with scripted recordings where lines are repeated
+- AI understands that repeated text = retake scenarios
+- One-click to remove all retakes
+
+### Positioning
+> *"Even when you're recording from a script, it's tough to get it right the first time. Or the 15th."*
+
+- Targeted at scripted content creators (explainers, tutorials, corporate videos, podcast intros)
+- Positioned as "90% easier" in Descript vs other tools, but now even faster with AI
+
+### Tier Availability
+- Hobbyist and above
+- Free: Limited trial
+
+---
+
+## 15. REGENERATE SPEECH — AI Audio Repair & Voice Regeneration
+
+**One-line positioning:** AI repairs mismatched audio tones, enhances flat/boring dialogue, and eliminates background noise — making impossible edits sound seamless.
+
+### Capabilities
+- **Smooth over awkward edits:** When editing audio creates a tone mismatch (cut-and-paste causes jarring tonal jump), Regenerate recreates the speaker's voice with AI and matches surrounding tone so the edit sounds natural
+- **Liven up lackluster dialogue:** Injects energy and life into flat/boring performances — turns "deathly boring" segments into "truly engaging" ones without re-recording
+- **Eliminate annoying noise:** Removes background noise (leaf blowers, dogs, etc.) at the segment level — one-click fix
+- **Works on podcasts, video, and screen recordings**
+- **Voice regeneration:** Recreates speaker's voice with AI to fill gaps created by edits
+
+### Important Distinction from Studio Sound & Video Regenerate
+- **Studio Sound** = broad audio cleanup on an entire clip (noise reduction + enhancement)
+- **Regenerate Speech** = targeted repair at edit points + tone matching + dialogue energy injection; also operates on entire clips for noise
+- **Video Regenerate** = also changes mouth/lip sync to match new words (audio + video)
+- Regenerate Speech = **audio only** (no lip sync, no new words)
+
+### Use Cases
+- Podcasts: stitch edits seamlessly, save hours
+- Video: fix awkward edits, remove noise on voiceovers or speech audio
+- Screen recordings: narrate imperfectly and fix everything in post
+
+### How It Works
+- Identifies tone/quality mismatch around edit points
+- Regenerates voice audio to bridge the gap
+- Result: sounds like it was recorded in one continuous take
+
+### Tier Availability
+- Available on Hobbyist and above (implied via AI tools grouping)
+
+---
+
+## 16. AI VOICES — AI Voice Clone + Text-to-Speech + Stock AI Voices
+
+**One-line positioning:** Create a personal voice clone in ~60 seconds, or use stock AI voices across 20+ languages for narration, voiceovers, and error correction.
+
+### Capabilities
+
+#### Voice Cloning
+- **Clone creation time:** "As little as 60 seconds"
+- **Multiple clones:** Create a roster of different tones, emotions, and accents from your own voice
+- **Restriction:** Can only clone YOUR OWN voice (verified) — no cloning other people's voices
+- **Identity verification:** Required before clone can be used
+- **Ownership:** User fully owns their voice clone; can share or keep private
+
+#### Text-to-Speech (Stock Voices)
+- **Named stock voices:** Cedric, Carla, Emily, and others ("life-like but definitely not alive gang")
+- **Languages:** 20+ languages supported
+- **Emotion range:** Full range of emotions, natural pacing/pauses/personalities
+- **Natural speech patterns:** AI model trained on how people actually speak; includes tone/rhythm variation, not robotic inflection
+
+#### Technical Detail (AI Voice Quality)
+> *"Descript's AI voices don't just pause at commas and add inflection at question marks. You'll hear your clone vary its tone and rhythm as they talk. It's incredibly life-like, maybe a little unsettling. Our home-grown AI model is trained on how people actually speak."*
+
+- Uses Descript's **home-grown AI model** (not a third-party TTS API per this claim)
+- Descript introduced AI voices in **2018** (early mover)
+
+#### Use Cases
+- Fix audio errors without re-recording (type correction → AI generates matching voice audio)
+- Narrate entire videos via text script (voiceover generation)
+- Generate podcast intros/outros
+- Fill in missed content post-recording
+
+#### AI Voice Tools Listed (Sub-features on page)
+1. **Text to speech** — write script, generate full voiceover in one click (`/text-to-speech`)
+2. **Translate** — translate voiceovers to 5 languages with AI dubbing (note: says "5 languages" on this page vs "25+/30+" on translate page — discrepancy suggests this sub-feature description may be outdated or refers to a different tier)
+3. **Regenerate** — fix/repair audio errors and smooth edits
+
+#### Transcription Model (from Changelog)
+- Default transcription model: **ElevenLabs Scribe v2**
+- Alternative: **Rev v2** (selectable; use for British English spellings)
+- Old default was Rev v2 for English; now Scribe v2 for all languages
+
+### Tier Availability
+- Free: "Limited trial of AI Speech"
+- Hobbyist: "AI Speech with custom voice clones and video regenerate"
+- Creator and above: Full access
+- Enterprise: Custom AI Controls
+
+---
+
+## SUPPLEMENTAL FINDINGS FROM CHANGELOG
+
+### File Format Support (Recently Added)
+- **MKV / Matroska** — all codecs Descript handles in other formats
+- **AVIF images** — AV1-based image format
+- **Opus audio (.opus)** — OGG container with Opus codec
+- **Raw AAC (.aac)** — ADTS container format
+- **WebM** — VP8 and VP9 video with Opus audio
+- **Multi-channel / surround audio** — 5.1 and other surround files; downmixed to stereo by default; can be split into individual mono clips
+
+### Transcription
+- Default: **ElevenLabs Scribe v2** (all languages)
+- Alternative: **Rev v2** (British English spelling, or user preference)
+
+### API (Open Beta)
+- Descript API available to all users
+- Supports MCP (Model Context Protocol) for Claude/ChatGPT integration
+- Endpoints: import media, create/edit projects with Underlord, project search, folder support, composition targeting, publish triggers
+- Token generated from account settings
+
+### Additional AI Features (Not in Original List — Referenced on Site)
+- `/ai/social-post-writer` — social media post copy in multiple styles with hashtags
+- `/ai/turn-into-blog-post` — convert script to blog post
+- `/ai/chapter-generator` — AI creates, names, and inserts chapter markers
+- `/ai/script-generator` — AI-generated scripts for podcast/video
+- `/brand-studio` — team-wide brand asset/template management (Business+)
+- `/ai-avatars` — pick from gallery or upload photo; write script, avatar does the talking
+- `/captions` — one-click subtitle addition with branding
+
+---
+
+## KEY NUMBERS SUMMARY
+
+| Metric | Value |
+|--------|-------|
+| Languages (Translate) | 25+ (feature page) / 30+ (Business pricing) |
+| Languages (AI Stock Voices) | 20+ |
+| Voice clone creation time | ~60 seconds |
+| AI video styles (Generate Video) | 20+ |
+| G2 Rating | 4.6/5 stars |
+| Stock media in carousel | Royalty-free library (unlimited on Creator+) |
+| Filler word types | "ums, uhs, you knows, and a dozen other filler words" |
+| Supported video containers | MP4, AVI, MOV, WMV, MKV, FLV, WebM |
+| AI video models (Generate Video) | Veo 3.1, Pixverse 4.5, Hailuo 02, Seedance 2.0, GPT Image 2 |
+| Transcription models | ElevenLabs Scribe v2 (default), Rev v2 |
+
+---
+
+## GAPS & UNCERTAINTIES
+
+1. **YouTube Description page** had minimal content — thin on specifics about SEO, character limits, or YouTube algorithm integration; no Builder.io API call was made for that page (would likely yield same level of minimal content per page structure similarity to Podcast Show Notes)
+2. **AI Automatic Multicam** — no mention of maximum number of simultaneous camera feeds/participants supported
+3. **Translate Video language count discrepancy** — "25+" on feature page vs "30+" on Business plan pricing; exact full language list not available
+4. **Eye Contact** — no stated limitations for performance with glasses, extreme angles, or hats; no details on processing time
+5. **AI Voices "5 languages" vs "25+"** — on the AI Voices sub-feature description for Translate it says "any of 5 languages (and counting)" which contradicts the 25+/30+ on the translate page; this sub-feature description appears outdated on the AI Voices page
+6. **Studio Sound** — "works with any file type" stated but no explicit list given; implied to be all formats Descript supports
+7. **Filler Words** — "a dozen other filler words" beyond um/uh/you know is referenced but no complete list provided on the page
+8. **Video Regenerate Beta status** — unclear if/when it exits beta; no stated limitations on length of text that can be regenerated
+9. **Edit for Clarity vs Remove Filler Words** — exact delineation unclear from page content; Edit for Clarity appears to do broader content-level cutting while Remove Filler Words is word-level, but both remove filler words

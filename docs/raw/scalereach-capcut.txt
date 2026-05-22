@@ -1,0 +1,813 @@
+Agent completed. agent_id: scalereach-capcut, agent_type: research, status: completed, description: Research ScaleReach and CapCut, elapsed: 320s, total_turns: 0, duration: 315s
+
+I now have extensive data on both products. Let me compile the comprehensive research report.
+
+---
+
+# 🔬 DEEP COMPETITOR RESEARCH REPORT
+
+## ══════════════════════════════════════
+# PRODUCT A: ScaleReach AI (scalereach.ai)
+## ══════════════════════════════════════
+
+---
+
+### 1. 🎯 Identity & Positioning
+
+- **Hero claim:** "Turn One Video Into 15 Viral Shorts Automatically — 1 Video → 15 Viral Shorts, Automatically"
+- **Value prop:** Paste a YouTube link → AI finds best moments → adds captions → generates 15 ready-to-post clips for TikTok, Reels, Shorts — in minutes
+- **Tagline supporting claims:** "No credit card required · 30 free minutes included · Captions added automatically"
+- **Target user:** Content creators, podcasters, marketing teams, gaming creators, coaches, fitness/lifestyle/education influencers, agencies
+- **Origin/company:** Very early-stage (v0.1.0 launched January 1, 2026; ~6 months old as of May 2026). Single founder (Hevin K). Delaware incorporated, contact email: hevin@scalereach.ai
+- **Customer logos / social proof:** User testimonials absent; comparison table vs. Vizard and Opus Clip used as social proof
+- **Positioning frame:** "More features, lower price, and the only tool with a built-in scheduler" — they compete on all-in-one bundle vs. stitched-together toolset
+
+---
+
+### 2. 📋 Feature Catalog (Exhaustive)
+
+**Core AI Clipping Engine:**
+- AI-powered viral moment detection (hooks, emotional peaks, key insights)
+- 8–15 clips from a 30-min video (up to 15 per video vs. Opus Clip's 10)
+- Custom clip types: viral clips, speaker insights, topics, memorable phrases, product features, jokes, testimonials, custom prompts
+- Takes ~2 minutes to process 1-hour video
+- YouTube link input (paste URL) + direct file upload (MP4, MOV, WebM, AVI, MKV)
+- Max video length: 2h (Starter), 3h (Pro), custom (Enterprise)
+- File upload max: up to 4GB (paid plans)
+
+**Viral Score:**
+- 0–100 AI-predicted virality score per clip
+- Components: Hook Strength (40%), Pacing (35%), Engagement (25%)
+- Trained on 10k+ viral clips
+- Launched v0.3.0 (Feb 5, 2026)
+
+**Captions:**
+- Word-by-word animated captions (burned-in)
+- 100+ languages
+- 95–98% claimed accuracy (powered by Deepgram)
+- Caption animations: bounce, pop, fade, karaoke
+- Word-level highlight with custom highlight color
+- Editable transcript (word-level timing)
+- Emoji/special character support
+- Drag-to-reposition on preview canvas
+- Export SRT/VTT (transcript download)
+- Custom caption style presets (save & reuse)
+
+**AI Reframe:**
+- Auto-tracks faces and moving subjects
+- Multi-speaker detection
+- Reframe to 9:16, 1:1, or custom aspect ratios
+- Manual override/fine-tune
+- FHD 1080p export
+
+**AI Hook Overlay:**
+- Auto-generates attention-grabbing text hook for the first 3 seconds of each clip
+- Launched v0.3.0
+
+**AI Thumbnails:**
+- Auto-generated per clip
+- AI picks best frame + adds text overlays
+- Platform-formatted (Pro plan)
+
+**Backgrounds / Split Screen:**
+- Split Screen: Subway Surfer, Minecraft, GTA 5 gameplay backgrounds
+- Blur, Mirror, Zoom backgrounds
+- Gradient presets: Midnight, Ocean, Sunset
+- Available on Starter and Pro
+
+**Post Scheduler:**
+- Platforms: TikTok, Instagram Reels, YouTube Shorts, Twitter/X, LinkedIn
+- Drip scheduling (queue clips over time)
+- Visual calendar view
+- Multiple accounts per platform
+- AI-generated captions + hashtag suggestions
+- Edit/cancel pending posts
+- Real-time post status
+- Social account limits: 1 (Starter), 5 (Pro), Unlimited (Agency)
+
+**MCP Integration:**
+- Works with: Claude.ai (browser), Claude Desktop, Cursor, Kiro, Windsurf
+- 15 tools: submit YouTube videos, custom prompts ("find the funniest parts"), check processing status, get download links, list/delete/regenerate videos, schedule to Instagram/TikTok/YouTube, post immediately or schedule, add captions/hashtags, edit/cancel posts, view post statuses
+- Setup via URL paste (no-install Claude.ai) or `npx scalereach-mcp setup your_key` (desktop)
+
+**Public Share Links:**
+- Any clip gets a public scalereach.ai/clip/[id] URL
+- Anyone can view, download, or embed without account
+- Live view counter
+
+**Export:**
+- Aspect ratios: 9:16, 16:9, 1:1
+- Quality: FHD 1080p (Starter), 4K Ultra HD (Pro/Agency)
+- Batch export (all clips in one click)
+- Watermark-free on paid plans
+- MP4 format
+
+**Video Editor:**
+- Transcript-based editing (delete words/sentences → video auto-cuts)
+- Clip trimming with precise start/end times
+- Undo/redo (Ctrl+Z)
+- Timeline-based editor
+
+**Brand Kit:**
+- Save logo, colors, fonts
+- Auto-apply to all new exports
+- Launched v0.5.0 (Mar 10, 2026)
+
+**Tools / Specialty Pages (from sitemap):**
+- AI Video Summarizer (extract key moments, 30–60 sec clips)
+- AI Hook Generator
+- AI Video Editor
+- AI Reframe
+- Video Silence Remover
+- Video Compressor
+- Video Resizer
+- Video Transcription (download transcript)
+- Podcast Clip Generator / Podcast to TikTok / Podcast to Reels
+- Gaming Highlight Clipper / Generator
+- Twitch-to-TikTok
+- Talking Head Video Editor
+- Tutorial Clip Generator
+- ASMR Video Generator
+- Minecraft Video Generator
+- Subway Surfers Video Generator
+- Interview Clip Generator
+- Instagram Reels Generator
+
+**Affiliate Program:**
+- 25% lifetime recurring commission
+- 30-day cookie window
+- Real-time dashboard
+- $50 payout minimum
+- Earn on plan upgrades
+
+---
+
+### 3. 💰 Pricing Matrix
+
+| | **Free** | **Starter** | **Pro** | **Agency** | **Enterprise** |
+|---|---|---|---|---|---|
+| **Monthly price** | $0 | $19/mo | $29/mo | $99/mo | Custom |
+| **Annual price** | $0 | $10/mo ($120/yr) | $12.50/mo ($150/yr) | $49/mo ($588/yr) | Custom |
+| **Minutes** | 50 one-time | 200/mo (1,800/yr annual) | 400/mo (4,800/yr annual) | 5,000/mo (60,000/yr annual) | Unlimited |
+| **Max video length** | 30 min | 2 hours | 3 hours | 3 hours | Custom |
+| **File upload size** | Up to 2GB | Up to 4GB | Up to 4GB | Up to 4GB | Custom |
+| **Watermark** | Yes | No | No | No | No |
+| **Storage** | 15 days | 6 months | 6 months | 6 months | — |
+| **Captions style** | Limited | Unlimited | Unlimited | Unlimited | Custom |
+| **Aspect ratios** | 9:16, 16:9, 1:1 | 9:16, 16:9, 1:1 | 9:16, 16:9, 1:1 | 9:16, 16:9, 1:1 | — |
+| **Split Screen** | ✗ | ✓ | ✓ | ✓ | — |
+| **Export quality** | FHD | 1080p | 4K | 4K | — |
+| **AI Reframe** | ✗ | ✓ | ✓ | ✓ | — |
+| **Viral Score** | ✓ | ✓ | ✓ | ✓ | — |
+| **Social accounts** | 0 | 1 | 5 | Unlimited | — |
+| **Workspaces** | — | 1 | 3 | 10 | — |
+| **Team members** | — | 1 | 3 | 10 | — |
+| **Downloads** | Unlimited | Unlimited | Unlimited | Unlimited | — |
+| **Queue priority** | Standard | High | Highest | Highest | — |
+| **AI Thumbnails** | — | — | ✓ | ✓ | — |
+| **Scheduling** | ✗ | ✓ | ✓ | ✓ | — |
+| **Support** | — | — | Founder personal | Founder personal | Dedicated AM + SLA |
+| **Enterprise extras** | — | — | — | — | White-label, custom AI training, custom integrations |
+
+**Note:** Annual plan comparison says "same price on monthly or annual" in one place but pricing page shows annual discounts — slight inconsistency in marketing copy.
+
+---
+
+### 4. 🤖 AI Capabilities
+
+| Capability | Available? |
+|---|---|
+| AI clip detection / moment extraction | ✅ Core feature |
+| Viral scoring (0–100) | ✅ |
+| AI hook overlay (text) | ✅ |
+| AI reframe / auto-zoom / face tracking | ✅ |
+| Auto captions (word-level, 100+ langs) | ✅ Deepgram-powered |
+| Caption animations | ✅ (bounce, pop, fade, karaoke) |
+| AI thumbnails | ✅ (Pro/Agency) |
+| AI video summarizer | ✅ |
+| Custom clip prompts (natural language) | ✅ |
+| MCP / LLM chat interface | ✅ (Claude, Cursor, Kiro, Windsurf) |
+| Text-to-video / generative video | ❌ Not offered |
+| AI dubbing / translation | ❌ Not offered |
+| TTS / voice generation | ❌ Not offered |
+| AI avatars | ❌ Not offered |
+| Image generation | ❌ Not offered |
+| Voice clone | ❌ Not offered |
+| AI silence remover | ✅ (tool page exists) |
+| Video transcription / download | ✅ (SRT/VTT) |
+
+---
+
+### 5. 🎙️ Recording / Capture
+
+- **No recording feature** — ScaleReach is a post-production/repurposing tool only
+- Input: YouTube URL paste, direct file upload (MP4, MOV, WebM, AVI, MKV, up to 4GB)
+- No screen recorder, webcam recorder, or live capture
+
+---
+
+### 6. ✂️ Editing Surfaces
+
+- **Transcript-based editing** (edit video by editing transcript text)
+- **Clip trimming** (drag handles or timestamp entry)
+- **Preview canvas** (real-time preview with caption repositioning)
+- **Timeline-based editor** (basic trim handles, keyboard shortcuts)
+- **Undo/redo** (Ctrl+Z / Ctrl+Shift+Z)
+- **No storyboard mode**
+- **No full NLE timeline** (not a general-purpose video editor — clip-and-caption focused)
+
+---
+
+### 7. 🔗 Integrations & Ecosystem
+
+| Integration | Status |
+|---|---|
+| YouTube (link input) | ✅ |
+| TikTok (posting) | ✅ |
+| Instagram (posting) | ✅ |
+| YouTube Shorts (posting) | ✅ |
+| Twitter/X (posting) | ✅ |
+| LinkedIn (posting) | ✅ |
+| Claude.ai (MCP) | ✅ |
+| Claude Desktop (MCP) | ✅ |
+| Cursor (MCP) | ✅ |
+| Kiro (MCP) | ✅ |
+| Windsurf (MCP) | ✅ |
+| Google Drive / Dropbox | ❌ Not mentioned |
+| Zoom / Loom / Vimeo | ❌ Not mentioned |
+| Zapier / webhooks | ❌ Not mentioned |
+| API | ❌ Not offered (competitors have it) |
+
+---
+
+### 8. 👥 Collaboration & Team Features
+
+- **Team workspaces** (Agency plan: up to 10 members, 10 workspaces)
+- **Project folders** for organization
+- **Member invitations** (Agency tier)
+- **Brand kit** shared across workspace
+- **Public share links** (anyone can view/embed clips without account)
+- **No real-time collaborative editing**
+- **No comments or review workflow**
+- **No approval flows**
+
+---
+
+### 9. 🔐 Security / Compliance
+
+**Stated in Privacy Policy (last updated not specified):**
+- Encryption in transit and at rest ✅
+- Secure cloud infrastructure with industry-standard protections ✅
+- Regular security assessments ✅
+- Access controls + authentication mechanisms ✅
+- Employee training on data protection ✅
+- GDPR rights (EEA residents) ✅ mentioned
+- CCPA rights (California residents) ✅ mentioned
+
+**NOT mentioned / absent:**
+- SOC 2 certification ❌ not claimed
+- HIPAA ❌ not claimed
+- ISO 27001 ❌ not mentioned
+- SSO / SAML / SCIM ❌ not mentioned
+- Data residency / region selection ❌ not mentioned
+- Specific cloud provider named ❌ not mentioned
+- Two-factor authentication ❌ not mentioned
+
+**Terms of Service:**
+- Governed by Delaware law, AAA arbitration
+- Credit-based (minutes), no rollover
+- User retains content ownership
+- Non-exclusive license granted to ScaleReach for processing
+
+---
+
+### 10. 💻 Platform Support
+
+| Platform | Available |
+|---|---|
+| Web app | ✅ (app.scalereach.ai) |
+| Mac desktop | ❌ |
+| Windows desktop | ❌ |
+| iOS mobile | ❌ |
+| Android mobile | ❌ |
+| Browser extension | ❌ |
+| API | ❌ |
+| MCP server | ✅ (unique differentiator) |
+
+**ScaleReach is web-only.**
+
+---
+
+### 11. 🎯 Use Cases Promoted
+
+From sitemap and business pages:
+1. **Podcasters** — episode → 10–25 short-form clips
+2. **Marketing teams** — webinars, product demos, testimonials → campaign clips
+3. **Gaming creators** — VODs, stream highlights → 15–20 vertical clips
+4. **Coaches** — coaching video content
+5. **Education** — educational video clip generator
+6. **Entertainment / Media** — entertainment clip generator
+7. **Fitness creators**
+8. **Lifestyle creators**
+9. **News / media organizations**
+10. **Sports highlight generator**
+11. **Live streaming / Twitch** — Twitch-to-TikTok
+12. **Instagram growth**
+13. **YouTube growth**
+14. **TikTok creators**
+15. **Agencies** — multi-client, multi-brand workflows
+
+---
+
+### 12. ⭐ Differentiators (Claimed)
+
+1. **MCP integration** — only video clipping tool offering Claude/Cursor/Kiro chat-based clipping (as of May 2026)
+2. **15 clips per video** vs. 10 (Opus Clip) and 10 (Vizard)
+3. **Built-in scheduler included at $12/mo** — competitors charge $29–$30/mo for same
+4. **Public share links** — shareable clip URLs without account
+5. **No credit card to start**
+6. **~2 min processing** for 1-hour video
+7. **Split-screen gameplay backgrounds** (Subway Surfer, Minecraft)
+8. **Viral scoring** (Vizard has none; Opus Clip has it)
+9. **Founder personal support** on all paid tiers
+10. **Brand kit** (v0.5.0, Mar 2026)
+
+---
+
+### 13. 🚧 Gaps / Not Mentioned
+
+- No recording/screen capture
+- No text-to-video or generative AI
+- No dubbing/translation/localization
+- No TTS or voice generation
+- No AI avatars
+- No mobile apps
+- No API access (competitors have this)
+- No transcript-based editing comparable to Vizard
+- No AI Co-Pilot (interactive prompt-based editing like Opus Clip)
+- No AI chapter summaries
+- No integration with Zoom, Loom, Vimeo, Google Drive, Dropbox
+- No team collaboration beyond basic workspace/invite
+- No enterprise-grade security (SOC 2, SSO, SAML, SCIM, HIPAA)
+- Storage limited to 6 months (vs. unlimited on some competitors)
+- Max 4GB upload vs. 10–30GB on competitors
+- Max 3h video vs. 10–20h+ on competitors
+- Still very new (5 months old as of May 2026), v0.5.0 as latest
+
+---
+
+## ══════════════════════════════════════
+# PRODUCT B: CapCut (capcut.com)
+## ══════════════════════════════════════
+
+---
+
+### 1. 🎯 Identity & Positioning
+
+- **Hero claim:** "AI-Powered Photo & Video Editor for Everyone"
+- **Subtext:** "CapCut has everything you need to create trending content for YouTube, Instagram, and beyond"
+- **Company:** ByteDance Pte. Ltd., registered address 1 Raffles Quay, #26-10, South Tower, Singapore 048583
+- **Scale:** 100M+ downloads, 100K+ creators, 4.7 App Store rating, 20 languages
+- **Languages supported in product:** 20+ UI languages; 100+ caption/translation languages
+- **Positioning:** All-in-one creative platform for everyone — video editing, photo editing, AI generation, templates — with a strong social media/TikTok ecosystem integration
+- **Business arm:** "Pippit AI" (accessed at capcut.com/business) — marketed as "The Simplest Creative Agent" for marketers, e-commerce, and business content production
+- **TikTok ecosystem:** Explicitly lists TikTok, TikTok Shop, TikTok Ads, TikTok Live, CapCut, Seed as linked ecosystem brands on the Business page
+
+---
+
+### 2. 📋 Feature Catalog (Exhaustive)
+
+**Video Editing (Core):**
+- Cut, trim, split, reverse, mirror clips
+- Timeline-based editing (drag and drop)
+- Transitions (library of transitions)
+- Filters & effects (themed, AI-powered)
+- Text overlays
+- Stickers
+- Sound effects
+- Trendy music library (royalty-free)
+- Color correction / color grading
+- Auto-reframe
+- Body effects
+- Relight (AI)
+- AI style transfer (3D cartoon, anime, oil painting — via Dreamina Seedance 2.0)
+- Video resizing/cropping
+- AI color correction (balance exposure + saturation automatically)
+
+**Image Editing:**
+- Background remover (one-click AI, no green screen needed)
+- Image enhancer / resolution upscaler
+- Image resizer (batch)
+- Photo editor (smart cropping, filters, advanced effects)
+- AI inpainting (fill/modify areas seamlessly)
+- AI people remover (remove persons from photos)
+- AI text remover
+- Face cutout
+- Chroma key (green screen, pixel-level accuracy)
+- Replace background with solid color, image, or AI-generated scene
+
+**AI Generation:**
+- **Text-to-video** (Dreamina Seedance 2.0) — cinematic movie, cartoon 3D, realistic film styles
+- **Image-to-video** (Dreamina Seedance 2.0)
+- **Text-to-image** (Seedream 5.0, Nano Banana Pro) — 2K native + 4K upscaling
+- **AI video generator** (avatars + templates + one-click text-to-video)
+- **AI image generator** — custom visuals from text/reference images
+- **AI Design** (layout generation for social media, covers, marketing materials)
+- **Video Studio / AI Agent** — "chat with CapCut's AI video editor and it'll build a video from scratch, style, avatar, everything"
+- **AI brainstorming** — video topics, storyboard outlines, content ideas
+
+**AI Avatars:**
+- 100+ digital avatars
+- 1000+ digital human categories
+- Clone your own avatar from a short video upload
+- Talking avatar from photo (lip-sync animation)
+- 150+ AI voiceovers for avatars
+- Customizable backgrounds, frames, styles
+- Export up to 8K
+
+**Text & Audio:**
+- **Text to Speech (TTS)** — 200+ AI voices (gender, age, style, language)
+- **Voice clone** — record a few sentences → AI creates lifelike clone of your voice
+- **Voice changer** — robot, chipmunk, many other effects
+- **AI voiceover generator**
+- **Audio translator** — translate audio into text in 100+ languages; audio-visual translation
+- **Auto captions** (speech-to-text, multiple languages)
+- **Subtitle translator** — translate captions to other languages
+- **Remove background noise** (one-click AI)
+- **Voice enhancer** — clarity, volume, vocal quality
+- **Extract audio** from video (MP3, WAV)
+- **Online audio editor**
+- **AI writer** — generate scripts/text
+- **SRT/VTT export** (standalone subtitle file)
+
+**Templates:**
+- Reels & TikTok templates
+- Social media templates (Instagram, Facebook, TikTok)
+- AI effects templates
+- Business templates (promo videos, ads, corporate)
+- Templates shown with use counts (873K, 934K, 293K, 129K, 243K on homepage)
+
+**Smart/Automation:**
+- One-click export optimization
+- Cloud import (Google Drive, Dropbox)
+- QR code file upload (mobile)
+- Batch image scaling
+- Auto-layout (AI resizes to platform specs)
+- Cloud storage + file backup
+- Cloud collaboration
+
+**Specialty AI Tools (confirmed from pages visited):**
+- AI tattoo generator
+- AI character generator (from text or image)
+- AI people remover
+- AI text remover
+- Face cutout
+- Image inpainting
+- Nano Banana Pro (image model — consistent character identity across generations, 4K upscale)
+- Seedream 5.0 (image generation model)
+- Dreamina Seedance 2.0 (video generation model — text/image-to-video)
+
+---
+
+### 3. 💰 Pricing Matrix
+
+**⚠️ CRITICAL FINDING: CapCut's pricing page returned 404.** No public pricing page was accessible at capcut.com/pricing or capcut.com/upgrade. The site requires login to access the editor and upgrade flows. Free-tier access is confirmed ("No credit card required" appears on tool pages). A Pro/paid plan exists (referenced in privacy policy and tool descriptions re: cloud storage upgrades), but specific pricing tiers, limits, and costs were **not publicly accessible** without logging in.
+
+**What is confirmed:**
+- **Free plan exists** — no credit card required, no watermark mentioned on video editor page, basic editing, templates, many tools accessible
+- **Paid/Pro plan exists** — "Upgrade your free cloud storage plan" referenced; higher resolution/export options implied
+- **Business/Pippit AI** — separate product at capcut.com/business; pricing unknown
+- **Free cloud storage: 5 GB** on signup (confirmed on voice changer page)
+- **Export up to 8K** mentioned for AI avatar (premium)
+- **"1080–8K exports" free** mentioned in AI video generator FAQ
+
+**The pricing structure could not be scraped** — CapCut walls pricing behind login. This is a significant intelligence gap.
+
+---
+
+### 4. 🤖 AI Capabilities
+
+| Capability | Available? | Details |
+|---|---|---|
+| Auto captions (speech-to-text) | ✅ | Multi-language, SRT/VTT export |
+| Caption translation | ✅ | Translate captions to other languages |
+| Audio translator | ✅ | 100+ languages |
+| TTS (text-to-speech) | ✅ | 200+ AI voices |
+| Voice clone | ✅ | Record + clone in seconds |
+| Voice changer | ✅ | Robot, chipmunk, many effects |
+| AI voiceover generator | ✅ | Multiple narration styles |
+| Background noise removal | ✅ | One-click AI |
+| Voice enhancer | ✅ | |
+| AI video background removal | ✅ | No green screen needed |
+| Chroma key / green screen | ✅ | Pixel-level accuracy |
+| Image background removal | ✅ | One-click AI |
+| AI image generation | ✅ | Seedream 5.0, Nano Banana Pro |
+| Text-to-video generation | ✅ | Dreamina Seedance 2.0 |
+| Image-to-video generation | ✅ | Dreamina Seedance 2.0 |
+| AI avatars (100+ digital) | ✅ | With voice + lip-sync |
+| Custom avatar clone (from video) | ✅ | |
+| Talking avatar from photo | ✅ | Lip-sync |
+| AI character generator | ✅ | Bulk one-click creation |
+| AI design / layout gen | ✅ | Social media, marketing |
+| AI script writer | ✅ | |
+| AI video agent (chat-to-video) | ✅ | Video Studio / "Simplest Creative Agent" |
+| AI auto-reframe | ✅ | |
+| AI body effects | ✅ | |
+| AI relight | ✅ | |
+| AI style transfer | ✅ | Anime, cartoon, oil painting |
+| AI color correction | ✅ | |
+| Image inpainting | ✅ | |
+| AI people remover | ✅ | |
+| AI text remover | ✅ | |
+| AI tattoo generator | ✅ | |
+| AI face cutout | ✅ | |
+| Viral score / clip detection | ❌ | Not offered |
+| MCP integration | ❌ | Not offered |
+| Social media scheduler | ❌ | Not confirmed in UI |
+
+---
+
+### 5. 🎙️ Recording / Capture
+
+- **No dedicated screen recorder** mentioned on public pages
+- Input sources: computer, cloud storage (Google Drive, Dropbox), QR code scan (mobile to desktop), YouTube API integration (for import/processing)
+- Mobile apps (iOS/Android) — confirmed for recording/capture via device camera
+- **Pre-uploading** feature: content is uploaded to servers before user saves, for AI processing (auto-captions, recommendations)
+- No mention of a dedicated screen capture or webcam recording mode in web editor
+
+---
+
+### 6. ✂️ Editing Surfaces
+
+- **Full timeline-based video editor** (web, desktop, mobile)
+- **Drag-and-drop interface**
+- **Text-based editing** (not explicitly documented as a core feature the way Vizard/ScaleReach feature it — but transcript editing exists via auto-captions tool)
+- **Template-first editing** (start from template, customize)
+- **AI agent / chat-to-video** (Video Studio — "build a video from scratch, style, avatar, everything" via chat)
+- **Scene-by-scene editing** (Voiceover, Elements, Music panels in AI video maker)
+- **AI Design surface** (layout generation for images/marketing materials)
+- **Photo editor** (smart crop, filters, effects — no timeline)
+- **No storyboard surface** explicitly named
+
+---
+
+### 7. 🔗 Integrations & Ecosystem
+
+| Integration | Status |
+|---|---|
+| TikTok (native share/upload) | ✅ Explicit |
+| YouTube API (import/export) | ✅ Confirmed in Privacy Policy |
+| Instagram | ✅ Export/share |
+| Facebook | ✅ Export/share |
+| Google Drive (import) | ✅ |
+| Dropbox (import) | ✅ |
+| Apple login | ✅ |
+| Facebook login | ✅ |
+| Google login | ✅ |
+| TikTok login | ✅ |
+| YouTube login | ✅ |
+| TikTok Shop | ✅ (via Pippit AI / Business page ecosystem) |
+| TikTok Ads | ✅ (via Pippit AI) |
+| TikTok Live | ✅ (via Pippit AI ecosystem) |
+| API | ❌ Not publicly documented for main CapCut |
+| MCP | ❌ Not offered |
+| Loom / Zoom | ❌ Not mentioned |
+| Dreamina (ByteDance AI image platform) | ✅ Deep integration |
+
+---
+
+### 8. 👥 Collaboration & Team Features
+
+- **Cloud storage** with backup and multi-device access
+- **Team space / collaborative projects** — mentioned on voice changer page ("create a team space for collaborative projects")
+- **Cloud collaboration** listed as a feature on Online Video Editor page
+- **Pippit AI (Business)** — implies team workflows for marketers/agencies
+- **Audio translator mentions** "share with team members, cloud storage for easy access"
+- **Workspace concept exists** but depth of collaboration (comments, reviews, approvals, roles) not confirmed from public pages
+- No explicit mention of SSO, SCIM, or enterprise user management in consumer-facing pages
+
+---
+
+### 9. 🔐 Security / Compliance
+
+**From Privacy Policy (last updated March 28, 2024; effective April 28, 2024):**
+- Entity: **Bytedance Pte. Ltd.**, Singapore
+- **Data collected:** Registration info (DOB, email, password), User Content (video/photos/images uploaded), email contacts (if Google sync), usage info, technical device info, IP, location (SIM + IP), face/body feature detection from User Content, **auto-caption text collected to train AI**
+- **Pre-uploading:** Content may be uploaded to servers BEFORE user saves — "to recommend audio options, generate captions, and provide personalized recommendations"
+- **Face/body feature data:** Collected from videos — "identifying the objects and scenery that appear, the existence and location within an image of face and body features and attributes"
+- **Corporate group sharing:** Data shared with ByteDance group entities globally
+- **Advertising:** Data shared with ad partners for personalized advertising; advertising identifiers, IP, inferred location shared
+- **Third-party integrations:** YouTube API integration explicitly noted; user data governed by YouTube ToS
+- **Governing law:** Singapore law, Singapore International Arbitration Centre
+- **Limitation of liability:** Max $50 USD or local equivalent
+
+**Certifications/Compliance explicitly stated:**
+- No SOC 2 mentioned ❌
+- No HIPAA ❌
+- No ISO 27001 ❌
+- No GDPR-specific mention in main privacy policy ❌ (may be in jurisdiction-specific supplements)
+- No SSO/SAML/SCIM ❌
+- No data residency options ❌
+
+**⚠️ KEY RISK FACTORS:**
+1. ByteDance (Chinese parent company) — significant geopolitical/regulatory concern for enterprise buyers
+2. Face and body feature data explicitly collected from uploaded videos
+3. Auto-caption text collected for AI model training
+4. Pre-uploading of content before saving
+5. Data shared with "corporate group" (ByteDance global entities)
+6. US-specific Consumer Health Data Privacy Policy exists (Washington State My Health My Data Act)
+7. No explicit mention of data NOT being sent to China
+8. Max liability capped at $50 USD
+
+---
+
+### 10. 💻 Platform Support
+
+| Platform | Available |
+|---|---|
+| Web browser (online editor) | ✅ |
+| Mac desktop app | ✅ (downloadable) |
+| Windows desktop app | ✅ (downloadable) |
+| iOS (iPhone/iPad) | ✅ (App Store, 4.7 rating) |
+| Android | ✅ |
+| Browser extension | ❌ Not mentioned |
+| API | ❌ Not publicly available for creators |
+| MCP | ❌ |
+
+---
+
+### 11. 🎯 Use Cases Promoted
+
+1. **Social media content** (TikTok, Instagram Reels, YouTube) — primary
+2. **Business marketing videos** (ads, promo, product showcase)
+3. **E-commerce product videos** (TikTok Shop integration)
+4. **Educational tutorials**
+5. **News updates** (avatar-based)
+6. **Vlogs / self-media**
+7. **Podcasts** (video editing)
+8. **Personal branding**
+9. **Entertainment / creative storytelling**
+10. **Professional marketing / agency** (via Pippit AI)
+11. **AI avatar-based videos** (faceless content creation)
+12. **Travel / lifestyle content**
+13. **Brand campaigns**
+
+---
+
+### 12. ⭐ Differentiators (from CapCut's POV)
+
+1. **All-in-one platform** — video, photo, image gen, video gen, TTS, avatars, templates, design, editor all in one
+2. **100M+ downloads** — massive scale and recognition
+3. **TikTok ecosystem integration** — native ByteDance stack (TikTok, TikTok Shop, TikTok Ads, TikTok Live)
+4. **Dreamina Seedance 2.0** — proprietary text/image-to-video model (smooth motion, multi-subject composition)
+5. **Seedream 5.0 + Nano Banana Pro** — proprietary image generation with 4K upscaling + character consistency
+6. **200+ TTS voices** in multiple languages
+7. **Voice clone** from own voice in seconds
+8. **AI avatars** — 1000+ digital human categories, custom clone, talking photo
+9. **No watermark** on free tier (explicitly stated on multiple tool pages)
+10. **Cross-platform** — Web + Mac + Windows + iOS + Android
+11. **5 GB free cloud storage**
+12. **Business/enterprise** surface (Pippit AI) with TikTok commerce integration
+13. **Gemini-based Nano Banana Pro** model (image gen — natural language editing, consistent characters)
+14. **Batch processing** (batch resize, bulk character creation)
+
+---
+
+### 13. 🚧 Gaps / Not Mentioned
+
+- **No public pricing page** — requires login (significant friction for buyers)
+- **No viral scoring / clip performance prediction** (ScaleReach's core differentiator)
+- **No MCP / LLM integration**
+- **No dedicated social media post scheduler** (not confirmed in public pages)
+- **No public share links** for clips
+- **No split-screen gaming backgrounds** (Subway Surfer, Minecraft)
+- **No auto-clip generation from long-form video** (ScaleReach's core)
+- **SOC 2, HIPAA, GDPR certifications** not mentioned — enterprise security story is weak
+- **ByteDance ownership** is a major enterprise blocker (government/healthcare/finance)
+- **No API for third-party integration** (public)
+- **No transcript-based editing** explicitly marketed as a workflow
+- Data privacy concerns (face/body feature extraction, pre-uploading, corporate group sharing)
+- Recording surface unclear — no confirmed screen recorder on web app
+
+---
+
+## ══════════════════════════════════════
+# HEAD-TO-HEAD COMPARISON SUMMARY
+## ══════════════════════════════════════
+
+| Dimension | ScaleReach AI | CapCut |
+|---|---|---|
+| **Core function** | Long-form → short clips (repurposing) | Full-spectrum video/photo editing + AI generation |
+| **Founded/scale** | Jan 2026, solo founder, <1 yr old | ByteDance subsidiary, 100M+ downloads |
+| **Pricing** | $12–$99/mo (public) | Unknown — login-gated |
+| **Free tier** | 30 min, no CC, no watermark | Free (confirmed), no CC, no watermark |
+| **Clip generation** | ✅ Core (15 clips/video) | ❌ Not a feature |
+| **Viral score** | ✅ | ❌ |
+| **MCP integration** | ✅ (Claude, Cursor, Kiro) | ❌ |
+| **Social scheduler** | ✅ (5 platforms) | ❌ (not confirmed) |
+| **Split-screen gaming BG** | ✅ | ❌ |
+| **Public share links** | ✅ | ❌ |
+| **Text-to-video (generative)** | ❌ | ✅ (Dreamina Seedance 2.0) |
+| **Image generation** | ❌ | ✅ (Seedream 5.0, Nano Banana Pro) |
+| **AI avatars** | ❌ | ✅ (1000+ categories) |
+| **Voice clone / TTS** | ❌ | ✅ (200+ voices) |
+| **Audio translation** | ❌ | ✅ |
+| **Voice changer** | ❌ | ✅ |
+| **Background removal (video)** | ❌ | ✅ |
+| **Auto captions** | ✅ (100+ langs, word-level) | ✅ (multi-lang, SRT export) |
+| **Caption translation** | ❌ | ✅ |
+| **Mobile apps** | ❌ (web only) | ✅ (iOS + Android) |
+| **Desktop apps** | ❌ | ✅ (Mac + Windows) |
+| **Template library** | ❌ | ✅ (millions) |
+| **API** | ❌ | ❌ (not public) |
+| **SOC 2 / HIPAA** | ❌ | ❌ |
+| **ByteDance/data concerns** | N/A | ⚠️ Major risk |
+| **Enterprise security** | Minimal | Minimal (consumer-grade) |
+| **Collaboration** | Basic (workspaces) | Basic (cloud teams) |
+
+---
+
+## ══════════════════════════════════════
+# KEY INTELLIGENCE FOR COMPETING PRODUCT
+## ══════════════════════════════════════
+
+**Top exploitable gaps in the market:**
+
+1. **CapCut has no viral scoring, no clip detection, no scheduler** → these are uncontested in the AI video mass market
+2. **ScaleReach is web-only** → a competing product with mobile + desktop wins on reach
+3. **Neither product has enterprise security** (SOC 2, HIPAA, SSO, SAML) → a compliance-ready video tool would own B2B/enterprise
+4. **CapCut's ByteDance ownership** creates fear for enterprise buyers, regulated industries (healthcare, government, finance, education) — a US/EU-domiciled alternative wins here
+5. **CapCut pricing is opaque** (login-gated) → a competitor with clear transparent pricing wins conversion
+6. **Neither product has a strong dubbing/localization workflow** that combines clip detection + translation + dubbing in one flow
+7. **ScaleReach has no mobile** — 60%+ of short-form creators edit on mobile
+8. **Neither has transcript-based precision editing well-integrated** into a clip repurposing flow (Vizard has this, ScaleReach doesn't)
+9. **ScaleReach's 4GB/3h limits** vs. the market need for 30GB/10h+ files
+10. **MCP is a genuine moat for ScaleReach** — a competing product should consider this
+
+**Source pages successfully crawled:**
+- scalereach.ai/ ✅
+- scalereach.ai/sitemap.xml ✅
+- scalereach.ai/pricing/ ✅
+- scalereach.ai/mcp/ ✅
+- scalereach.ai/privacy/ ✅
+- scalereach.ai/terms/ ✅
+- scalereach.ai/changelog/ ✅
+- scalereach.ai/affiliate/ ✅
+- scalereach.ai/tools/ai-video-clip-generator ✅
+- scalereach.ai/tools/ai-caption-generator ✅
+- scalereach.ai/tools/ai-video-reframe-tool ✅
+- scalereach.ai/tools/ai-video-editor-tool ✅
+- scalereach.ai/tools/social-media-post-scheduler ✅
+- scalereach.ai/tools/ai-video-summarizer-tool ✅
+- scalereach.ai/tools/video-virality-score-tool/ ✅
+- scalereach.ai/business/podcast/ ✅
+- scalereach.ai/business/marketing/ ✅
+- scalereach.ai/gaming-clip-generator/ ✅
+- scalereach.ai/alternatives/opus-clip/ ✅
+- scalereach.ai/alternatives/vizard/ ✅
+- capcut.com/ ✅
+- capcut.com/sitemap.xml ✅
+- capcut.com/tools/online-video-editor ✅
+- capcut.com/tools/text-to-speech ✅
+- capcut.com/tools/add-subtitles-to-video ✅
+- capcut.com/tools/video-background-remover ✅
+- capcut.com/tools/ai-video-maker ✅
+- capcut.com/tools/ai-video-generator ✅
+- capcut.com/tools/ai-avatar ✅
+- capcut.com/tools/voice-changer ✅
+- capcut.com/tools/auto-caption-generator ✅
+- capcut.com/tools/audio-translator ✅
+- capcut.com/tools/ai-voice-over ✅
+- capcut.com/tools/dreamina-seedance-2-0 ✅
+- capcut.com/tools/nano-banana-pro ✅
+- capcut.com/tools/image-background-remover ✅
+- capcut.com/tools/ai-character-generators ✅
+- capcut.com/tools/ai-people-remover ✅
+- capcut.com/tools/video-effect-and-filter ✅
+- capcut.com/tools/ai-tattoo-generator ✅
+- capcut.com/tools/online-image-resizer ✅
+- capcut.com/business ✅ (reveals Pippit AI)
+- capcut.com/template/business ✅
+- capcut.com/privacy-policy ✅
+- capcut.com/terms-of-service ✅
+
+**Pages that returned 404 / inaccessible:**
+- capcut.com/pricing ❌
+- capcut.com/upgrade ❌
+- capcut.com/pro ❌
+- capcut.com/features ❌
+- capcut.com/capcut-for-business ❌
+- capcut.com/capcut-for-teams ❌
+- capcut.com/commerce ❌
+- capcut.com/tools/ai-translation ❌
+- capcut.com/policy/privacy ❌ (correct URL is /privacy-policy)
+- capcut.com/create/ai-text-to-image-generator ❌
+
+**Unresolved gaps requiring further investigation:**
+- CapCut actual pricing tiers and limits (requires login)
+- CapCut Pro-specific features vs. free tier (requires login)
+- Pippit AI (capcut.com/business) — full pricing and enterprise offering
+- CapCut recording/screen capture capabilities (unclear from public pages)
+- Whether CapCut has a post scheduler (not confirmed from public pages)
+- CapCut enterprise/team SSO/SAML features (not publicly documented)
+- Specific export codec options and bitrate controls

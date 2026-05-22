@@ -1,0 +1,478 @@
+Agent completed. agent_id: wayin-hipclip, agent_type: research, status: completed, description: Research Wayin and HipClip, elapsed: 364s, total_turns: 0, duration: 360s
+
+Now I have enough data for a comprehensive report. Let me compile all findings.
+
+---
+
+# DEEP COMPETITOR RESEARCH REPORT
+
+## ⚠️ Access Notes
+- **wayin.ai** subpages (`/pricing/`, `/about/`, `/tools/*`, `/api/`) all return **HTTP 403** from the live site. The homepage (`wayin.ai/`) was accessible. Additional data was recovered from **Wayback Machine archives** (snapshots: April 2025, June 2025, August 2025, September 2025). The WayinVideo app at `v.wayin.ai` also returns 403.
+- **hipclip.ai** was fully crawlable. All major pages accessed successfully.
+
+---
+
+---
+
+# PRODUCT A: WAYIN VIDEO
+
+## 1. Identity & Positioning
+
+| Field | Value |
+|---|---|
+| **Product Name** | WayinVideo (formerly **Videohunt.AI**) |
+| **Parent brand** | Wayin AI — also operates a separate Chrome extension product for video Q&A/summarization |
+| **Tagline (current homepage)** | *"AI Video Clipper. Turn Long Videos into Share-Ready Shorts"* |
+| **Tagline (app title in HTML meta)** | *"Grasp viral video moments (formerly Videohunt.Ai)"* |
+| **Description** | *"Grasp video moments and create viral clips in a flash. Tailored for video enthusiasts and creators, WayinVideo uncovers the most compelling stories from videos with ease and brilliance."* |
+| **App URL** | `v.wayin.ai` (marketing site: `wayin.ai/`) |
+| **Company contact** | contact@wayin.ai |
+| **Funding disclosed** | None disclosed |
+| **Named customers / logos** | None cited on accessible pages |
+| **Quantitative claims** | "Loved by creators" (homepage), "100+ languages" (multiple pages) |
+
+**Context on product split:** Wayin operates **two products** under the same domain:
+1. **Wayin AI** (original) — Chrome extension for video understanding, chat-with-video, Q&A, mind maps. Archived pricing shows subscription tiers.
+2. **WayinVideo** (current primary) — A web app (`v.wayin.ai`) for AI clipping, captioning, transcription, and reframing. This is the product under research.
+
+---
+
+## 2. Feature Catalog
+
+### Core AI Features
+| Feature | Description |
+|---|---|
+| **AI Clip Maker** | Auto-detects highlights, speaker changes, and pacing to surface viral moments; converts long-form video into short clips with one click |
+| **AI Video Search / Find Moments** | Natural language search — type a keyword, phrase, action, or scene; AI locates exact moments in seconds without scrubbing |
+| **AI Video Summarizer** | One-paragraph overview + timestamped outline of key segments; supports 100+ languages |
+| **AI Video Transcription** | Accurate transcription with punctuation, timestamps, and speaker labels; supports copy to notes/docs |
+| **AI Caption Generator** | Animated subtitles, callout cards, platform-optimized caption templates; multi-style options |
+| **AI Video Reframe** | Face/object tracking to auto-center subjects; outputs 9:16, 1:1, 16:9 |
+| **Subtitle Translation** | 100+ languages; three display modes: Translated Only / Original Only / Bilingual (side-by-side) |
+| **Auto Title/Description/Hashtag Generation** | AI generates metadata for clips based on content analysis |
+
+### Caption/Subtitle Sub-features
+- Adjustable font, color, and size
+- Animated caption styles
+- Multiple templates per platform
+- Bilingual display (original + translated simultaneously)
+
+### Workflow / Output Sub-features
+- Paste YouTube link OR upload video file
+- One-click aspect ratio conversion (no manual editing)
+- Share directly to Twitter, Instagram, YouTube Shorts, Facebook
+- Export with subtitles burned in
+
+### API / Developer Feature
+- Full API access at `wayin.ai/api/` (or `/wayinvideo/api-dashboard`)
+- Integrates with **N8N**, **Make**, **MCP** (Model Context Protocol)
+- Integrates with AI agents: **OpenClaw**, **Claude Code**
+- Functions accessible via API: AI clipping, transcription, summarization, find moments, animated captions, reframe
+- Claim: "Generate hundreds of clips from long videos automatically"
+
+---
+
+## 3. Pricing Matrix
+
+**Note:** `wayin.ai/pricing/` returns 403 on live site and all archive attempts. The following was recovered from the **Wayback Machine** (April 2025 archive of the parent Wayin AI product at the same domain):
+
+| Tier | Price | Allotments |
+|---|---|---|
+| **Free (Signup Benefits)** | $0 | 240 min video summary, 20 in-depth understanding credits, 20 bot chat questions, 3 notes, real-time web access |
+| **Standard** | $9.99/mo *(struck through: $29.99/mo — 67% OFF, most popular)* | 3,000 min video summary, 300 credits, 300 bot chat, unlimited notes, real-time web access, priority email support, video summary share |
+| **Premium** | Not shown *(listed above Standard with 10k mins)* | 10,000 min video summary, 1,000 credits, 1,000 bot chat questions, unlimited notes, real-time web access, priority email support, video summary share |
+| **Enterprise** | Custom | Contact contact@wayin.ai for discount |
+
+> ⚠️ **Important caveat:** These tiers appear to belong to the **Wayin AI Chrome extension** product (older). The **WayinVideo** app (`v.wayin.ai`) pricing is **not captured** — its `/pricing/` endpoint is blocked. Only the API pricing was retrieved:
+
+**WayinVideo API Pricing** (from Wayback Machine, ~May 2026 snapshot of the API page):
+| Tier | Price | Allotments |
+|---|---|---|
+| **Pay-As-You-Go** | Starts from $10 | All standard API endpoints, pay per use, no expiration, community Discord support |
+| **Enterprise API** | Custom | Volume discounts, custom endpoints, dedicated developer support, higher rate limits |
+
+---
+
+## 4. AI Capabilities
+
+| Capability | Status | Detail |
+|---|---|---|
+| **TTS / Voice clone** | ❌ Not mentioned | |
+| **Dubbing / Audio translation** | ❌ Not mentioned | Only subtitle/text translation, not audio |
+| **Translation (language count)** | ✅ **100+ languages** | Subtitles/captions only |
+| **Captions / Subtitles** | ✅ Core feature | Animated, multilingual, bilingual display, customizable styles |
+| **AI Clipping** | ✅ Core feature | Viral moment detection, one-click |
+| **AI Summarization** | ✅ | Paragraph summary + timestamped outline |
+| **AI Transcription** | ✅ | Speaker labels, timestamps, punctuation |
+| **AI Video Search** | ✅ | Natural language search within video |
+| **Metadata generation** | ✅ | AI titles, descriptions, hashtags for clips |
+| **Generative video / avatars** | ❌ Not mentioned | |
+| **Agentic / Chat-based AI** | ✅ Partial | Via API integration with AI agents (Claude Code, OpenClaw); no direct in-app chat mentioned |
+
+---
+
+## 5. Recording / Capture
+
+**Not mentioned.** Input is exclusively via:
+- File upload (local device)
+- URL paste (YouTube links confirmed, likely other platforms)
+
+---
+
+## 6. Editing Surfaces
+
+WayinVideo is **not a full editor**. The workflow is:
+1. Upload/paste link → AI analyzes → Clips suggested → Adjust style → Export
+2. Users can: choose caption style, choose aspect ratio, choose language — but there is **no timeline editor, no text-based editing, no storyboard**
+3. Limited manual controls: subtitle font/color/size, aspect ratio selection
+4. **No trim/cut timeline exposed to user** — AI makes those decisions
+
+---
+
+## 7. Integrations & Ecosystem
+
+| Category | Details |
+|---|---|
+| **Video Input** | YouTube URL paste, file upload |
+| **API Automation** | N8N, Make, MCP |
+| **AI Agent Platforms** | OpenClaw, Claude Code |
+| **Output / Publish** | Twitter/X, Instagram, YouTube Shorts, Facebook |
+| **Browser Extension** | Chrome extension (the separate Wayin AI product) |
+| **Mobile App** | ❌ Not mentioned |
+| **API Documentation** | Available at `wayin.ai/api/` and `v.wayin.ai/api-dashboard` |
+
+---
+
+## 8. Collaboration & Team Features
+
+**Not mentioned anywhere.** No multi-user workspaces, team plans, or sharing features documented on accessible pages.
+
+---
+
+## 9. Security / Compliance
+
+**Not mentioned.** No SOC 2, GDPR, HIPAA, SSO, SAML, SCIM, encryption standards, or data residency information found on any accessible page.
+
+---
+
+## 10. Platform Support
+
+| Platform | Support |
+|---|---|
+| **Web App** | ✅ `v.wayin.ai` (marketing: `wayin.ai/`) |
+| **Chrome Extension** | ✅ (Wayin AI parent product — separate) |
+| **iOS App** | ❌ Not mentioned |
+| **Android App** | ❌ Not mentioned |
+| **Desktop App** | ❌ Not mentioned |
+
+---
+
+## 11. Use Cases Promoted
+
+- **Video creators / Vloggers** — repurpose long content, enhance research, spark ideas
+- **Social media creators** — YouTube Shorts, TikTok, Instagram Reels
+- **Podcasters** — clip audio/video recordings
+- **Educators / Courses** — video understanding, Q&A
+- **Interviews & Talks** — speaker-labeled transcripts, clip key exchanges
+- **News & Conference** — quickly extract key insights
+- **E-commerce marketers** — multilingual product demo localization
+- **Educational platform builders / Media archives** — via API (natural language video library search)
+- **Automation/developer teams** — API-driven pipeline automation
+
+---
+
+## 12. Differentiators (Their Claimed)
+
+1. **100+ language subtitle translation** with bilingual display mode
+2. **Natural language video search** ("Find any moment in video")
+3. **One-click viral clip detection** — no scrubbing, no manual selection
+4. **Animated captions** with platform-specific templates
+5. **API with AI agent integrations** (MCP, Claude Code, N8N)
+6. **Formerly Videohunt.AI** — market presence since before rebranding
+
+---
+
+## 13. Gaps / Not Mentioned
+
+- ❌ No TTS, voice cloning, or dubbing
+- ❌ No audio translation (subtitles only)
+- ❌ No generative video, avatars, or text-to-image
+- ❌ No recording/capture functionality
+- ❌ No timeline or text-based editing surface
+- ❌ No collaboration features
+- ❌ No security/compliance documentation
+- ❌ No mobile apps
+- ❌ No music library
+- ❌ No templates library beyond caption styles
+- ❌ Pricing is opaque — WayinVideo specific pricing not publicly accessible
+- ❌ No content calendar / scheduling
+- ❌ No written content generation (blogs, newsletters, etc.)
+- ❌ No team management
+
+---
+---
+
+# PRODUCT B: HIPCLIP AI
+
+## 1. Identity & Positioning
+
+| Field | Value |
+|---|---|
+| **Product Name** | HipClip AI (also "Hipclip") |
+| **Tagline** | *"Promote your videos & podcasts 10x faster"* |
+| **Primary Value Prop** | *"A wonderfully efficient AI assistant that has all the tools to edit your videos and podcasts into short clips, blogs, and ads"* |
+| **Hero Claim** | *"Replace Opus, Descript, Jasper, ChatGPT, CapCut, Captions, & more"* |
+| **Introducing** | *"Autocomplete by Hipclip"* (newest feature, announced prominently) |
+| **App URL** | `studio.hipclip.ai` |
+| **Company Mission** | *"Building the future of content creation: a human-AI storyteller that redefines efficiency, surpassing traditional creators by an order of magnitude"* |
+| **Team** | Artem, Max, Michael (named on sitemap/team pages; no surnames or bios rendered) |
+| **Funding** | Not disclosed |
+| **Named customers** | @vabankpod (grew 100→7,000 subscribers in 6 months using HipClip) |
+| **User stats** | 3,400+ creators (workflow page); 2,900+ podcasters (workflow page) |
+
+---
+
+## 2. Feature Catalog
+
+### Video Editing Features
+| Feature | Description |
+|---|---|
+| **AI Viral Clip Detection** | AI identifies best moments with hooks and viral potential; scored suggestions |
+| **AI Clip Maker / Co-Editor** | Chat-based interface; tell AI what you want, it creates the clip |
+| **Auto Captions** | Animated captions generated automatically; customizable font, size, background |
+| **Video Trimming** | Text-based: delete transcript text → removes video segment |
+| **Horizontal-to-Vertical Conversion** | Resize/reframe for 9:16 (TikTok, Reels), 1:1, 16:9 |
+| **Filler Word Removal** | Auto-identifies "uh", "um", "you know"; one-click removal |
+| **Silence Removal** | Detects pauses; remove all silences or only those above a threshold length |
+| **Branding** | Add logos, brand colors, visual identity to clips |
+| **Music Addition** | Drag-and-drop music; volume controls, fade in/out |
+| **Text Overlays** | Add text/captions with style options |
+| **Transitions & Animations** | Built-in library of transitions and animated effects |
+| **AI Audio Enhancement** | Auto-enhanced audio quality |
+| **Lighting Adjustment** | AI-powered automatic lighting correction |
+| **Aspect Ratio Adjustments** | Platform-specific output formats |
+| **Marking / Highlighting** | Mark transcript segments for navigation; highlight key moments |
+| **Export as MP4** | Final output format |
+
+### AI Writing / Content Features
+| Feature | Description |
+|---|---|
+| **AI Copywriter** | Chat-based content writer for posts, blogs, newsletters, emails |
+| **Blog Post Generation** | SEO-optimized blog posts from video transcripts (800-1200 words) |
+| **LinkedIn Articles** | Professional framing for LinkedIn (600-800 words) |
+| **Email Newsletters** | Key takeaways + CTAs from video content (250-350 words) |
+| **Twitter/X Thread Creation** | 8-10 tweet threads from video insights |
+| **Instagram Carousel Concepts** | 8-10 slide outlines with visual direction |
+| **Quote Post Extraction** | Surface powerful quotes for branded social graphics |
+| **Show Notes / Podcast Summaries** | Podcast summaries with timestamps |
+| **Metadata Extraction** | Pull titles, descriptions, tags from video content |
+| **Translation** | Translate written content to any language |
+
+### AI Intelligence Features
+| Feature | Description |
+|---|---|
+| **AI Transcription** | Automatic, precise with timestamps |
+| **AI Video Summarization** | Content analysis and key point extraction |
+| **Brand Voice & ICP Guidelines** | Custom writing guidelines or choose from templates; tailor to audience profiles/ICPs |
+| **AI Remembers Your Workflows** | Persistent memory of user preferences and workflows (claimed differentiator) |
+| **90+ Pre-Made Workflow Templates** | Categories: Ads, Brand Marketing, Social Media, Content Repurposing, Customer Interviews, Digital Ministry |
+| **Autocomplete** | New feature (description not detailed in crawl) |
+| **Free Tools (public/SEO)** | Free YouTube tag generator, free YouTube title generator, free YouTube description generator, free YouTube-to-transcript |
+
+---
+
+## 3. Pricing Matrix
+
+| Tier | Price | Details |
+|---|---|---|
+| **Self-Serve** | **$20** (appears monthly) | Full app access; AI agent, clip maker, captions, resize, filler removal, branding, AI writing, 90+ workflows, 35+ languages |
+| **Enterprise / Plus** | **Starts at $250/video** | Depends on volume + number of supported channels/assets; includes professional content creators + AI tools; "award-winning branding agencies" available on request; white-label/API upon request |
+
+> **Note:** No granular tier breakdown (storage limits, export count, upload size cap) was found on accessible pages. Free trial mentioned ("first video free"). Blog mentions "start free and scale up." The pricing page content was sparse/collapsed in the crawl.
+
+---
+
+## 4. AI Capabilities
+
+| Capability | Status | Detail |
+|---|---|---|
+| **TTS / Voice Clone** | ❌ Not mentioned | |
+| **Dubbing / Audio Translation** | ❌ Not mentioned | |
+| **Translation (language count)** | ✅ **35+ languages** (comparison table) / **50 languages** (supported languages list) | Discrepancy: comparison table says "35+", actual language list has 50 entries |
+| **Captions / Subtitles** | ✅ | Animated, customizable, multilingual |
+| **AI Clipping** | ✅ Core | Viral moment detection with engagement scoring |
+| **AI Summarization** | ✅ | |
+| **AI Transcription** | ✅ | Timestamps, automatic |
+| **Filler/Silence Removal** | ✅ | |
+| **AI Copywriting** | ✅ | Full written content suite (blogs, emails, threads, carousels) |
+| **Brand Voice Personalization** | ✅ | Custom guidelines, ICP profiles, tone templates |
+| **Agentic / Chat-based AI** | ✅ **Core UX** | Entire editing and writing workflow is chat-based: "talk to AI to create new clips / write posts" |
+| **AI Remembers Workflows** | ✅ | Persistent context/memory |
+| **Generative Video / Avatars** | ❌ Not mentioned | |
+
+**Full Supported Languages List** (from `/post/supported-languages`):
+English US, Spanish, French, German, Hindi, Multilingual (Spanish+English), Bulgarian, Czech, Danish, Dutch, English, English AU, English IN, English NZ, English UK, Estonian, Flemish, French Canadian, German Swiss, Greek, Hindi Latin, Hungarian, Indonesian, Italian, Japanese, Korean, Latvian, Lithuanian, Malay, Norwegian, Polish, Portuguese, Portuguese BR, Romanian, Russian, Slovak, Spanish LATAM, Swedish, Thai, Turkish, Ukrainian, Vietnamese, Catalan, Chinese Mandarin Simplified, Chinese Mandarin Traditional, Chinese Cantonese Traditional, Finnish — **total: ~48 explicit variants**
+
+---
+
+## 5. Recording / Capture
+
+**Not mentioned.** No screen recorder, webcam capture, or live recording feature found. Input is upload-only.
+
+---
+
+## 6. Editing Surfaces
+
+| Surface | Detail |
+|---|---|
+| **Text-Based Editor (Primary)** | Transcript pane (left) + video preview pane (right); delete transcript text = remove video segment; edit text = edit video |
+| **Chat-Based AI Interface** | Conversational commands ("add captions to my video", "find best moments") — the primary workflow for new clip creation |
+| **Highlighting/Marking** | Mark transcript regions; use marks for navigation and clip creation |
+| **Clip Creation** | Highlight text segment → "Clip" → new short video generated |
+| **Drag-and-Drop** | For music and asset addition |
+| **No Timeline Editor** | Not exposed |
+| **No Storyboard** | Not mentioned |
+
+---
+
+## 7. Integrations & Ecosystem
+
+| Category | Details |
+|---|---|
+| **Upload Sources** | Local storage, **Google Drive**, **Zoom**, **Dropbox**, **OneDrive**, **Box** |
+| **Input URLs** | YouTube (for transcript/import) |
+| **Export** | MP4 |
+| **Publish Destinations** | TikTok, Instagram Reels, YouTube Shorts, LinkedIn, Facebook, X/Twitter (manual; no direct publish integration confirmed) |
+| **API** | Enterprise only — "upon request"; not publicly documented |
+| **White-label** | "Upon request" (enterprise) |
+| **Mobile App** | ❌ Not mentioned |
+| **Browser Extension** | ❌ Not mentioned |
+| **Browser Recommendation** | Chrome (or Firefox) for optimal performance |
+| **Free SEO Tools** | YouTube tag generator, title generator, description generator, transcript converter |
+
+---
+
+## 8. Collaboration & Team Features
+
+**Not explicitly documented.** The enterprise/agency tier implies team use (professional content creators included), but no multi-seat management, shared workspaces, commenting, or role-based access was mentioned anywhere.
+
+---
+
+## 9. Security / Compliance
+
+| Item | Status |
+|---|---|
+| **Privacy Policy** | ✅ Exists at `hipclip.ai/privacy` |
+| **SOC 2** | ❌ Not mentioned |
+| **GDPR** | ❌ Not mentioned |
+| **HIPAA** | ❌ Not mentioned |
+| **SSO / SAML / SCIM** | ❌ Not mentioned |
+| **Encryption / Data residency** | ❌ Not mentioned |
+
+---
+
+## 10. Platform Support
+
+| Platform | Support |
+|---|---|
+| **Web App** | ✅ `studio.hipclip.ai` |
+| **Recommended Browser** | Chrome (or Firefox) |
+| **iOS App** | ❌ Not mentioned |
+| **Android App** | ❌ Not mentioned |
+| **Desktop App** | ❌ Not mentioned |
+| **Browser Extension** | ❌ Not mentioned |
+
+---
+
+## 11. Use Cases Promoted
+
+| Use Case | Target Audience |
+|---|---|
+| **YouTube video promotion** | Creators |
+| **Podcast repurposing** | Podcasters |
+| **Webinar repurposing** | Marketers, B2B teams |
+| **Agency content production** | Marketing agencies |
+| **Church/sermon repurposing** | Digital ministries |
+| **Social media omnichannel** | All creators |
+| **Interview analysis** | UX researchers, product teams |
+| **Course module creation** | Educators |
+| **Ad campaign creation** | Performance marketers |
+| **Product demo repurposing** | Sales teams |
+| **Zoom recording marketing** | B2B / sales |
+
+**Workflow categories** (from `/workflow-categories/`): Ads, Brand Marketing, Content Repurposing, Customer Interviews, Digital Ministry, Social Media
+
+---
+
+## 12. Differentiators (Their Claimed)
+
+1. **Chat-based AI co-creator** — entire product UX is conversational; "just tell AI what you want"
+2. **AI agent tailored to individual goals** — onboarding captures goals, priorities, roadblocks
+3. **AI remembers your workflows** — no other competitor in their comparison table has this
+4. **90+ pre-made workflow templates** — widest coverage in their comparison
+5. **Brand voice & ICP guidelines** — built-in brand/audience personalization
+6. **Full omnichannel content suite** — one product replaces Opus + Descript + Jasper + ChatGPT + CapCut + Captions
+7. **"Autocomplete by Hipclip"** — newest launch (details sparse)
+8. **Ministry/church vertical** — unique niche workflows for sermon repurposing
+9. **$20 flat price** — positioned as radically affordable vs. per-seat alternatives
+
+---
+
+## 13. Gaps / Not Mentioned
+
+- ❌ No TTS, voice cloning, or dubbing
+- ❌ No audio translation (text only)
+- ❌ No generative video, AI avatars
+- ❌ No screen recording or capture
+- ❌ No live streaming features
+- ❌ No timeline editor
+- ❌ No public API (enterprise-only, no docs)
+- ❌ No mobile app
+- ❌ No collaboration/multi-user features documented
+- ❌ No security/compliance certifications
+- ❌ Language count discrepancy between comparison table (35+) and actual list (~48-50)
+- ❌ No direct social media publishing integrations (manual export/upload)
+- ❌ No content calendar or scheduling
+- ❌ No video hosting / CDN
+- ❌ Template library details not enumerated
+- ❌ Storage/upload size limits not disclosed
+
+---
+---
+
+# HEAD-TO-HEAD COMPARISON SUMMARY
+
+| Dimension | WayinVideo | HipClip AI |
+|---|---|---|
+| **Core positioning** | AI video clipper / viral moment finder | AI content repurposing suite (video + text) |
+| **Primary UX** | Upload/paste → AI clips → export | Chat with AI → clips + written content |
+| **Languages** | 100+ (subtitles only) | ~50 (translation of text content) |
+| **Subtitle style** | Animated, bilingual display mode | Animated, customizable |
+| **Written content** | ❌ None | ✅ Full suite (blogs, emails, threads, ads) |
+| **Brand voice** | ❌ | ✅ Custom ICP + tone guidelines |
+| **Filler removal** | ❌ Not mentioned | ✅ |
+| **Silence removal** | ❌ Not mentioned | ✅ |
+| **Music library** | ❌ Not mentioned | ✅ (basic) |
+| **API** | ✅ Public API (Pay-as-you-go from $10) | ❌ Enterprise only, not documented |
+| **Automation integrations** | ✅ N8N, Make, MCP, Claude Code | ❌ None |
+| **AI agent integrations** | ✅ OpenClaw, Claude Code | ❌ None |
+| **Workflow templates** | ❌ None | ✅ 90+ templates |
+| **Text-based editor** | ❌ No | ✅ Yes |
+| **Recording/capture** | ❌ | ❌ |
+| **Mobile app** | ❌ | ❌ |
+| **Collaboration** | ❌ | ❌ |
+| **Security certs** | ❌ | ❌ |
+| **Pricing (self-serve)** | Unknown (WayinVideo-specific pricing blocked) | $20/mo flat |
+| **Free tier** | ✅ (Wayin AI product: 240 min/mo) | ✅ First video free |
+| **Enterprise** | ✅ Custom | ✅ $250+/video |
+| **Natural language video search** | ✅ Core feature | ❌ Not mentioned |
+
+---
+
+# KEY INTELLIGENCE FOR YOUR PRODUCT BUILD
+
+**Where WayinVideo wins:** Developer-friendly (public API, N8N/Make/MCP/Claude Code), 100+ language subtitles, bilingual display, natural language video moment search. Focused, simple workflow for solo creators.
+
+**Where HipClip wins:** Conversational AI co-creator UX, full written content generation (blogs, emails, threads), brand voice/ICP system, 90+ pre-made workflow templates, AI that remembers users, broader use case coverage (agencies, ministries, product teams), affordable flat pricing.
+
+**Shared weaknesses (your opportunity):** Neither product has TTS/dubbing, audio translation, AI avatars, screen recording, mobile apps, team collaboration features, or security/compliance certifications. Both are web-only, export-only (no direct-to-platform publishing). Neither has a timeline editor. Both have no disclosed video hosting. WayinVideo's pricing is opaque; HipClip's tier details are sparse.
