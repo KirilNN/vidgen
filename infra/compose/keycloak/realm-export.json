@@ -1,0 +1,110 @@
+{
+  "realm": "app",
+  "enabled": true,
+  "displayName": "vidgen",
+  "displayNameHtml": "<strong>vidgen</strong>",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+
+  "defaultSignatureAlgorithm": "RS256",
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+
+  "roles": {
+    "realm": [
+      {
+        "name": "owner",
+        "description": "Workspace owner — full admin rights inside a workspace."
+      },
+      {
+        "name": "editor",
+        "description": "Workspace editor — create/edit projects, run renders."
+      },
+      {
+        "name": "viewer",
+        "description": "Workspace viewer — read-only access to projects."
+      }
+    ]
+  },
+  "defaultRole": {
+    "name": "viewer",
+    "description": "Default role assigned to every new user.",
+    "composite": false,
+    "clientRole": false
+  },
+
+  "clients": [
+    {
+      "clientId": "app-web",
+      "name": "vidgen web app (public, PKCE)",
+      "description": "Browser SPA / Next.js front-end. Public client; PKCE required.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "rootUrl": "http://localhost:3000",
+      "baseUrl": "/",
+      "redirectUris": ["http://localhost:3000/*", "https://app.localhost/*"],
+      "webOrigins": ["http://localhost:3000", "https://app.localhost", "+"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3000/*##https://app.localhost/*",
+        "access.token.lifespan": "900"
+      },
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
+      "optionalClientScopes": ["address", "phone", "offline_access"]
+    },
+    {
+      "clientId": "app-api",
+      "name": "vidgen API (confidential)",
+      "description": "Server-side API token introspection + service account.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "replaced-by-keycloak-init",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": false,
+      "rootUrl": "http://localhost:3001",
+      "baseUrl": "/",
+      "redirectUris": ["http://localhost:3001/*", "https://api.localhost/*"],
+      "webOrigins": ["http://localhost:3001", "https://api.localhost"],
+      "attributes": {
+        "access.token.lifespan": "900",
+        "use.refresh.tokens": "true"
+      },
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"]
+    }
+  ],
+
+  "users": [
+    {
+      "username": "dev@local",
+      "email": "dev@local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Dev",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "dev",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["owner"]
+    }
+  ]
+}
