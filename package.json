@@ -17,13 +17,15 @@
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\" --ignore-path .prettierignore",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yaml,yml}\" --ignore-path .prettierignore",
+    "sdk:gen": "bash scripts/gen-sdk.sh",
+    "sdk:check": "bash scripts/check-sdk-fresh.sh",
     "clean": "turbo run clean && rm -rf node_modules .turbo",
     "prepare": "node scripts/husky-install.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,mjs,cjs}": [
       "prettier --write",
-      "eslint --fix --max-warnings=0"
+      "eslint --fix --max-warnings=0 --no-warn-ignored"
     ],
     "*.{json,md,yaml,yml}": [
       "prettier --write"
