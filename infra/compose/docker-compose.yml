@@ -1,8 +1,12 @@
-# vidgen — Docker Compose stack (scaffold from T-003)
+# vidgen — Docker Compose stack
 #
-# This file defines the *profile structure* only. Each profile carries a tiny
-# placeholder service (`busybox`, ~5 MB, multi-arch) running `/bin/true` so
-# that `docker compose --profile <name> config` and `up -d` validate end-to-end
+# Originally scaffolded by T-003 (profile structure + busybox placeholders).
+# Real services replace placeholders as their owning tickets land:
+#   * T-010 (this revision): postgres real, core-placeholder removed.
+#
+# Each *remaining* profile carries a tiny placeholder service (`busybox`,
+# ~5 MB, multi-arch) running `/bin/true` so that
+# `docker compose --profile <name> config` and `up -d` validate end-to-end
 # before later tickets wire in the real services per docs/architecture.md §4.1.
 #
 # Profiles (architecture.md §4.1):
@@ -54,10 +58,59 @@ x-placeholder: &placeholder
 
 services:
   # --- core ---------------------------------------------------------------
-  core-placeholder:
-    <<: *placeholder
-    container_name: vidgen-core-placeholder
+  # Postgres 16 + pgvector (T-010). Custom image is built from
+  # ./postgres/Dockerfile which copies ./postgres/init/*.sql into the
+  # standard /docker-entrypoint-initdb.d so the official entrypoint runs
+  # them once on first cluster init (extensions, app role, RLS helpers).
+  #
+  # Architecture references:
+  #   - §5.1 — Postgres 16 + pgvector, pg_trgm, pgcrypto
+  #   - §11  — RLS gates every tenant table by workspace_id
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: vidgen/postgres:16-pgvector
+    container_name: vidgen-postgres
     profiles: [core]
+    restart: unless-stopped
+    environment:
+      # The official postgres entrypoint hard-codes the names
+      # POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB for *cluster
+      # bootstrap* (the cluster's superuser + initial database). We want
+      # those to be the SUPERUSER identity, NOT the service identity, so
+      # that the `app` role we create in init/01-app-role.sql can be
+      # non-superuser and RLS actually applies to it.
+      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-vidgen}
+      # Surfaced to init/01-app-role.sql via backtick `echo` substitution
+      # inside that script. These are the credentials services use at
+      # runtime (POSTGRES_USER / POSTGRES_PASSWORD in the application env
+      # namespace; see .env.example).
+      APP_DB_USER: ${POSTGRES_USER:-app}
+      APP_DB_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      # Stable, transcript-friendly locale.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      # Host:container. Exposed on 5432 for local devs (psql, pgAdmin,
+      # Drizzle migrations from T-011). Inside the network, services reach
+      # it as `postgres:5432`.
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks: [appnet]
+    healthcheck:
+      # pg_isready ships with the official image. -U / -d match the
+      # superuser identity the entrypoint set up so we test the *real* app
+      # database, not the built-in `postgres` maintenance DB.
+      test:
+        - "CMD-SHELL"
+        - 'pg_isready -U "${POSTGRES_SUPERUSER:-postgres}" -d "${POSTGRES_DB:-vidgen}"'
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
 
   # --- media --------------------------------------------------------------
   media-placeholder:
