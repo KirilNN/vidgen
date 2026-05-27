@@ -40,6 +40,13 @@ volumes:
   # rendered realm import file to the `keycloak` server container without
   # forcing the server image to know about our env-var conditionals.
   keycloak_realm:
+  # Caddy persistence (T-014). `caddy_data` holds the **local CA** that
+  # mints leaf certs for *.localhost — once the developer has installed
+  # this CA in their host keychain, every restart of the container must
+  # reuse it, otherwise browser warnings reappear. `down -v` wipes it on
+  # purpose; the README documents the re-install flow.
+  caddy_data:
+  caddy_config:
 
 # Single user-defined bridge network. All services (placeholder or real) join
 # this network so they can reach each other by service name.
@@ -282,6 +289,65 @@ services:
       timeout: 5s
       retries: 30
       start_period: 30s
+
+  # Caddy reverse proxy (T-014).
+  #
+  # Architecture references:
+  #   - §10  — Caddy in front, automatic Let's Encrypt for real domains,
+  #            self-signed (Caddy's internal CA) for *.localhost in dev.
+  #   - §4.1 — Part of the `core` profile (always on).
+  #
+  # No `depends_on` — Caddy boots independently and returns 502 if an
+  # upstream isn't up yet. This keeps iteration fast and matches the
+  # acceptance criterion (HTTPS terminates regardless of upstream state).
+  caddy:
+    image: caddy:2.8.4-alpine
+    container_name: vidgen-caddy
+    profiles: [core]
+    restart: unless-stopped
+    ports:
+      # 80  → HTTP (Caddy auto-redirects to HTTPS for matched sites).
+      # 443 → HTTPS (TCP + UDP for HTTP/3 / QUIC).
+      - "${CADDY_HTTP_PORT:-80}:80"
+      - "${CADDY_HTTPS_PORT:-443}:443"
+      - "${CADDY_HTTPS_PORT:-443}:443/udp"
+    environment:
+      # Used only when a real public domain swaps in; *.localhost stays on
+      # `tls internal` regardless.
+      CADDY_ACME_EMAIL: ${CADDY_ACME_EMAIL:-change-me@example.com}
+      CADDY_LOG_LEVEL: ${CADDY_LOG_LEVEL:-INFO}
+      # Per-site upstreams. Defaults match the layout this ticket ships:
+      # in-network container names for services in `core` today, and
+      # `host.docker.internal:PORT` for services that don't yet have a
+      # container (web/api/share). Later tickets can override these to
+      # `web:3000` / `api:3001` / `share:3000` once their containers land.
+      APP_UPSTREAM: ${APP_UPSTREAM:-host.docker.internal:3000}
+      API_UPSTREAM: ${API_UPSTREAM:-host.docker.internal:3001}
+      SHARE_UPSTREAM: ${SHARE_UPSTREAM:-host.docker.internal:3002}
+      AUTH_UPSTREAM: ${AUTH_UPSTREAM:-keycloak:8080}
+      S3_UPSTREAM: ${S3_UPSTREAM:-minio:9000}
+      MINIO_CONSOLE_UPSTREAM: ${MINIO_CONSOLE_UPSTREAM:-minio:9001}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    extra_hosts:
+      # Docker Desktop injects this automatically on macOS / Windows; we
+      # declare it explicitly so the same compose works on Linux runners
+      # (Docker engine), which is what CI uses.
+      - "host.docker.internal:host-gateway"
+    networks: [appnet]
+    healthcheck:
+      # Caddy's admin API is bound to :2019 inside the container. If
+      # `/config/` returns 200, the server has parsed the Caddyfile and is
+      # accepting connections. 127.0.0.1 avoids IPv4/IPv6 ambiguity.
+      test:
+        - "CMD-SHELL"
+        - "wget -qO- http://127.0.0.1:2019/config/ >/dev/null || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
 
   # --- media --------------------------------------------------------------
   media-placeholder:

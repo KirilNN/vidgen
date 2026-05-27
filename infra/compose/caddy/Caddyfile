@@ -1,0 +1,108 @@
+# vidgen — Caddy reverse proxy (T-014)
+#
+# Architecture references:
+#   - §10  — Caddy in front, Let's Encrypt in prod, local self-signed in dev.
+#   - §4.1 — `core` profile container (always on).
+#
+# Goals:
+#   1. Terminate HTTPS for every *.localhost developer URL with locally
+#      trusted certs (`tls internal` → Caddy's built-in CA, no ACME).
+#   2. Proxy to in-network containers (keycloak, minio) when those services
+#      are part of `core` *today*, and to host-bound dev servers
+#      (web/api/share via host.docker.internal) for services not yet
+#      containerised (T-015 API, T-016 Web, T-100 share).
+#   3. Every upstream is overridable via `{$VAR:default}` so later tickets
+#      can flip a route from `host.docker.internal:PORT` to a service name
+#      without editing the Caddyfile.
+#
+# CA install: see ../README.md → "Trusting Caddy's local CA".
+
+# ---- global options ---------------------------------------------------------
+{
+	# ACME email used only when a developer / operator switches to a real
+	# public domain. *.localhost stays on `tls internal` (below) regardless.
+	email {$CADDY_ACME_EMAIL:change-me@example.com}
+
+	# Tunable log level. INFO is quiet enough for a laptop, DEBUG is loud
+	# enough for diagnosing TLS or reverse_proxy issues.
+	log {
+		level {$CADDY_LOG_LEVEL:INFO}
+	}
+
+	# Admin API stays on the loopback inside the container (default :2019)
+	# and is what the docker healthcheck talks to.
+}
+
+# ---- snippets ---------------------------------------------------------------
+# Reusable bits to keep each site block one line of intent + one upstream.
+
+# Local-CA TLS. Caddy's internal CA mints leaf certs for the SANs of each
+# matched site — `tls internal` is per-site so production custom domains
+# (e.g. white-label tenants, F7.6) can still get a real Let's Encrypt cert
+# via the global `email` directive.
+(local_tls) {
+	tls internal
+}
+
+# Standard upstream tuning: stream bodies (don't buffer) so large MinIO
+# uploads / HLS segment fetches don't accumulate in Caddy's memory.
+(stream_proxy) {
+	flush_interval -1
+}
+
+# ---- sites ------------------------------------------------------------------
+
+# Web app (T-016). Until the web container lands the default upstream is
+# the host-bound `pnpm dev` server. Override by setting APP_UPSTREAM (e.g.
+# `web:3000` once T-016's container joins `core`).
+app.localhost {
+	import local_tls
+	reverse_proxy {$APP_UPSTREAM:host.docker.internal:3000}
+}
+
+# API (T-015). Default port is 3001 — that is what the merged @vidgen/config,
+# @vidgen/sdk-ts, OpenAPI server list, and Keycloak realm-export already
+# assume. (The T-014 ticket text mentions port 4000; reconciling that to
+# 3001 across the SDK / OpenAPI / realm-export is outside this ticket's
+# file scope — see PR body.)
+api.localhost {
+	import local_tls
+	reverse_proxy {$API_UPSTREAM:host.docker.internal:3001}
+}
+
+# Static share / embed app (T-100).
+share.localhost {
+	import local_tls
+	reverse_proxy {$SHARE_UPSTREAM:host.docker.internal:3002}
+}
+
+# Keycloak (T-013). The container is configured with KC_HOSTNAME_STRICT=false
+# and KC_PROXY_HEADERS=xforwarded, so it trusts Caddy's X-Forwarded-* and
+# derives the issuer URL from the inbound Host header. That means tokens
+# fetched via https://auth.localhost get issuer=https://auth.localhost/realms/app,
+# while tokens fetched directly via http://localhost:8080 keep the legacy
+# issuer. The existing keycloak-smoke.sh asserts the direct-localhost issuer
+# and is unaffected by this proxy.
+auth.localhost {
+	import local_tls
+	reverse_proxy {$AUTH_UPSTREAM:keycloak:8080}
+}
+
+# MinIO S3 API (T-012). Caddy's reverse_proxy preserves the inbound Host
+# header by default, which is what MinIO needs to validate Signature V4
+# presigned URLs that were signed against `s3.localhost`.
+s3.localhost {
+	import local_tls
+	reverse_proxy {$S3_UPSTREAM:minio:9000} {
+		import stream_proxy
+	}
+}
+
+# MinIO web console (T-012). Same flush behaviour: the console uses
+# long-lived requests for live cluster stats.
+minio.localhost {
+	import local_tls
+	reverse_proxy {$MINIO_CONSOLE_UPSTREAM:minio:9001} {
+		import stream_proxy
+	}
+}
