@@ -14,15 +14,22 @@ land, placeholders are replaced by the real containers.
 
 ## Profiles
 
-| Profile    | Owns (when fully built)                                              | Lands in tickets                                            |
-| ---------- | -------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `core`     | Postgres ✅, MinIO ✅, Keycloak ✅, Caddy ✅, Redis, API, Web        | T-010 ✅, T-012 ✅, T-013 ✅, T-014 ✅, T-015, T-016, T-017 |
-| `media`    | `ffmpeg-worker`, `mlt-worker`, `remotion-worker`                     | T-032, T-062, T-090                                         |
-| `ai-cpu`   | `whisper-cpu`, `piper`, `ollama` (small), `argos-translate`, `rembg` | T-041, T-070, etc.                                          |
-| `ai-gpu`   | `whisperx-gpu`, `xtts-gpu`, `sam2`, `propainter`, `vllm`             | F4/F5 phases                                                |
-| `realtime` | LiveKit SFU, Hocuspocus, NATS JetStream                              | T-022, T-110                                                |
-| `obs`      | Prometheus, Grafana, Loki, Tempo, OpenTelemetry collector            | T-121, T-122                                                |
-| `dev`      | Mailpit, MinIO console, pgAdmin, Temporal Web                        | T-200                                                       |
+| Profile    | Owns (when fully built)                                                             | Lands in tickets                                                               |
+| ---------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `core`     | Postgres ✅, MinIO ✅, Keycloak ✅, Caddy ✅, Redis ✅, API ✅, Web ✅, Temporal ✅ | T-010 ✅, T-012 ✅, T-013 ✅, T-014 ✅, T-015 ✅, T-016 ✅, T-017 ✅, T-020 ✅ |
+| `media`    | `ffmpeg-worker`, `mlt-worker`, `remotion-worker`                                    | T-032, T-062, T-090                                                            |
+| `ai-cpu`   | `whisper-cpu`, `piper`, `ollama` (small), `argos-translate`, `rembg`                | T-041, T-070, etc.                                                             |
+| `ai-gpu`   | `whisperx-gpu`, `xtts-gpu`, `sam2`, `propainter`, `vllm`                            | F4/F5 phases                                                                   |
+| `realtime` | LiveKit SFU, Hocuspocus, NATS JetStream                                             | T-022, T-110                                                                   |
+| `obs`      | Prometheus, Grafana, Loki, Tempo, OpenTelemetry collector                           | T-121, T-122                                                                   |
+| `dev`      | Mailpit, MinIO console, pgAdmin, `temporal-admin-tools` ✅                          | T-020 ✅, T-200                                                                |
+
+> **Deviation from `architecture.md` §4.1:** The arch's profile table lists
+> "Temporal Web" under the `dev` profile; T-020 explicitly moves both the
+> server and the Web UI into `core` so the workflow plane (the spine of every
+> long op per arch §6) and its observability surface are always available.
+> The interactive `temporal` / `tctl` CLI sidecar (`temporal-admin-tools`) is
+> what stays in `dev`. See `temporal/README.md` for the rationale.
 
 ## Run
 

@@ -329,6 +329,7 @@ services:
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-keycloak:8080}
       S3_UPSTREAM: ${S3_UPSTREAM:-minio:9000}
       MINIO_CONSOLE_UPSTREAM: ${MINIO_CONSOLE_UPSTREAM:-minio:9001}
+      TEMPORAL_UI_UPSTREAM: ${TEMPORAL_UI_UPSTREAM:-temporal-ui:8080}
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -604,6 +605,178 @@ services:
       timeout: 5s
       retries: 12
       start_period: 15s
+
+  # ---------------------------------------------------------------------------
+  # Temporal — durable workflow plane (T-020).
+  #
+  # Architecture references:
+  #   - §6   — Temporal is the spine for every long op (ingest, transcribe,
+  #            render, dub, clip-gen, publish). Workers join in T-021+.
+  #   - §5.1 — Postgres is the primary OLTP store; Temporal reuses the same
+  #            T-010 cluster (no second postgres container).
+  #
+  # The auto-setup image takes care of:
+  #   - waiting for the DB (DB_PORT defaults to 3306, so we MUST set 5432),
+  #   - running the schema migrations on the two pre-created DBs,
+  #   - registering DEFAULT_NAMESPACE before starting the frontend.
+  #
+  # Profile placement: the ticket explicitly overrides arch §4.1 — the
+  # original section lists "Temporal Web" under `dev`; T-020 places BOTH
+  # the server and the UI in `core` because the workflow plane is core to
+  # every long op and the UI is the only observability surface dev gets
+  # before the OTel stack lands (phase 12).
+  temporal-init:
+    image: postgres:16-alpine
+    container_name: vidgen-temporal-init
+    profiles: [core]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_SUPERUSER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_SUPERUSER_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-vidgen}
+      TEMPORAL_DB_USER: ${TEMPORAL_DB_USER:-temporal}
+      TEMPORAL_DB_PASSWORD: ${TEMPORAL_DB_PASSWORD:-change-me}
+      TEMPORAL_DB_NAME: ${TEMPORAL_DB_NAME:-temporal}
+      TEMPORAL_VISIBILITY_DB_NAME: ${TEMPORAL_VISIBILITY_DB_NAME:-temporal_visibility}
+    entrypoint: ["/bin/sh", "/etc/temporal/init.sh"]
+    volumes:
+      - ./temporal/init.sh:/etc/temporal/init.sh:ro
+    networks: [appnet]
+
+  temporal:
+    # `auto-setup` bundles the frontend / history / matching / worker server
+    # plus a one-shot schema-migrate + namespace-register on boot. Pinning
+    # to a dated release for reproducibility; multi-arch image (amd64 +
+    # arm64) verified on Docker Hub so Apple-Silicon devs aren't forced
+    # through Rosetta. Renovate/Dependabot can bump.
+    image: temporalio/auto-setup:${TEMPORAL_VERSION:-1.29.6}
+    container_name: vidgen-temporal
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      temporal-init:
+        condition: service_completed_successfully
+    environment:
+      # SQL backend selection. `postgres12` is the schema flavor used for
+      # every Postgres >= 12 (we run 16 from T-010). Do NOT change to
+      # `postgresql` — that's the legacy 9.x flavor and the migrations
+      # silently mismatch.
+      DB: postgres12
+      # MUST be set explicitly — auto-setup's default is 3306 (MySQL)
+      # which causes the wait_for_db loop to hang forever against our
+      # Postgres on 5432.
+      DB_PORT: 5432
+      # Connection target. POSTGRES_SEEDS is the comma-separated list of
+      # hosts auto-setup probes; one entry is fine for the local cluster.
+      POSTGRES_SEEDS: postgres
+      POSTGRES_USER: ${TEMPORAL_DB_USER:-temporal}
+      POSTGRES_PWD: ${TEMPORAL_DB_PASSWORD:-change-me}
+      # Database names. Both are pre-created by `temporal-init` with the
+      # `temporal` role as owner — so the role itself does NOT need
+      # CREATEDB and we set SKIP_DB_CREATE=true to short-circuit the
+      # built-in `CREATE DATABASE` step in auto-setup.
+      DBNAME: ${TEMPORAL_DB_NAME:-temporal}
+      VISIBILITY_DBNAME: ${TEMPORAL_VISIBILITY_DB_NAME:-temporal_visibility}
+      SKIP_DB_CREATE: "true"
+      # Namespace registration. Default in upstream auto-setup is
+      # `default`; the ticket mandates `app`.
+      DEFAULT_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
+      # Short retention is fine for dev — 24h means visibility queries
+      # are bounded; phase-12 ops work raises this per-namespace.
+      DEFAULT_NAMESPACE_RETENTION: 24h
+      # Dynamic config knobs (255-byte IDs, dev search-attribute cache
+      # refresh). Path is relative to the image's TEMPORAL_HOME=/etc/temporal.
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/development.yaml
+      # gRPC + admin addresses. Mostly for the bundled `temporal` CLI
+      # smoke commands inside the container.
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_CLI_ADDRESS: temporal:7233
+    ports:
+      # Frontend gRPC. Workers + Temporal SDK clients connect here. Direct
+      # host binding so workers running outside the compose network
+      # (e.g. `pnpm dev` against the host) can still reach it.
+      - "${TEMPORAL_GRPC_PORT:-7233}:7233"
+    volumes:
+      # Mounts the upstream-style dynamicconfig directory at the path
+      # DYNAMIC_CONFIG_FILE_PATH expects (relative to /etc/temporal).
+      - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig:ro
+    networks: [appnet]
+    healthcheck:
+      # The auto-setup image bundles the `temporal` CLI (and tctl). The
+      # operator subcommand returns SERVING once the frontend service is
+      # up. NOTE: temporal-server binds to the container's eth0 IP
+      # (resolvable via the service name `temporal` over Docker's
+      # embedded DNS), NOT to 127.0.0.1 — so the healthcheck has to use
+      # the service hostname even though the CLI is running inside the
+      # same container.
+      test:
+        - "CMD-SHELL"
+        - "temporal --address temporal:7233 operator cluster health 2>/dev/null | grep -q SERVING"
+      # Long start_period because the boot sequence is: wait-for-DB →
+      # create-schema → register-namespace → start frontend. Empty
+      # cluster + fresh DB ~ 30-60 s on a laptop.
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  temporal-ui:
+    image: temporalio/ui:${TEMPORAL_UI_VERSION:-2.50.0}
+    container_name: vidgen-temporal-ui
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      # CORS allow-list. The UI's own assets are served same-origin so
+      # this only matters for the rare external script; permit both the
+      # Caddy-fronted and direct host-port origins so either works.
+      TEMPORAL_CORS_ORIGINS: https://temporal.localhost,http://localhost:${TEMPORAL_UI_PORT:-8088}
+    ports:
+      # Dev host binding so `curl http://localhost:8088/` works without
+      # going through Caddy. Caddy fronts this at https://temporal.localhost
+      # via the TEMPORAL_UI_UPSTREAM env on the caddy service.
+      - "${TEMPORAL_UI_PORT:-8088}:8080"
+    networks: [appnet]
+    healthcheck:
+      # The UI is a Go binary that serves a SPA on :8080 immediately
+      # after boot. wget ships in the base image (distroless: no; alpine
+      # base: yes). A 200 on `/` is sufficient liveness.
+      test:
+        - "CMD-SHELL"
+        - "wget -qO- http://127.0.0.1:8080/ >/dev/null || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  temporal-admin-tools:
+    # CLI sidecar used by `scripts/temporal-smoke.sh` and by operators who
+    # want an interactive `temporal` shell. Sleeps forever so the
+    # container stays up and `docker compose exec` works; it does NOT
+    # depend on `temporal` because we want `docker compose --profile dev
+    # up -d temporal-admin-tools` to work standalone. If `temporal:7233`
+    # isn't reachable the CLI commands fail loudly, which is fine.
+    image: temporalio/admin-tools:${TEMPORAL_ADMINTOOLS_VERSION:-1.29.6.1-tctl-1.18.4-cli-1.7.0}
+    container_name: vidgen-temporal-admin-tools
+    profiles: [dev]
+    restart: unless-stopped
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_CLI_ADDRESS: temporal:7233
+    # The default ENTRYPOINT runs `tctl` or `temporal` interactively;
+    # override with sleep so the container stays in the background.
+    entrypoint: ["sleep", "infinity"]
+    networks: [appnet]
 
   # --- media --------------------------------------------------------------
   media-placeholder:
