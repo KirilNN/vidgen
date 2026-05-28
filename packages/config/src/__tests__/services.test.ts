@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ConfigError, parseApiEnv, parseMcpEnv, parseWorkerEnv } from "../index.js";
+import { ConfigError, parseApiEnv, parseMcpEnv, parseWebEnv, parseWorkerEnv } from "../index.js";
 
 const baseValidApi = {
   NODE_ENV: "test",
@@ -94,5 +94,66 @@ describe("mcp config", () => {
   it("parses with sane defaults", () => {
     const cfg = parseMcpEnv({ NODE_ENV: "test", ENV: "dev" });
     expect(cfg.MCP_PORT).toBe(3100);
+  });
+});
+
+describe("web config", () => {
+  const baseValidWeb = {
+    NODE_ENV: "test",
+    ENV: "dev",
+    LOG_LEVEL: "info",
+    APP_SECRET: "x".repeat(32),
+  } satisfies NodeJS.ProcessEnv;
+
+  it("parses with sane defaults", () => {
+    const cfg = parseWebEnv(baseValidWeb);
+    expect(cfg.WEB_PORT).toBe(3000);
+    expect(cfg.WEB_PUBLIC_URL).toBe("http://localhost:3000");
+    expect(cfg.KEYCLOAK_CLIENT_ID_WEB).toBe("app-web");
+    expect(cfg.KEYCLOAK_PUBLIC_ISSUER_URL).toBe("https://auth.localhost/realms/app");
+    expect(cfg.API_INTERNAL_URL).toBe("http://localhost:3001");
+    expect(Object.isFrozen(cfg)).toBe(true);
+  });
+
+  it("honours explicit overrides", () => {
+    const cfg = parseWebEnv({
+      ...baseValidWeb,
+      WEB_PORT: "4000",
+      WEB_PUBLIC_URL: "https://app.localhost",
+      KEYCLOAK_PUBLIC_ISSUER_URL: "https://idp.example.com/realms/app",
+      KEYCLOAK_CLIENT_ID_WEB: "custom-web",
+      API_INTERNAL_URL: "http://api:3001",
+    });
+    expect(cfg.WEB_PORT).toBe(4000);
+    expect(cfg.WEB_PUBLIC_URL).toBe("https://app.localhost");
+    expect(cfg.KEYCLOAK_PUBLIC_ISSUER_URL).toBe("https://idp.example.com/realms/app");
+    expect(cfg.KEYCLOAK_CLIENT_ID_WEB).toBe("custom-web");
+    expect(cfg.API_INTERNAL_URL).toBe("http://api:3001");
+  });
+
+  it("rejects a short APP_SECRET", () => {
+    expect(() => parseWebEnv({ ...baseValidWeb, APP_SECRET: "too-short" })).toThrowError(
+      /APP_SECRET/,
+    );
+  });
+
+  it("rejects a non-URL KEYCLOAK_PUBLIC_ISSUER_URL", () => {
+    try {
+      parseWebEnv({ ...baseValidWeb, KEYCLOAK_PUBLIC_ISSUER_URL: "not-a-url" });
+      throw new Error("expected parseWebEnv to throw");
+    } catch (err) {
+      expect(err).toBeInstanceOf(ConfigError);
+      expect((err as ConfigError).message).toContain("KEYCLOAK_PUBLIC_ISSUER_URL");
+    }
+  });
+
+  it("rejects the dev sentinel APP_SECRET in production", () => {
+    expect(() =>
+      parseWebEnv({
+        ...baseValidWeb,
+        NODE_ENV: "production",
+        APP_SECRET: "change-me-change-me-change-me-change-me",
+      }),
+    ).toThrowError(/APP_SECRET/);
   });
 });

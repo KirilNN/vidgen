@@ -39,3 +39,5 @@ export {
 } from "./services/worker.js";
 
 export { mcpEnvSchema, parseMcpEnv, loadMcpConfig, type McpConfig } from "./services/mcp.js";
+
+export { webEnvSchema, parseWebEnv, loadWebConfig, type WebConfig } from "./services/web.js";

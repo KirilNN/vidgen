@@ -321,7 +321,9 @@ services:
       # container in `core`, and `host.docker.internal:PORT` for services
       # that haven't moved into the compose stack yet. T-015 added the
       # `api` container, so API_UPSTREAM now defaults to `api:3001`.
-      APP_UPSTREAM: ${APP_UPSTREAM:-host.docker.internal:3000}
+      # T-016 added the `web` container, so APP_UPSTREAM now defaults to
+      # `web:3000` (was `host.docker.internal:3000`).
+      APP_UPSTREAM: ${APP_UPSTREAM:-web:3000}
       API_UPSTREAM: ${API_UPSTREAM:-api:3001}
       SHARE_UPSTREAM: ${SHARE_UPSTREAM:-host.docker.internal:3002}
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-keycloak:8080}
@@ -443,6 +445,165 @@ services:
       timeout: 5s
       retries: 12
       start_period: 10s
+
+  # ---------------------------------------------------------------------------
+  # DragonflyDB — Redis-compatible cache (T-017).
+  #
+  # Architecture references:
+  #   - §5.1 — Redis / DragonflyDB is the cache, rate-limit store, and
+  #            Yjs awareness ephemeral state holder.
+  #   - §4.1 — Part of the `core` profile (always on).
+  #
+  # Why Dragonfly over vanilla Redis: per docs/decisions.md context, Dragonfly
+  # is BSL-licensed (free for our use — single-org operator, not offered as a
+  # managed DBaaS) and is wire-compatible with Redis clients. It does not
+  # implement a Redis-style AOF; persistence is snapshot-based via `--dir`
+  # + an auto-snapshot cron. We accept the trade-off because (a) the ticket
+  # explicitly authorised Dragonfly and (b) cache contents are recoverable.
+  #
+  # Wire compat: clients connect with REDIS_URL=redis://...; everything from
+  # `ioredis` to `redis-cli` Just Works.
+  redis:
+    # Multi-arch (amd64 + arm64) image is published on ghcr.io, not Docker
+    # Hub (the docker.io publish appears amd64-only). Apple-Silicon devs
+    # would otherwise be hit by Rosetta emulation, so we pin the ghcr.io
+    # variant explicitly.
+    image: ghcr.io/dragonflydb/dragonfly:v1.30.3
+    container_name: vidgen-redis
+    profiles: [core]
+    restart: unless-stopped
+    # `ulimits` is required by Dragonfly for memory mapping. Without it
+    # the container exits immediately with "Cannot open /proc/self/limits".
+    ulimits:
+      memlock: -1
+    command:
+      - "--logtostderr"
+      # Persistence: snapshot every 5 minutes into /data. Dragonfly writes
+      # a *.dfs file per shard and an entry for re-opening on next boot.
+      - "--dir=/data"
+      - "--dbfilename=dump"
+      - "--snapshot_cron=*/5 * * * *"
+      # Single-port mode — exposes only 6379 for the Redis protocol; the
+      # admin HTTP UI on 6380 stays disabled by default (no flag).
+      - "--port=6379"
+      # Bind to all interfaces so the host port mapping works on Linux,
+      # macOS, and Windows. We have no auth here — same as MinIO/postgres
+      # in the core profile (local-dev convention; production uses
+      # `--requirepass`).
+      - "--bind=0.0.0.0"
+    ports:
+      # Dev host binding so `redis-cli -h localhost ping` from the host
+      # works. In-network services reach this as `redis:6379`.
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks: [appnet]
+    healthcheck:
+      # Dragonfly's image bundles `redis-cli`, so use it for the most
+      # direct liveness check possible. `-q` suppresses the banner; we
+      # match exactly "PONG" on stdout. Catches the "process is up but
+      # not accepting connections" window that a `pgrep` would miss.
+      test: ["CMD-SHELL", "redis-cli -h 127.0.0.1 -p 6379 ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  # ---------------------------------------------------------------------------
+  # Web app shell — Next.js App Router (T-016).
+  #
+  # Architecture references:
+  #   - §8.1 — Next.js + Tailwind + shadcn primitives + TanStack Query.
+  #   - §4.1 — Part of the `core` profile (always on).
+  #   - §3.10 — Talks to the API via @vidgen/sdk-ts (OpenAPI-generated).
+  #
+  # Auth flow:
+  #   - Browser uses KEYCLOAK_PUBLIC_ISSUER_URL (https://auth.localhost via
+  #     Caddy) for PKCE authorize / userinfo / RP-logout.
+  #   - The Next.js server-side code (route handlers) hits the SAME URL for
+  #     the token-exchange callback. This requires the web container to
+  #     trust Caddy's local CA — we mount the `caddy_data` volume read-only
+  #     at /caddy-pki and point NODE_EXTRA_CA_CERTS at the root cert that
+  #     Caddy generates on first boot.
+  #
+  # The token's `iss` claim therefore matches the API's KEYCLOAK_ISSUER_URL
+  # default (https://auth.localhost/realms/app) — no dual-issuer footgun.
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    image: vidgen/web:dev
+    container_name: vidgen-web
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      caddy:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      WEB_PORT: 3000
+      WEB_PUBLIC_URL: ${WEB_PUBLIC_URL:-https://app.localhost}
+      # Cookie sealing key — reuses APP_SECRET (32+ char). iron-session
+      # AES-GCM-256 with this as the password.
+      APP_SECRET: ${APP_SECRET:-dev-only-change-me-dev-only-change-me}
+      # OIDC — public issuer is what the browser navigates to; internal
+      # endpoints are the same because the web container trusts the Caddy
+      # CA (see NODE_EXTRA_CA_CERTS below).
+      KEYCLOAK_PUBLIC_ISSUER_URL: ${KEYCLOAK_PUBLIC_ISSUER_URL:-https://auth.localhost/realms/app}
+      KEYCLOAK_CLIENT_ID_WEB: ${KEYCLOAK_CLIENT_ID_WEB:-app-web}
+      # Where the Next.js server proxies SDK calls to. In-network so the
+      # call doesn't bounce through Caddy.
+      API_INTERNAL_URL: ${API_INTERNAL_URL:-http://api:3001}
+      # Where the browser can reach the API (only used in `<a href>`
+      # links / docs). Defaults to the Caddy-fronted URL.
+      NEXT_PUBLIC_API_PUBLIC_URL: ${API_PUBLIC_URL:-https://api.localhost}
+      # Make the local Caddy CA available to Node's HTTPS layer. The
+      # `caddy_data` volume is mounted at /caddy-pki below. Caddy writes
+      # the root cert here on first start; the file path matches every
+      # supported Caddy version's PKI layout.
+      NODE_EXTRA_CA_CERTS: /caddy-pki/caddy/pki/authorities/local/root.crt
+    ports:
+      # Dev host binding so `curl http://localhost:3000/` works without
+      # going through Caddy. Caddy fronts this at https://app.localhost
+      # (default APP_UPSTREAM=web:3000, set in the caddy service env above).
+      - "${WEB_PORT:-3000}:3000"
+    volumes:
+      # Read-only mount of Caddy's data dir; we only need root.crt out of
+      # it. Caddy writes the cert on first boot — the `depends_on:
+      # caddy.condition: service_healthy` above guarantees it's present
+      # by the time the web container starts.
+      - caddy_data:/caddy-pki:ro
+    networks: [appnet]
+    extra_hosts:
+      # The web container needs to resolve `auth.localhost` for the
+      # server-side OIDC token exchange when KEYCLOAK_PUBLIC_ISSUER_URL
+      # points at the Caddy-fronted URL (compose default). Routing it via
+      # the host gateway lets it traverse the host's port 443 → caddy:443
+      # → keycloak.
+      - "auth.localhost:host-gateway"
+      - "api.localhost:host-gateway"
+      # Same idea for the direct http://localhost:8080/realms/app issuer
+      # path used by api-smoke.sh: route `localhost` through the host
+      # gateway so the SSR openid-client can reach the Keycloak port
+      # mapping. Safe inside the dev compose stack — the web container
+      # doesn't bind anything on 127.0.0.1 internally.
+      - "localhost:host-gateway"
+    healthcheck:
+      # Next.js standalone serves on $WEB_PORT immediately after boot. A
+      # successful GET on `/` (which redirects to /login when anonymous)
+      # is sufficient liveness.
+      test:
+        - "CMD-SHELL"
+        - 'node -e "fetch(''http://127.0.0.1:3000/api/healthz'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"'
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
 
   # --- media --------------------------------------------------------------
   media-placeholder:

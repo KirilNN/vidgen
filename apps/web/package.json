@@ -3,11 +3,35 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "src/index.ts",
   "scripts": {
+    "dev": "next dev -p ${WEB_PORT:-3000}",
+    "build": "next build",
+    "start": "next start -p ${WEB_PORT:-3000}",
     "lint": "eslint src --max-warnings=0",
     "type-check": "tsc --noEmit -p tsconfig.json",
-    "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+    "test": "vitest run",
+    "clean": "rm -rf .next .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.100.14",
+    "@vidgen/config": "workspace:*",
+    "@vidgen/sdk-ts": "workspace:*",
+    "clsx": "^2.1.1",
+    "iron-session": "^8.0.4",
+    "lucide-react": "^0.469.0",
+    "next": "15.5.5",
+    "openid-client": "^6.8.4",
+    "react": "^19.2.2",
+    "react-dom": "^19.2.2",
+    "tailwind-merge": "^2.6.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19",
+    "vitest": "^2.1.8"
   }
 }
