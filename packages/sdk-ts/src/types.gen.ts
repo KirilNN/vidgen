@@ -13,13 +13,70 @@ export interface paths {
         };
         /**
          * Liveness probe
-         * @description Returns `{ status: "ok" }` if the API process is up. Cheap and
-         *     unauthenticated — safe for load balancers and uptime checks. Does not
-         *     verify downstream dependencies (see future `/ready` for that).
+         * @description Unauthenticated liveness probe. Returns the API process status, the
+         *     package version, and the current server timestamp. Cheap and safe for
+         *     load balancers / uptime checks. Does not verify downstream
+         *     dependencies — see future `/ready` for that.
          */
         get: operations["getHealth"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Caller identity + workspace memberships
+         * @description Returns the calling user (resolved from the verified Bearer JWT) along
+         *     with the workspaces they belong to. On first call the user record is
+         *     upserted by email (see `users.email` UNIQUE constraint in
+         *     `services/api/src/db/schema.ts`). The response is the canonical
+         *     bootstrap payload used by the web shell (T-016) to render the
+         *     workspace switcher.
+         */
+        get: operations["getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/workspaces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the caller's workspaces
+         * @description Returns every workspace the calling user is a member of, with the
+         *     caller's role inside each. Cross-tenant by design — bound to the
+         *     caller via the `app.user_id` GUC + the `self_bootstrap_read` RLS
+         *     policies introduced in migration 0002.
+         */
+        get: operations["listWorkspaces"];
+        put?: never;
+        /**
+         * Create a workspace
+         * @description Creates a new workspace (a.k.a. tenant) and adds the caller as its
+         *     first `owner`. The workspace_id is server-generated (UUID) so the
+         *     client never has to guess. The new workspace is immediately listed
+         *     by `GET /workspaces` for the caller, and is invisible to every
+         *     other user (verified by the multi-tenant smoke test).
+         */
+        post: operations["createWorkspace"];
         delete?: never;
         options?: never;
         head?: never;
@@ -31,11 +88,76 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         HealthResponse: {
+            /** @description True when the API process is up. */
+            ok: boolean;
+            /** @description Version string from the API package.json (e.g. `0.0.2`). */
+            version: string;
             /**
-             * @description Always `ok` when the service responds at all.
-             * @enum {string}
+             * Format: date-time
+             * @description ISO-8601 timestamp from the server clock at response time.
              */
-            status: "ok";
+            ts: string;
+        };
+        User: {
+            /**
+             * Format: uuid
+             * @description Internal user id (UUID generated on first sight of the email).
+             */
+            userId: string;
+            /** Format: email */
+            email: string;
+            displayName?: string | null;
+        };
+        /**
+         * @description Workspace-level role. Mirrors the realm roles in Keycloak's `app` realm
+         *     (T-013).
+         * @enum {string}
+         */
+        WorkspaceRole: "owner" | "editor" | "viewer";
+        Workspace: {
+            /** @description Stable workspace identifier (used as the tenant key in every other table). */
+            workspaceId: string;
+            name: string;
+            /** @description Data-residency region (arch §11). Defaults to `local`. */
+            region: string;
+            /** @description Workspace tier (free / paid). Defaults to `free`. */
+            tier: string;
+            role: components["schemas"]["WorkspaceRole"];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        WorkspaceList: {
+            workspaces: components["schemas"]["Workspace"][];
+        };
+        Me: {
+            user: components["schemas"]["User"];
+            workspaces: components["schemas"]["Workspace"][];
+        };
+        CreateWorkspaceRequest: {
+            /** @description Human-readable workspace name. Displayed in the workspace switcher. */
+            name: string;
+        };
+        /** @description RFC 7807 problem details object. */
+        ProblemDetails: {
+            /**
+             * Format: uri
+             * @description URI reference identifying the problem type.
+             * @default about:blank
+             */
+            type: string;
+            /** @description Short human-readable summary of the problem type. */
+            title: string;
+            /** @description HTTP status code generated by the origin server. */
+            status: number;
+            /** @description Human-readable explanation specific to this occurrence. */
+            detail?: string;
+            /**
+             * Format: uri
+             * @description URI reference that identifies the specific occurrence.
+             */
+            instance?: string;
+        } & {
+            [key: string]: unknown;
         };
     };
     responses: never;
@@ -62,6 +184,106 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponse"];
+                };
+            };
+        };
+    };
+    getMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Authenticated caller. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description Missing or invalid Bearer token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    listWorkspaces: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Caller's workspaces. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceList"];
+                };
+            };
+            /** @description Missing or invalid Bearer token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    createWorkspace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWorkspaceRequest"];
+            };
+        };
+        responses: {
+            /** @description Workspace created; caller is its owner. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Workspace"];
+                };
+            };
+            /** @description Invalid request body. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Missing or invalid Bearer token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
                 };
             };
         };

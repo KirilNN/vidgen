@@ -34,8 +34,15 @@ export const apiEnvSchema = refuseDevSentinelsInProduction(
     POSTGRES_DB: z.string().min(1),
 
     KEYCLOAK_ISSUER_URL: z.string().url().optional(),
+    KEYCLOAK_JWKS_URL: z.string().url().optional(),
     KEYCLOAK_CLIENT_ID_API: z.string().min(1).optional(),
     KEYCLOAK_CLIENT_SECRET_API: z.string().min(1).optional(),
+    // Comma-separated list of Keycloak `azp` claim values allowed to call
+    // this API. Defaults to the two client IDs the dev realm-export ships
+    // (app-web for the browser SPA, app-api for service-to-service grants).
+    // Kept as a string so docker-compose env injection just works; parsed
+    // into a Set on first read by the auth plugin.
+    KEYCLOAK_ALLOWED_AZP: z.string().min(1).default("app-web,app-api"),
 
     REDIS_URL: z.string().url().optional(),
     TEMPORAL_ADDRESS: z.string().min(1).optional(),

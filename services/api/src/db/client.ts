@@ -131,4 +131,102 @@ export async function withWorkspace<T>(
   });
 }
 
+// ---- Bootstrap helpers (T-015) ----------------------------------------------
+//
+// The three cross-tenant routes (GET /me, GET /workspaces, POST /workspaces)
+// run before the caller has chosen a workspace. RLS is still enforced — the
+// app role only sees rows that match the additive `self_bootstrap_read`
+// policies installed by migration 0002, which key off the `app.user_id` GUC.
+// `withUserContext` sets that GUC inside a transaction in the same way
+// `withWorkspace` sets `app.workspace_id` above.
+//
+// Writes that the bootstrap path cannot perform under RLS (creating the
+// first tenant + tenant_members pair) go through SECURITY DEFINER functions
+// — `upsertUserByEmail` and `createWorkspaceForUser` below. Both are
+// EXECUTE-granted to the app role only.
+
+// PostgreSQL canonical UUID textual representation, e.g.
+// 00000000-0000-0000-0000-000000000000. Matching this here means we never
+// inject a malformed value into `set_config('app.user_id', ...)` — the
+// migration's `current_user_id()` falls back to NULL on a bad cast, so a
+// caller bug would result in zero-row reads (silent), which is worse than
+// throwing.
+const UUID_RE = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+/**
+ * Run `fn` inside a transaction bound to a specific user (no workspace
+ * context). Sets `app.user_id` so the `self_bootstrap_read` policies from
+ * migration 0002 allow the caller to read their own user row, their
+ * tenant_members rows, and the tenants they belong to. Use this for the
+ * /me and GET /workspaces routes only — anything that touches a specific
+ * workspace's rows should use `withWorkspace` instead so the standard
+ * RLS predicate fires.
+ */
+export async function withUserContext<T>(
+  userId: string,
+  fn: (tx: AppDatabase) => Promise<T>,
+): Promise<T> {
+  if (!userId || !UUID_RE.test(userId)) {
+    throw new Error(
+      `withUserContext: invalid userId ${JSON.stringify(userId)} — must be a canonical UUID`,
+    );
+  }
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`select set_config('app.user_id', ${userId}, true)`);
+    return fn(tx);
+  });
+}
+
+/**
+ * SECURITY DEFINER bootstrap: resolve a Keycloak email claim into our
+ * internal `users.user_id`. Idempotent. Migration 0002 installs the
+ * underlying function and gates EXECUTE to the app role only.
+ *
+ * Returns the canonical user_id (UUID text). Throws if the function
+ * surfaces an exception (empty email, etc.).
+ */
+export async function upsertUserByEmail(
+  email: string,
+  displayName?: string | null,
+): Promise<string> {
+  const db = getDb();
+  const rows = await db.execute<{ upsert_user_by_email: string }>(
+    sql`select public.upsert_user_by_email(${email}, ${displayName ?? null}) as upsert_user_by_email`,
+  );
+  const id = rows[0]?.upsert_user_by_email;
+  if (!id || !UUID_RE.test(id)) {
+    throw new Error(`upsertUserByEmail: backend returned ${JSON.stringify(id)} for email ${email}`);
+  }
+  return id;
+}
+
+/**
+ * SECURITY DEFINER bootstrap: atomically insert a new tenant + its
+ * founding `tenant_members(role='owner')` row. The function requires
+ * `app.user_id = userId`, so we run it inside `withUserContext` to
+ * enforce that contract from the connection side too — defence in depth
+ * with the function's own check.
+ */
+export async function createWorkspaceForUser(
+  workspaceId: string,
+  name: string,
+  userId: string,
+): Promise<string> {
+  if (!workspaceId) throw new Error("createWorkspaceForUser: workspaceId required");
+  if (!name) throw new Error("createWorkspaceForUser: name required");
+  return withUserContext(userId, async (tx) => {
+    const rows = await tx.execute<{ create_workspace_for_user: string }>(
+      sql`select public.create_workspace_for_user(${workspaceId}, ${name}, ${userId}::uuid) as create_workspace_for_user`,
+    );
+    const ws = rows[0]?.create_workspace_for_user;
+    if (ws !== workspaceId) {
+      throw new Error(
+        `createWorkspaceForUser: backend returned ${JSON.stringify(ws)}, expected ${workspaceId}`,
+      );
+    }
+    return ws;
+  });
+}
+
 export { schema };

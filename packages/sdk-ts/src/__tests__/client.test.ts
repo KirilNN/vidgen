@@ -19,10 +19,11 @@ describe("@vidgen/sdk-ts", () => {
   });
 
   it("typechecks and executes client.GET('/health')", async () => {
+    const sampleBody = { ok: true, version: "0.0.2", ts: "2025-01-01T00:00:00Z" };
     const fetchMock = vi.fn(async (input: Request | string | URL) => {
       const url = typeof input === "string" || input instanceof URL ? input.toString() : input.url;
       expect(url).toBe("http://localhost:3001/health");
-      return new Response(JSON.stringify({ status: "ok" }), {
+      return new Response(JSON.stringify(sampleBody), {
         status: 200,
         headers: { "content-type": "application/json" },
       });
@@ -33,26 +34,27 @@ describe("@vidgen/sdk-ts", () => {
 
     expect(error).toBeUndefined();
     expect(response.status).toBe(200);
-    expect(data).toEqual({ status: "ok" });
+    expect(data).toEqual(sampleBody);
 
     // Type-level assertion: `data` is narrowed to HealthResponse | undefined.
     const typed: components["schemas"]["HealthResponse"] | undefined = data;
-    expect(typed?.status).toBe("ok");
+    expect(typed?.ok).toBe(true);
 
     expect(fetchMock).toHaveBeenCalledOnce();
   });
 
   it("uses the default baseUrl when none is supplied", async () => {
+    const sampleBody = { ok: true, version: "0.0.2", ts: "2025-01-01T00:00:00Z" };
     const fetchMock = vi.fn(async (input: Request | string | URL) => {
       const url = typeof input === "string" || input instanceof URL ? input.toString() : input.url;
       expect(url).toBe("http://localhost:3001/health");
-      return new Response(JSON.stringify({ status: "ok" }), {
+      return new Response(JSON.stringify(sampleBody), {
         status: 200,
         headers: { "content-type": "application/json" },
       });
     });
     const client = createClient({ fetch: fetchMock });
     const { data } = await client.GET("/health");
-    expect(data?.status).toBe("ok");
+    expect(data?.ok).toBe(true);
   });
 });
