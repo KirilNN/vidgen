@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./api": "./src/services/api.ts",
     "./worker": "./src/services/worker.ts",
-    "./mcp": "./src/services/mcp.ts"
+    "./mcp": "./src/services/mcp.ts",
+    "./web": "./src/services/web.ts"
   },
   "scripts": {
     "lint": "eslint src --max-warnings=0",

@@ -14,6 +14,8 @@ export default tseslint.config(
       "**/coverage/**",
       "**/*.gen.ts",
       "**/*.gen.tsx",
+      // Next.js generates next-env.d.ts with mandatory triple-slash refs.
+      "**/next-env.d.ts",
     ],
   },
   js.configs.recommended,

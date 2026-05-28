@@ -1,0 +1,12 @@
+node_modules
+.next
+.turbo
+dist
+coverage
+*.tsbuildinfo
+.env
+.env.local
+.env.development
+.env.production
+.git
+README.md
