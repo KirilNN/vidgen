@@ -317,12 +317,12 @@ services:
       CADDY_ACME_EMAIL: ${CADDY_ACME_EMAIL:-change-me@example.com}
       CADDY_LOG_LEVEL: ${CADDY_LOG_LEVEL:-INFO}
       # Per-site upstreams. Defaults match the layout this ticket ships:
-      # in-network container names for services in `core` today, and
-      # `host.docker.internal:PORT` for services that don't yet have a
-      # container (web/api/share). Later tickets can override these to
-      # `web:3000` / `api:3001` / `share:3000` once their containers land.
+      # in-network container names for services that already have a
+      # container in `core`, and `host.docker.internal:PORT` for services
+      # that haven't moved into the compose stack yet. T-015 added the
+      # `api` container, so API_UPSTREAM now defaults to `api:3001`.
       APP_UPSTREAM: ${APP_UPSTREAM:-host.docker.internal:3000}
-      API_UPSTREAM: ${API_UPSTREAM:-host.docker.internal:3001}
+      API_UPSTREAM: ${API_UPSTREAM:-api:3001}
       SHARE_UPSTREAM: ${SHARE_UPSTREAM:-host.docker.internal:3002}
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-keycloak:8080}
       S3_UPSTREAM: ${S3_UPSTREAM:-minio:9000}
@@ -348,6 +348,101 @@ services:
       timeout: 5s
       retries: 6
       start_period: 5s
+
+  # ---------------------------------------------------------------------------
+  # Fastify API service (T-015).
+  #
+  # Architecture references:
+  #   - §3.10 — Fastify gateway exposing the OpenAPI contract.
+  #   - §4.1  — Part of the `core` profile (always on).
+  #   - §11   — Multi-tenant isolation via Postgres RLS — the api connects
+  #             as the non-superuser `app` role and sets app.workspace_id
+  #             / app.user_id per request.
+  #
+  # api-migrate is a one-shot sidecar: it runs Drizzle migrations against
+  # the superuser DB URL and exits 0 on success. `api` waits for it via
+  # `condition: service_completed_successfully` so a freshly-volume-less
+  # stack auto-applies migrations on first boot. Same pattern as
+  # keycloak-init.
+  api-migrate:
+    build:
+      context: ../..
+      dockerfile: services/api/Dockerfile
+    image: vidgen/api:dev
+    container_name: vidgen-api-migrate
+    profiles: [core]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      APP_SECRET: ${APP_SECRET:-dev-only-change-me-dev-only-change-me}
+      # Migration script uses the SUPERUSER credentials so it can create
+      # the RLS policies & functions owned by a role that bypasses RLS.
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-vidgen}
+      # The application user (used by the runtime api container) — referenced
+      # by some migrations that GRANT EXECUTE on SECURITY DEFINER functions
+      # to the app role.
+      APP_DB_USER: ${POSTGRES_USER:-app}
+    command: ["pnpm", "--filter", "@vidgen/api", "db:migrate"]
+    networks: [appnet]
+
+  api:
+    build:
+      context: ../..
+      dockerfile: services/api/Dockerfile
+    image: vidgen/api:dev
+    container_name: vidgen-api
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      api-migrate:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      API_PORT: 3001
+      API_PUBLIC_URL: ${API_PUBLIC_URL:-https://api.localhost}
+      APP_SECRET: ${APP_SECRET:-dev-only-change-me-dev-only-change-me}
+      # Runtime app credentials — the non-superuser, RLS-bound role.
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-vidgen}
+      # OIDC. The expected issuer (`iss` claim) is the public URL the
+      # browser-facing Keycloak gives out; the JWKS endpoint we fetch
+      # internally has to be the in-network hostname because *.localhost
+      # is not resolvable from inside Docker.
+      KEYCLOAK_ISSUER_URL: ${KEYCLOAK_ISSUER_URL:-https://auth.localhost/realms/app}
+      KEYCLOAK_JWKS_URL: ${KEYCLOAK_JWKS_URL:-http://keycloak:8080/realms/app/protocol/openid-connect/certs}
+      KEYCLOAK_CLIENT_ID_API: ${KEYCLOAK_CLIENT_ID_API:-app-api}
+      KEYCLOAK_CLIENT_SECRET_API: ${KEYCLOAK_CLIENT_SECRET_API:-change-me}
+      KEYCLOAK_ALLOWED_AZP: ${KEYCLOAK_ALLOWED_AZP:-app-web,app-api}
+    ports:
+      # Dev-only host binding so `curl http://localhost:3001/health` works
+      # without going through Caddy. Caddy fronts the same port at
+      # https://api.localhost (default API_UPSTREAM=api:3001).
+      - "${API_PORT:-3001}:3001"
+    networks: [appnet]
+    healthcheck:
+      # Use Node to GET /health — no curl/wget needed in the alpine image.
+      test:
+        - "CMD-SHELL"
+        - 'node -e "fetch(''http://127.0.0.1:3001/health'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"'
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
 
   # --- media --------------------------------------------------------------
   media-placeholder:

@@ -60,14 +60,13 @@ app.localhost {
 	reverse_proxy {$APP_UPSTREAM:host.docker.internal:3000}
 }
 
-# API (T-015). Default port is 3001 — that is what the merged @vidgen/config,
-# @vidgen/sdk-ts, OpenAPI server list, and Keycloak realm-export already
-# assume. (The T-014 ticket text mentions port 4000; reconciling that to
-# 3001 across the SDK / OpenAPI / realm-export is outside this ticket's
-# file scope — see PR body.)
+# API (T-015). The api container in the `core` profile listens on 3001;
+# Caddy proxies via the compose-network hostname `api:3001`. Override
+# API_UPSTREAM to `host.docker.internal:3001` if you'd rather run the API
+# on the host (e.g. via `pnpm dev`).
 api.localhost {
 	import local_tls
-	reverse_proxy {$API_UPSTREAM:host.docker.internal:3001}
+	reverse_proxy {$API_UPSTREAM:api:3001}
 }
 
 # Static share / embed app (T-100).

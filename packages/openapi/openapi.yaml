@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Vidgen API
-  version: 0.0.1
+  version: 0.0.2
   summary: Public REST API for the Vidgen platform.
   description: |
     Single source of truth for the Vidgen HTTP contract.
@@ -18,21 +18,28 @@ info:
     name: Apache-2.0
 servers:
   - url: http://localhost:3001
-    description: Local development (Mode A)
+    description: Local development (Mode A) — direct (host port 3001).
+  - url: https://api.localhost
+    description: Local development (Mode A) — via Caddy on 443.
   - url: https://api.example.com
-    description: Production placeholder — replace per environment
+    description: Production placeholder — replace per environment.
 tags:
   - name: system
     description: Liveness, readiness, and platform health.
+  - name: identity
+    description: Authenticated caller identity and workspace membership.
+  - name: workspaces
+    description: Workspace (a.k.a. tenant) CRUD.
 paths:
   /health:
     get:
       operationId: getHealth
       summary: Liveness probe
       description: |
-        Returns `{ status: "ok" }` if the API process is up. Cheap and
-        unauthenticated — safe for load balancers and uptime checks. Does not
-        verify downstream dependencies (see future `/ready` for that).
+        Unauthenticated liveness probe. Returns the API process status, the
+        package version, and the current server timestamp. Cheap and safe for
+        load balancers / uptime checks. Does not verify downstream
+        dependencies — see future `/ready` for that.
       tags: [system]
       responses:
         "200":
@@ -44,15 +51,219 @@ paths:
               examples:
                 ok:
                   value:
-                    status: ok
+                    ok: true
+                    version: "0.0.2"
+                    ts: "2025-05-28T10:46:08.102Z"
+  /me:
+    get:
+      operationId: getMe
+      summary: Caller identity + workspace memberships
+      description: |
+        Returns the calling user (resolved from the verified Bearer JWT) along
+        with the workspaces they belong to. On first call the user record is
+        upserted by email (see `users.email` UNIQUE constraint in
+        `services/api/src/db/schema.ts`). The response is the canonical
+        bootstrap payload used by the web shell (T-016) to render the
+        workspace switcher.
+      tags: [identity]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Authenticated caller.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Me"
+        "401":
+          description: Missing or invalid Bearer token.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /workspaces:
+    get:
+      operationId: listWorkspaces
+      summary: List the caller's workspaces
+      description: |
+        Returns every workspace the calling user is a member of, with the
+        caller's role inside each. Cross-tenant by design — bound to the
+        caller via the `app.user_id` GUC + the `self_bootstrap_read` RLS
+        policies introduced in migration 0002.
+      tags: [workspaces]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Caller's workspaces.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceList"
+        "401":
+          description: Missing or invalid Bearer token.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    post:
+      operationId: createWorkspace
+      summary: Create a workspace
+      description: |
+        Creates a new workspace (a.k.a. tenant) and adds the caller as its
+        first `owner`. The workspace_id is server-generated (UUID) so the
+        client never has to guess. The new workspace is immediately listed
+        by `GET /workspaces` for the caller, and is invisible to every
+        other user (verified by the multi-tenant smoke test).
+      tags: [workspaces]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWorkspaceRequest"
+      responses:
+        "201":
+          description: Workspace created; caller is its owner.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workspace"
+        "400":
+          description: Invalid request body.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "401":
+          description: Missing or invalid Bearer token.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Keycloak-issued OIDC access token. The API verifies the signature
+        against the realm JWKS (`KEYCLOAK_JWKS_URL`) and the `iss` claim
+        against `KEYCLOAK_ISSUER_URL`.
   schemas:
     HealthResponse:
       type: object
       additionalProperties: false
-      required: [status]
+      required: [ok, version, ts]
       properties:
-        status:
+        ok:
+          type: boolean
+          description: True when the API process is up.
+        version:
           type: string
-          enum: [ok]
-          description: Always `ok` when the service responds at all.
+          description: Version string from the API package.json (e.g. `0.0.2`).
+        ts:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp from the server clock at response time.
+    User:
+      type: object
+      additionalProperties: false
+      required: [userId, email]
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: Internal user id (UUID generated on first sight of the email).
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+          nullable: true
+    WorkspaceRole:
+      type: string
+      enum: [owner, editor, viewer]
+      description: |
+        Workspace-level role. Mirrors the realm roles in Keycloak's `app` realm
+        (T-013).
+    Workspace:
+      type: object
+      additionalProperties: false
+      required: [workspaceId, name, region, tier, role, createdAt]
+      properties:
+        workspaceId:
+          type: string
+          description: Stable workspace identifier (used as the tenant key in every other table).
+        name:
+          type: string
+        region:
+          type: string
+          description: Data-residency region (arch §11). Defaults to `local`.
+        tier:
+          type: string
+          description: Workspace tier (free / paid). Defaults to `free`.
+        role:
+          $ref: "#/components/schemas/WorkspaceRole"
+        createdAt:
+          type: string
+          format: date-time
+    WorkspaceList:
+      type: object
+      additionalProperties: false
+      required: [workspaces]
+      properties:
+        workspaces:
+          type: array
+          items:
+            $ref: "#/components/schemas/Workspace"
+    Me:
+      type: object
+      additionalProperties: false
+      required: [user, workspaces]
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        workspaces:
+          type: array
+          items:
+            $ref: "#/components/schemas/Workspace"
+    CreateWorkspaceRequest:
+      type: object
+      additionalProperties: false
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Human-readable workspace name. Displayed in the workspace switcher.
+    ProblemDetails:
+      type: object
+      additionalProperties: true
+      required: [type, title, status]
+      description: RFC 7807 problem details object.
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI reference identifying the problem type.
+          default: about:blank
+        title:
+          type: string
+          description: Short human-readable summary of the problem type.
+        status:
+          type: integer
+          minimum: 100
+          maximum: 599
+          description: HTTP status code generated by the origin server.
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence.
+        instance:
+          type: string
+          format: uri
+          description: URI reference that identifies the specific occurrence.

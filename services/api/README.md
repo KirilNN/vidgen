@@ -1,7 +1,71 @@
 # @vidgen/api
 
-Fastify API gateway (skeleton scaffolded by T-001; database layer landed
-in T-011; HTTP server lands in T-015).
+Fastify 5 API gateway. Built across T-001 (skeleton), T-011 (Drizzle +
+RLS), and T-015 (HTTP server + four endpoints).
+
+## Endpoints (T-015)
+
+| Method | Path          | Auth   | Purpose                                                          |
+| ------ | ------------- | ------ | ---------------------------------------------------------------- |
+| GET    | `/health`     | none   | Liveness probe — returns `{ ok, version, ts }`.                  |
+| GET    | `/me`         | Bearer | Returns the calling user + workspace memberships.                |
+| GET    | `/workspaces` | Bearer | Lists workspaces the caller is a member of.                      |
+| POST   | `/workspaces` | Bearer | Creates a workspace and adds the caller as `owner`. Returns 201. |
+
+The wire contract is owned by `packages/openapi/openapi.yaml`. The SDK
+in `packages/sdk-ts` is regenerated from that spec via `pnpm sdk:gen`.
+
+## Run inside compose (default)
+
+The `core` profile builds and runs the api in-network:
+
+```bash
+cd infra/compose
+cp .env.example .env   # if you haven't already
+docker compose --profile core up -d
+# api-migrate runs once; api then waits for it to complete.
+curl https://api.localhost/health   # via Caddy
+curl http://localhost:3001/health   # direct, host-bound for dev
+```
+
+## Run on the host (for fast iteration)
+
+```bash
+# Postgres + Keycloak still come from compose:
+cd infra/compose && docker compose --profile core up -d postgres keycloak-init keycloak
+
+# Apply migrations once (superuser URL):
+POSTGRES_HOST=localhost POSTGRES_USER=postgres \
+POSTGRES_PASSWORD="$POSTGRES_SUPERUSER_PASSWORD" \
+pnpm --filter @vidgen/api db:migrate
+
+# Run the API on the host:
+cd services/api && pnpm dev
+```
+
+Then either flip `API_UPSTREAM=host.docker.internal:3001` and `docker
+compose --profile core up -d caddy --force-recreate` so Caddy proxies to
+the host process, or hit the API directly on `http://localhost:3001`.
+
+## Tests
+
+```bash
+pnpm --filter @vidgen/api test           # vitest, all 23 tests
+pnpm --filter @vidgen/api type-check     # tsc --noEmit
+pnpm --filter @vidgen/api lint           # eslint
+bash scripts/api-smoke.sh                # end-to-end against running compose
+```
+
+## Architecture references
+
+- arch §3.10 — Fastify gateway, OpenAPI as the wire contract.
+- arch §5.1 — Postgres connection lifecycle.
+- arch §11 — Multi-tenant isolation via per-request RLS GUC
+  (`app.workspace_id` for in-workspace requests, `app.user_id` for
+  cross-tenant bootstrap reads). Migration `0002_app_bootstrap.sql`
+  installs the additive `self_bootstrap_read` RLS policies and the
+  two SECURITY DEFINER helper functions (`upsert_user_by_email`,
+  `create_workspace_for_user`).
 
 ## Purpose
 
