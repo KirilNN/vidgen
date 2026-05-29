@@ -544,6 +544,7 @@ services:
       AUTH_UPSTREAM: ${AUTH_UPSTREAM:-keycloak:8080}
       S3_UPSTREAM: ${S3_UPSTREAM:-minio:9000}
       MINIO_CONSOLE_UPSTREAM: ${MINIO_CONSOLE_UPSTREAM:-minio:9001}
+      TUS_UPSTREAM: ${TUS_UPSTREAM:-tusd:1080}
       TEMPORAL_UI_UPSTREAM: ${TEMPORAL_UI_UPSTREAM:-temporal-ui:8080}
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
@@ -646,6 +647,14 @@ services:
       KEYCLOAK_CLIENT_ID_API: ${KEYCLOAK_CLIENT_ID_API:-app-api}
       KEYCLOAK_CLIENT_SECRET_API: ${KEYCLOAK_CLIENT_SECRET_API:-change-me}
       KEYCLOAK_ALLOWED_AZP: ${KEYCLOAK_ALLOWED_AZP:-app-web,app-api}
+      # T-022 event bus — fan-out to webhooks (T-023) lands here.
+      NATS_URL: ${NATS_URL:-nats://nats:4222}
+      # T-031 — start IngestAssetWorkflow from the tus post-finish hook.
+      TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
+      INGEST_TASK_QUEUE: ${INGEST_TASK_QUEUE:-light}
+      # T-030/31 internal HMAC. Defaults to APP_SECRET if blank.
+      API_INTERNAL_TOKEN: ${API_INTERNAL_TOKEN:-}
     ports:
       # Dev-only host binding so `curl http://localhost:3001/health` works
       # without going through Caddy. Caddy fronts the same port at
@@ -660,6 +669,70 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
+      start_period: 10s
+
+  # ---------------------------------------------------------------------------
+  # tusd — resumable upload server (T-030).
+  #
+  # Architecture references:
+  #   - §3.1 — uploads enter via tus, the only supported upload protocol.
+  #   - §5.1 — chunks land in the `media-chunks` bucket; the ingest
+  #            workflow's `finalizeUpload` activity moves them to
+  #            `media-raw/{ws}/{asset}/source.{ext}` once complete.
+  #   - §11  — pre-create + post-finish hooks enforce membership via
+  #            the API's `/internal/tus/*` routes.
+  #
+  # The upstream tusd image is a single static binary; we pin a
+  # multi-arch tag so Apple Silicon devs aren't stuck under Rosetta.
+  # The S3 backend stores chunks under `media-chunks/`. We delete
+  # chunks after `finalizeUpload` (no need for tusd's own GC).
+  #
+  # Hooks: tusd POSTs to http://api:3001/internal/tus/{pre-create,
+  # post-finish}. The pre-create hook validates the user's JWT
+  # (carried in Upload-Metadata) and the workspace membership; the
+  # post-finish hook starts an IngestAssetWorkflow.
+  tusd:
+    image: tusproject/tusd:v2.5.0
+    container_name: vidgen-tusd
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      minio:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+      api:
+        condition: service_healthy
+    command:
+      - "-s3-bucket=${MINIO_BUCKET_CHUNKS:-media-chunks}"
+      - "-s3-endpoint=${MINIO_INTERNAL_ENDPOINT:-http://minio:9000}"
+      - "-port=1080"
+      - "-base-path=/files/"
+      # Hooks. `-hooks-http` is the BASE url; tusd appends the event
+      # name (pre-create, post-finish, …). We enable only the two
+      # we use; tusd doesn't fire the disabled ones, saving round-trips.
+      - "-hooks-http=http://api:3001/internal/tus"
+      - "-hooks-enabled-events=pre-create,post-finish"
+      # Behind Caddy. tusd should trust the X-Forwarded-* headers Caddy
+      # sets so its `Location` response points at upload.localhost.
+      - "-behind-proxy"
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-change-me}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-change-me}
+      AWS_REGION: ${MINIO_REGION:-us-east-1}
+    ports:
+      - "${TUSD_PORT:-1080}:1080"
+    networks: [appnet]
+    healthcheck:
+      # tusd serves a tus-Resumable: 1.0.0 OPTIONS on / by default. A
+      # successful POST without a body to /files/ would create an
+      # upload; we don't want side effects in a healthcheck, so probe
+      # the metrics endpoint instead (exposed by default on the same
+      # port at /metrics).
+      test: ["CMD-SHELL", "wget -q -O- http://127.0.0.1:1080/metrics > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
       start_period: 10s
 
   # ---------------------------------------------------------------------------
@@ -1051,6 +1124,19 @@ services:
       TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
       TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
       NATS_URL: ${NATS_URL:-nats://nats:4222}
+      # T-030/31 storage + API internal endpoints (finalize-upload +
+      # create-rendition activities).
+      MINIO_ENDPOINT: ${MINIO_INTERNAL_ENDPOINT:-http://minio:9000}
+      MINIO_REGION: ${MINIO_REGION:-us-east-1}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-change-me}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-change-me}
+      MINIO_BUCKET_RAW: ${MINIO_BUCKET_RAW:-media-raw}
+      MINIO_BUCKET_DERIVED: ${MINIO_BUCKET_DERIVED:-media-derived}
+      MINIO_BUCKET_CHUNKS: ${MINIO_BUCKET_CHUNKS:-media-chunks}
+      MINIO_BUCKET_PUBLIC: ${MINIO_BUCKET_PUBLIC:-public}
+      API_INTERNAL_URL: ${API_INTERNAL_URL:-http://api:3001}
+      API_INTERNAL_TOKEN: ${API_INTERNAL_TOKEN:-}
+      APP_SECRET: ${APP_SECRET:-dev-only-change-me-dev-only-change-me}
     networks: [appnet]
 
   worker-media:
@@ -1072,6 +1158,15 @@ services:
       TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
       TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
       NATS_URL: ${NATS_URL:-nats://nats:4222}
+      # T-032 ffmpeg activities read/write through the S3 adapter.
+      MINIO_ENDPOINT: ${MINIO_INTERNAL_ENDPOINT:-http://minio:9000}
+      MINIO_REGION: ${MINIO_REGION:-us-east-1}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-change-me}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-change-me}
+      MINIO_BUCKET_RAW: ${MINIO_BUCKET_RAW:-media-raw}
+      MINIO_BUCKET_DERIVED: ${MINIO_BUCKET_DERIVED:-media-derived}
+      MINIO_BUCKET_CHUNKS: ${MINIO_BUCKET_CHUNKS:-media-chunks}
+      MINIO_BUCKET_PUBLIC: ${MINIO_BUCKET_PUBLIC:-public}
     networks: [appnet]
 
   worker-ai-cpu:

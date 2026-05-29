@@ -106,6 +106,17 @@ minio.localhost {
 	}
 }
 
+# tus resumable uploads (T-030). tusd terminates the protocol; chunks
+# land in MinIO's `media-chunks` bucket and the post-finish hook starts
+# the ingest workflow. Stream-proxy is critical here — buffering a
+# multi-GB upload in Caddy would defeat tus's resume semantics.
+upload.localhost {
+	import local_tls
+	reverse_proxy {$TUS_UPSTREAM:tusd:1080} {
+		import stream_proxy
+	}
+}
+
 # Temporal Web UI (T-020). The UI listens on :8080 inside the container
 # (mapped to host port 8088 for direct access). Same default-host pattern
 # as the other in-network routes — override TEMPORAL_UI_UPSTREAM to flip

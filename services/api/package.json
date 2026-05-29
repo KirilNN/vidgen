@@ -19,6 +19,7 @@
   "dependencies": {
     "@fastify/sensible": "^6.0.2",
     "@fastify/swagger": "^9.4.2",
+    "@temporalio/client": "^1.17.2",
     "@vidgen/config": "workspace:*",
     "@vidgen/events": "workspace:*",
     "@vidgen/openapi": "workspace:*",

@@ -34,6 +34,8 @@ import healthRoutes from "./routes/health.js";
 import meRoutes from "./routes/me.js";
 import workspacesRoutes from "./routes/workspaces.js";
 import webhooksRoutes from "./routes/webhooks.js";
+import tusPlugin from "./tus/index.js";
+import { closeTemporal } from "./temporal-client.js";
 import { getOpenApiDocument } from "./openapi.js";
 
 export interface BuildServerOptions {
@@ -72,11 +74,18 @@ export async function buildServer(opts: BuildServerOptions = {}): Promise<Fastif
   await app.register(dbPlugin);
   await app.register(authPlugin);
   await app.register(notifierPlugin);
+  await app.register(tusPlugin);
 
   await app.register(healthRoutes);
   await app.register(meRoutes);
   await app.register(workspacesRoutes);
   await app.register(webhooksRoutes);
+
+  // Close the Temporal client (lazily opened by tus post-finish)
+  // alongside Fastify so `pnpm dev` shuts down cleanly.
+  app.addHook("onClose", async () => {
+    await closeTemporal();
+  });
 
   return app;
 }
