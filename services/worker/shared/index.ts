@@ -18,3 +18,18 @@ export {
   type CreateWorkerOptions,
   type BootedWorker,
 } from "./create-worker.js";
+
+export {
+  createStorageClient,
+  createStorageClientFromEnv,
+  defaultBucketLayout,
+  extensionForMime,
+  parseS3Uri,
+  buildS3Uri,
+  workspaceKey,
+  type BucketLayout,
+  type ObjectHead,
+  type S3Uri,
+  type StorageClient,
+  type StorageConfig,
+} from "./storage.js";

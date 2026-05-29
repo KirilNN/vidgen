@@ -31,6 +31,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.js
 COPY packages/caption-ui/package.json packages/caption-ui/
 COPY packages/config/package.json packages/config/
 COPY packages/editor-core/package.json packages/editor-core/
+COPY packages/events/package.json packages/events/
 COPY packages/openapi/package.json packages/openapi/
 COPY packages/sdk-ts/package.json packages/sdk-ts/
 COPY packages/ui/package.json packages/ui/
@@ -44,6 +45,7 @@ RUN pnpm install --frozen-lockfile --filter @vidgen/api...
 FROM deps AS src
 # Source for the API and the two workspace packages it consumes at runtime.
 COPY packages/config packages/config
+COPY packages/events packages/events
 COPY packages/openapi packages/openapi
 COPY services/api services/api
 

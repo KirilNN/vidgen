@@ -49,6 +49,25 @@ export const apiEnvSchema = refuseDevSentinelsInProduction(
     TEMPORAL_NAMESPACE: z.string().min(1).default("default"),
     NATS_URL: z.string().url().optional(),
 
+    // ---- T-030/31 tus hooks + Temporal client ------------------------------
+    //
+    // The tusd sidecar (T-030) calls the API's `/internal/tus/*` hooks
+    // over the compose network. We don't want those hooks accessible
+    // from the public internet, so we gate them on a shared HMAC token
+    // — same secret on both sides, never bound to a public route.
+    //
+    // The post-finish hook also starts an `IngestAssetWorkflow` via the
+    // Temporal client; `TEMPORAL_ADDRESS` above tells the client where
+    // to dial. INGEST_TASK_QUEUE defaults to `light` because the
+    // workflow itself runs on the light pool (cross-queue calls into
+    // `media` happen inside the workflow via `proxyActivities`).
+    API_INTERNAL_TOKEN: z
+      .string()
+      .min(16)
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+    INGEST_TASK_QUEUE: z.string().min(1).default("light"),
+
     // ---- T-023 Notifier (Novu + webhook fan-out) ---------------------------
     //
     // The API's outbound-webhook fan-out has two backends, both opt-in

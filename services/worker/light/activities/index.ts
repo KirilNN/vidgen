@@ -1,18 +1,32 @@
 /**
- * services/worker/light — activity registry (T-021).
+ * services/worker/light — activity registry (T-021, extended T-031).
  *
  * Re-exports every activity this pool implements. The pool's
  * entrypoint imports `* as activities` from this barrel and hands the
  * resulting record straight to `createWorker`, so adding an activity
  * is a one-line export here plus the file itself.
  *
- * Activities ship empty at T-021 — light's actual activities arrive
- * with the workflows that need them (T-031 finalizeUpload, T-040
- * enqueueTranscription, etc.).
+ * T-031 wires the four orchestration activities the
+ * `IngestAssetWorkflow` calls:
+ *
+ *   - `finalizeUpload`         — copy chunk → media-raw, hash, upsert.
+ *   - `createRendition`        — POST /internal/renditions.
+ *   - `enqueueTranscription`   — placeholder until T-040.
+ *   - `publishAssetIngested`   — emit `asset.ingested` on the bus.
+ *
+ * The cross-queue ffmpeg activities (`probeMedia`,
+ * `transcodeMezzanine`, `extractAudio`) live in the media pool — the
+ * workflow accesses them through `proxyActivities({ taskQueue:
+ * 'media' })`, not via this registry.
  *
  * Architecture refs:
- * - §6.2 — light pool capabilities: orchestration, REST, OAuth refresh.
+ *   - §6.2 — light pool capabilities: orchestration, REST, OAuth refresh.
  */
+
+export { finalizeUpload } from "./finalize-upload.js";
+export { createRendition } from "./create-rendition.js";
+export { enqueueTranscription } from "./enqueue-transcription.js";
+export { publishAssetIngested } from "./publish-event.js";
 
 /**
  * Heartbeat activity that returns a structured pong. Exists so the

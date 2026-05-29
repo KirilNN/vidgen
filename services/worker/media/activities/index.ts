@@ -1,12 +1,17 @@
 /**
- * services/worker/media — activity registry (T-021).
+ * services/worker/media — activity registry (T-021, populated T-032).
  *
- * Media pool capabilities: ffmpeg, mlt, remotion. Activities ship
- * empty at T-021 and are filled in by:
- *   - T-032 transcodeMezzanine / extractAudio / probeMedia (FFmpeg)
- *   - T-062 renderTimeline (MLT)
- *   - T-090 renderRemotion (Remotion)
+ * Media pool capabilities: ffmpeg, mlt, remotion. Re-exports every
+ * activity this pool implements; the entrypoint hands the resulting
+ * record to `createWorker`, so adding an activity is a one-line
+ * `export *` plus the file itself.
+ *
+ * T-032 wires the three FFmpeg activities mandated by the ticket:
+ * `probeMedia`, `transcodeMezzanine`, `extractAudio`. Later tickets
+ * (T-062 MLT, T-090 Remotion) add their own files alongside.
  */
+
+export { probeMedia, transcodeMezzanine, extractAudio } from "./ffmpeg.js";
 
 export async function ping(input: { workspace_id: string }): Promise<{
   ok: true;

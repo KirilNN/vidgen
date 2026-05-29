@@ -21,10 +21,30 @@ export const workerEnvSchema = refuseDevSentinelsInProduction(
     POSTGRES_PASSWORD: z.string().min(1).optional(),
     POSTGRES_DB: z.string().min(1).optional(),
 
+    // ---- T-032 ffmpeg activities ------------------------------------
+    // MinIO connection: required for media activities. The S3 client
+    // helper in `services/worker/shared/storage.ts` reads these
+    // directly so the worker can talk to MinIO (Mode A) or R2 (Mode B).
     MINIO_ENDPOINT: z.string().url().optional(),
     MINIO_ROOT_USER: z.string().min(1).optional(),
     MINIO_ROOT_PASSWORD: z.string().min(1).optional(),
     MINIO_REGION: z.string().min(1).default("us-east-1"),
+    MINIO_BUCKET_RAW: z.string().min(1).default("media-raw"),
+    MINIO_BUCKET_DERIVED: z.string().min(1).default("media-derived"),
+    MINIO_BUCKET_CHUNKS: z.string().min(1).default("media-chunks"),
+    MINIO_BUCKET_PUBLIC: z.string().min(1).default("public"),
+
+    // ---- T-031 finalize-upload / publish-event ----------------------
+    // The light pool's IngestAssetWorkflow calls back into the API for
+    // metadata writes (assets / renditions) — see services/api/src/
+    // routes/internal.ts. Reuses APP_SECRET as the shared HMAC token
+    // by default so the dev path needs zero extra config.
+    API_INTERNAL_URL: z.string().url().optional(),
+    API_INTERNAL_TOKEN: z
+      .string()
+      .min(16)
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
 
     REDIS_URL: z.string().url().optional(),
     NATS_URL: z.string().url().optional(),
