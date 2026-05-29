@@ -3,6 +3,9 @@
 # Originally scaffolded by T-003 (profile structure + busybox placeholders).
 # Real services replace placeholders as their owning tickets land:
 #   * T-010 (this revision): postgres real, core-placeholder removed.
+#   * T-021: worker-base + worker-{light,media,ai-cpu,ai-gpu} real;
+#     media/ai-cpu/ai-gpu busybox placeholders removed.
+#   * T-022: NATS JetStream real; realtime-placeholder removed.
 #
 # Each *remaining* profile carries a tiny placeholder service (`busybox`,
 # ~5 MB, multi-arch) running `/bin/true` so that
@@ -47,6 +50,11 @@ volumes:
   # purpose; the README documents the re-install flow.
   caddy_data:
   caddy_config:
+  # NATS JetStream durable storage (T-022). Streams + consumer state
+  # live here; survives container restarts. `down -v` resets the event
+  # log, which is fine for dev but operators on a long-lived host
+  # should NOT pass -v when restarting NATS.
+  nats_data:
 
 # Single user-defined bridge network. All services (placeholder or real) join
 # this network so they can reach each other by service name.
@@ -778,30 +786,208 @@ services:
     entrypoint: ["sleep", "infinity"]
     networks: [appnet]
 
-  # --- media --------------------------------------------------------------
-  media-placeholder:
-    <<: *placeholder
-    container_name: vidgen-media-placeholder
+  # --- worker pools -------------------------------------------------------
+  # vidgen Temporal workers (T-021). Four pools, one per capability class
+  # (arch §6.2). Each pool ships its own thin Dockerfile that FROMs the
+  # shared base image; `worker-base` is a build-only sidecar that exists
+  # solely to produce that base image (`vidgen/worker-base:dev`) before
+  # the pool images try to build on top of it.
+  #
+  # Activities + workflows are empty at T-021 — the workers boot, log a
+  # capability banner, and register as pollers on their task queue. Later
+  # tickets (T-031, T-032, T-040, T-041, T-062, T-090, T-091, T-130, …)
+  # fill in the activities for each pool.
+  #
+  # depends_on chains:
+  #   worker-base (one-shot build)  ──►  worker-{light,media,ai-cpu,ai-gpu}
+  #   temporal (service_healthy)    ──►  worker-{light,media,ai-cpu,ai-gpu}
+  #
+  # See services/worker/README.md for the layout and run instructions.
+
+  # Build-only sidecar: tags vidgen/worker-base:dev so pool Dockerfiles
+  # can FROM it. Compose builds this image the first time any worker
+  # service starts because every pool `depends_on: worker-base:
+  # service_completed_successfully` — guarantees the base image exists
+  # in the local store before BuildKit hits a `FROM vidgen/worker-base:dev`.
+  worker-base:
+    build:
+      context: ../..
+      dockerfile: services/worker/Dockerfile.base
+    image: vidgen/worker-base:dev
+    container_name: vidgen-worker-base
+    # `core` so it's built whenever ANY worker pool is requested via
+    # `--profile core` (the most common dev invocation). Also tagged
+    # into the heavier profiles so `--profile media` alone still works.
+    profiles: [core, media, ai-cpu, ai-gpu]
+    restart: "no"
+    # The base image is never run as a service; it just needs to exist.
+    # `/bin/true` returns 0 so compose sees the one-shot completed.
+    entrypoint: ["true"]
+    networks: [appnet]
+
+  worker-light:
+    build:
+      context: ../..
+      dockerfile: services/worker/light/Dockerfile
+    image: vidgen/worker-light:dev
+    container_name: vidgen-worker-light
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      worker-base:
+        condition: service_completed_successfully
+      temporal:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
+      NATS_URL: ${NATS_URL:-nats://nats:4222}
+    networks: [appnet]
+
+  worker-media:
+    build:
+      context: ../..
+      dockerfile: services/worker/media/Dockerfile
+    image: vidgen/worker-media:dev
+    container_name: vidgen-worker-media
     profiles: [media]
+    restart: unless-stopped
+    depends_on:
+      worker-base:
+        condition: service_completed_successfully
+      temporal:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
+      NATS_URL: ${NATS_URL:-nats://nats:4222}
+    networks: [appnet]
+
+  worker-ai-cpu:
+    build:
+      context: ../..
+      dockerfile: services/worker/ai-cpu/Dockerfile
+    image: vidgen/worker-ai-cpu:dev
+    container_name: vidgen-worker-ai-cpu
+    profiles: [ai-cpu]
+    restart: unless-stopped
+    depends_on:
+      worker-base:
+        condition: service_completed_successfully
+      temporal:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
+      NATS_URL: ${NATS_URL:-nats://nats:4222}
+    networks: [appnet]
+
+  worker-ai-gpu:
+    build:
+      context: ../..
+      dockerfile: services/worker/ai-gpu/Dockerfile
+    image: vidgen/worker-ai-gpu:dev
+    container_name: vidgen-worker-ai-gpu
+    profiles: [ai-gpu]
+    restart: unless-stopped
+    depends_on:
+      worker-base:
+        condition: service_completed_successfully
+      temporal:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-app}
+      NATS_URL: ${NATS_URL:-nats://nats:4222}
+    networks: [appnet]
+    # GPU attachment lives in compose.gpu.override.yml (T-003 scaffold);
+    # without it the container starts fine but any activity that calls
+    # CUDA will fail at runtime. That's acceptable for dev — operators
+    # only deploy this pool when a GPU is attached.
+
+  # --- media --------------------------------------------------------------
+  # (worker-media moved into the worker pools block above; the old
+  # busybox placeholder is removed.)
 
   # --- ai-cpu -------------------------------------------------------------
-  ai-cpu-placeholder:
-    <<: *placeholder
-    container_name: vidgen-ai-cpu-placeholder
-    profiles: [ai-cpu]
+  # (worker-ai-cpu moved into the worker pools block above; the old
+  # busybox placeholder is removed.)
 
   # --- ai-gpu -------------------------------------------------------------
-  # Real services here will require compose.gpu.override.yml to attach a GPU.
-  ai-gpu-placeholder:
-    <<: *placeholder
-    container_name: vidgen-ai-gpu-placeholder
-    profiles: [ai-gpu]
+  # (worker-ai-gpu moved into the worker pools block above; the old
+  # busybox placeholder is removed.)
 
   # --- realtime ----------------------------------------------------------
-  realtime-placeholder:
-    <<: *placeholder
-    container_name: vidgen-realtime-placeholder
+  # NATS JetStream — event bus (T-022).
+  #
+  # Architecture references:
+  #   - §6.1 — workflows emit lifecycle events; downstream services
+  #            (Novu T-023, audit log T-120) subscribe.
+  #   - §9   — NATS JetStream chosen over Kafka for operational
+  #            simplicity at our scale.
+  #   - §11  — every event payload is workspace_id-tagged in code
+  #            (@vidgen/events schema); the bus itself is workspace-
+  #            agnostic.
+  #
+  # Image pinning policy:
+  #   The `nats` image is published multi-arch (amd64 + arm64) on
+  #   Docker Hub. We pin to a dated minor so Apple-Silicon devs aren't
+  #   forced through Rosetta. Renovate/Dependabot can bump.
+  #
+  # Ports:
+  #   4222 — client protocol (used by @vidgen/events JetStream adapter)
+  #   8222 — monitoring HTTP (/varz, /healthz) — bound to localhost only
+  #          for the healthcheck and the smoke script
+  #
+  # Persistence:
+  #   `-sd /data` points JetStream at the named `nats_data` volume.
+  #   File storage (default for FileStorage) survives container restarts.
+  nats:
+    image: nats:2.10.24-alpine
+    container_name: vidgen-nats
     profiles: [realtime]
+    restart: unless-stopped
+    command:
+      # `--jetstream` enables the JS subsystem (off by default in the
+      # core nats-server). `--store_dir` parks the durable state on the
+      # named volume so streams + consumer state survive restarts.
+      - "--jetstream"
+      - "--store_dir=/data"
+      # Monitoring endpoint on :8222 — exposes /healthz used by the
+      # healthcheck below and /varz used by scripts/events-smoke.sh.
+      - "--http_port=8222"
+      # Explicit client port for clarity; matches the default and the
+      # NATS_URL we publish in .env.example (nats://nats:4222).
+      - "--port=4222"
+      # Server name surfaced in monitoring + lameduck logs. Useful when
+      # we go multi-region (one named server per A1 box).
+      - "--name=vidgen-nats"
+    ports:
+      # 4222 host-bound so workers / tests running outside compose can
+      # connect via `nats://localhost:4222`.
+      - "${NATS_PORT:-4222}:4222"
+      # 8222 host-bound on 127.0.0.1 only — the monitoring endpoint is
+      # unauthenticated, never expose it on a real network.
+      - "127.0.0.1:${NATS_HTTP_PORT:-8222}:8222"
+    volumes:
+      - nats_data:/data
+    networks: [appnet]
+    healthcheck:
+      # /healthz on the monitoring port returns 200 + JSON when the
+      # server is up. The image is alpine-based and ships `wget`.
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8222/healthz >/dev/null || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
 
   # --- obs ---------------------------------------------------------------
   obs-placeholder:
