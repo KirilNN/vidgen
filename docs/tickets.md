@@ -17,17 +17,6 @@ Legend: `🟢 R1 wedge` `🟡 R1 polish` `🔵 R2+ enabler`
 
 ## Phase 2 — Workflow plane
 
-### T-020 — Temporal cluster (dev mode) 🟢
-**Phase:** 2
-**Depends on:** T-010
-**Files:** compose (add to `core`), `infra/compose/temporal/`
-**Context:** arch §6 — Temporal is the spine for every long op.
-**Task:** Add Temporal server + Temporal Web (UI) to `core` profile, backed by Postgres (a `temporal` DB). Expose gRPC on 7233, UI on 8088 routed through Caddy as `temporal.localhost`. Configure default namespace `app`.
-
-**Acceptance:** `temporal.localhost` shows the empty UI. `temporal workflow list -n app` works from `temporal` CLI in a sidecar.
-
----
-
 ### T-021 — Worker service skeleton + capability tagging 🟢
 **Phase:** 2
 **Depends on:** T-020
