@@ -3,31 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "shared/index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "lint": "eslint shared light media ai-cpu ai-gpu __tests__ --max-warnings=0",
+    "lint": "eslint src --max-warnings=0",
     "type-check": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist .turbo *.tsbuildinfo",
-    "start:light": "tsx light/entrypoint.ts",
-    "start:media": "tsx media/entrypoint.ts",
-    "start:ai-cpu": "tsx ai-cpu/entrypoint.ts",
-    "start:ai-gpu": "tsx ai-gpu/entrypoint.ts"
-  },
-  "dependencies": {
-    "@temporalio/activity": "^1.17.2",
-    "@temporalio/worker": "^1.17.2",
-    "@temporalio/workflow": "^1.17.2",
-    "@vidgen/config": "workspace:*",
-    "@vidgen/events": "workspace:*",
-    "pino": "^9.5.0",
-    "tsx": "^4.19.2",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "@types/node": "^22.10.0",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
   }
 }
