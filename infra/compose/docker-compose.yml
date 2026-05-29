@@ -6,6 +6,8 @@
 #   * T-021: worker-base + worker-{light,media,ai-cpu,ai-gpu} real;
 #     media/ai-cpu/ai-gpu busybox placeholders removed.
 #   * T-022: NATS JetStream real; realtime-placeholder removed.
+#   * T-023: Novu self-host (api+worker+ws+dashboard) + MongoDB added to
+#     the `core` profile (ADR D-015 documents the MongoDB choice).
 #
 # Each *remaining* profile carries a tiny placeholder service (`busybox`,
 # ~5 MB, multi-arch) running `/bin/true` so that
@@ -55,6 +57,11 @@ volumes:
   # log, which is fine for dev but operators on a long-lived host
   # should NOT pass -v when restarting NATS.
   nats_data:
+  # Novu's MongoDB operational store (T-023, ADR D-015). Holds Novu's
+  # workflows, subscribers, message logs, and scheduling state. Does NOT
+  # hold any vidgen data — that is in Postgres / MinIO / Qdrant per
+  # arch §5.1. Wiped by `down -v`; Novu re-seeds on next boot.
+  mongo_data:
 
 # Single user-defined bridge network. All services (placeholder or real) join
 # this network so they can reach each other by service name.
@@ -296,6 +303,206 @@ services:
       interval: 10s
       timeout: 5s
       retries: 30
+      start_period: 30s
+
+  # ---------------------------------------------------------------------------
+  # Novu self-host (T-023) — notification infrastructure for outbound
+  # webhook fan-out (arch §3.8 F8.9, §3.10 F10.2, §11).
+  #
+  # The Novu CE bundle is API + Worker + WS + Dashboard, all sharing
+  # Redis (DragonflyDB on db_index=2 so our own cache doesn't collide)
+  # and **MongoDB** (Novu's operational store — see ADR D-015 in
+  # decisions.md). Our application data stays in Postgres; MongoDB is
+  # Novu's private filesystem and is never read or written by us.
+  #
+  # The acceptance criterion for T-023 (registered webhook → signed POST
+  # on `asset.ingested`) is satisfied by the API's in-process
+  # `WebhookNotifier` (services/api/src/notifier/) which does NOT depend
+  # on these containers being up. Novu is provisioned alongside so that
+  # later phase-12 features (in-app inbox, Slack/Teams channels) can land
+  # without a profile-shuffle.
+  mongodb:
+    image: mongo:8.0.4
+    container_name: vidgen-mongodb
+    profiles: [core]
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-novu}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-change-me}
+    volumes:
+      - mongo_data:/data/db
+    # No host port binding by design — only Novu containers on `appnet`
+    # may reach Mongo. Compensating control for the lack of RLS analog
+    # (ADR D-015).
+    networks: [appnet]
+    healthcheck:
+      test:
+        - "CMD"
+        - "mongosh"
+        - "--quiet"
+        - "--username"
+        - "${MONGO_INITDB_ROOT_USERNAME:-novu}"
+        - "--password"
+        - "${MONGO_INITDB_ROOT_PASSWORD:-change-me}"
+        - "--authenticationDatabase"
+        - "admin"
+        - "--eval"
+        - "db.adminCommand('ping').ok"
+      interval: 20s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+  novu-api:
+    image: ghcr.io/novuhq/novu/api:3.15.0
+    container_name: vidgen-novu-api
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3000
+      # `IS_SELF_HOSTED` flips Novu out of cloud-mode signup gates so the
+      # local admin user is provisioned via the dashboard's first-run flow.
+      IS_SELF_HOSTED: "true"
+      # Public URLs that Novu mints into its own emails / links. Defaults
+      # match the Caddy reverse-proxy layout (T-014).
+      API_ROOT_URL: ${NOVU_API_ROOT_URL:-http://localhost:${NOVU_API_PORT:-3030}}
+      FRONT_BASE_URL: ${NOVU_DASHBOARD_URL:-http://localhost:${NOVU_DASHBOARD_PORT:-4000}}
+      # Connection strings.
+      MONGO_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-novu}:${MONGO_INITDB_ROOT_PASSWORD:-change-me}@mongodb:27017/novu-db?authSource=admin
+      MONGO_MIN_POOL_SIZE: ${MONGO_MIN_POOL_SIZE:-1}
+      MONGO_MAX_POOL_SIZE: ${MONGO_MAX_POOL_SIZE:-10}
+      MONGO_AUTO_CREATE_INDEXES: "true"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # DragonflyDB has no auth in our dev compose; omit REDIS_PASSWORD.
+      REDIS_DB_INDEX: 2
+      REDIS_CACHE_SERVICE_HOST: redis
+      REDIS_CACHE_SERVICE_PORT: 6379
+      # Disable Novu's local S3 store — we never put media into Novu's
+      # internal storage; webhook/email templates carry only metadata.
+      S3_LOCAL_STACK: ""
+      # Secrets — REUSE our APP_SECRET as the JWT signing key so the
+      # operator only manages one master secret in dev; production should
+      # set NOVU_*_SECRET explicitly.
+      JWT_SECRET: ${NOVU_JWT_SECRET:-${APP_SECRET:-dev-only-change-me-dev-only-change-me}}
+      STORE_ENCRYPTION_KEY: ${NOVU_STORE_ENCRYPTION_KEY:-dev-only-change-me-dev-only-change-me}
+      NOVU_SECRET_KEY: ${NOVU_SECRET_KEY:-dev-only-change-me-dev-only-change-me}
+      SUBSCRIBER_WIDGET_JWT_EXPIRATION_TIME: ${NOVU_WIDGET_JWT_TTL:-15 days}
+      IS_API_RATE_LIMITING_ENABLED: "false"
+      IS_API_IDEMPOTENCY_ENABLED: "true"
+    ports:
+      # Host binding so `curl http://localhost:3030/v1/health-check`
+      # works during the smoke. Caddy can front this at
+      # https://notify.localhost in a later ticket.
+      - "${NOVU_API_PORT:-3030}:3000"
+    networks: [appnet]
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/v1/health-check || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 6
+      start_period: 60s
+
+  novu-worker:
+    image: ghcr.io/novuhq/novu/worker:3.15.0
+    container_name: vidgen-novu-worker
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3004
+      MONGO_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-novu}:${MONGO_INITDB_ROOT_PASSWORD:-change-me}@mongodb:27017/novu-db?authSource=admin
+      MONGO_MIN_POOL_SIZE: ${MONGO_MIN_POOL_SIZE:-1}
+      MONGO_MAX_POOL_SIZE: ${MONGO_MAX_POOL_SIZE:-10}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB_INDEX: 2
+      REDIS_CACHE_SERVICE_HOST: redis
+      REDIS_CACHE_SERVICE_PORT: 6379
+      S3_LOCAL_STACK: ""
+      STORE_ENCRYPTION_KEY: ${NOVU_STORE_ENCRYPTION_KEY:-dev-only-change-me-dev-only-change-me}
+      SUBSCRIBER_WIDGET_JWT_EXPIRATION_TIME: ${NOVU_WIDGET_JWT_TTL:-15 days}
+      API_ROOT_URL: http://novu-api:3000
+      BROADCAST_QUEUE_CHUNK_SIZE: 100
+      MULTICAST_QUEUE_CHUNK_SIZE: 100
+    networks: [appnet]
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "wget --no-verbose --tries=1 --spider http://127.0.0.1:3004/v1/health-check || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 6
+      start_period: 60s
+
+  novu-ws:
+    image: ghcr.io/novuhq/novu/ws:3.15.0
+    container_name: vidgen-novu-ws
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3002
+      MONGO_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-novu}:${MONGO_INITDB_ROOT_PASSWORD:-change-me}@mongodb:27017/novu-db?authSource=admin
+      MONGO_MIN_POOL_SIZE: ${MONGO_MIN_POOL_SIZE:-1}
+      MONGO_MAX_POOL_SIZE: ${MONGO_MAX_POOL_SIZE:-10}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB_INDEX: 2
+      JWT_SECRET: ${NOVU_JWT_SECRET:-${APP_SECRET:-dev-only-change-me-dev-only-change-me}}
+    ports:
+      - "${NOVU_WS_PORT:-3032}:3002"
+    networks: [appnet]
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "wget --no-verbose --tries=1 --spider http://127.0.0.1:3002/v1/health-check || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 6
+      start_period: 40s
+
+  novu-dashboard:
+    image: ghcr.io/novuhq/novu/dashboard:3.15.0
+    container_name: vidgen-novu-dashboard
+    profiles: [core]
+    restart: unless-stopped
+    depends_on:
+      novu-api:
+        condition: service_healthy
+      novu-worker:
+        condition: service_healthy
+    environment:
+      VITE_API_HOSTNAME: ${NOVU_API_ROOT_URL:-http://localhost:${NOVU_API_PORT:-3030}}
+      VITE_WEBSOCKET_HOSTNAME: ${NOVU_WS_ROOT_URL:-http://localhost:${NOVU_WS_PORT:-3032}}
+    ports:
+      - "${NOVU_DASHBOARD_PORT:-4000}:4000"
+    networks: [appnet]
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'node -e "const http=require(''http'');const req=http.get({hostname:''localhost'',port:4000,path:''/'',timeout:5000},(res)=>process.exit(res.statusCode===200?0:1));req.on(''error'',()=>process.exit(1));req.on(''timeout'',()=>{req.destroy();process.exit(1);});"'
+      interval: 20s
+      timeout: 10s
+      retries: 6
       start_period: 30s
 
   # Caddy reverse proxy (T-014).

@@ -83,6 +83,64 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/workspaces/{workspaceId}/webhooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Workspace identifier the subscription belongs to. */
+                workspaceId: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * List webhooks registered in the workspace
+         * @description Returns every webhook subscription registered for the given
+         *     workspace, newest first. The plaintext `secret` is NEVER
+         *     returned by this endpoint — only the metadata fields. Callers
+         *     who lost the secret must delete and re-register.
+         */
+        get: operations["listWebhooks"];
+        put?: never;
+        /**
+         * Register a webhook
+         * @description Registers a new outbound webhook. The response includes a
+         *     **plaintext** `secret` field — this is the only time the API
+         *     returns it. Store it now; subsequent requests will only return
+         *     the metadata. The API uses the secret to compute the
+         *     `X-Vidgen-Signature` header (HMAC-SHA256) on every delivery.
+         *
+         *     Signature format (Stripe-style):
+         *     `X-Vidgen-Signature: t=<unix_seconds>,v1=<hex_sha256>` where
+         *     the signed string is `"<unix_seconds>.<canonical_body>"`.
+         */
+        post: operations["createWebhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/workspaces/{workspaceId}/webhooks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove a webhook subscription */
+        delete: operations["deleteWebhook"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -136,6 +194,40 @@ export interface components {
         CreateWorkspaceRequest: {
             /** @description Human-readable workspace name. Displayed in the workspace switcher. */
             name: string;
+        };
+        /**
+         * @description Event subject names the platform publishes (see `@vidgen/events`).
+         *     Webhooks subscribe to a subset of these.
+         * @enum {string}
+         */
+        EventType: "asset.ingested" | "asset.transcribed" | "project.rendered" | "render.failed" | "clip.proposed" | "clip.approved" | "publish.completed";
+        Webhook: {
+            /** Format: uuid */
+            id: string;
+            workspaceId: string;
+            /** Format: uri */
+            url: string;
+            events: components["schemas"]["EventType"][];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        WebhookList: {
+            webhooks: components["schemas"]["Webhook"][];
+        };
+        WebhookWithSecret: components["schemas"]["Webhook"] & {
+            /**
+             * @description Plaintext HMAC secret. Returned only on creation. Store it
+             *     now — the API will never return it again.
+             */
+            secret: string;
+        };
+        CreateWebhookRequest: {
+            /**
+             * Format: uri
+             * @description HTTPS (or HTTP in dev) endpoint that receives the signed POST.
+             */
+            url: string;
+            events: components["schemas"]["EventType"][];
         };
         /** @description RFC 7807 problem details object. */
         ProblemDetails: {
@@ -279,6 +371,149 @@ export interface operations {
             };
             /** @description Missing or invalid Bearer token. */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    listWebhooks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Workspace identifier the subscription belongs to. */
+                workspaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Subscriptions in the workspace. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookList"];
+                };
+            };
+            /** @description Missing or invalid Bearer token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Caller is not a member of the workspace. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    createWebhook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Workspace identifier the subscription belongs to. */
+                workspaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebhookRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription registered. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookWithSecret"];
+                };
+            };
+            /** @description Invalid request body. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Missing or invalid Bearer token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Caller is not a member of the workspace. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    deleteWebhook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Subscription removed. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid Bearer token. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Caller is not a member of the workspace. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Webhook not found in this workspace. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

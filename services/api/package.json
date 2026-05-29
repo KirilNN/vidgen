@@ -20,6 +20,7 @@
     "@fastify/sensible": "^6.0.2",
     "@fastify/swagger": "^9.4.2",
     "@vidgen/config": "workspace:*",
+    "@vidgen/events": "workspace:*",
     "@vidgen/openapi": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "fastify": "^5.2.1",
