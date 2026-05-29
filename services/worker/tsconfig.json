@@ -1,8 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist"
+    "rootDir": ".",
+    "outDir": "dist",
+    "types": ["node"],
+    "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "shared/**/*.ts",
+    "light/**/*.ts",
+    "media/**/*.ts",
+    "ai-cpu/**/*.ts",
+    "ai-gpu/**/*.ts",
+    "__tests__/**/*.ts"
+  ]
 }
