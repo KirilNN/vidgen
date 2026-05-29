@@ -1,0 +1,26 @@
+# vidgen — Temporal dynamic config (T-020)
+#
+# Minimal dev-mode dynamic config. Mirrors the canonical
+# `dynamicconfig/development-sql.yaml` shipped by the upstream
+# `temporalio/docker-compose` repository.
+#
+# `forceSearchAttributesCacheRefreshOnRead: true` is a dev convenience —
+# DO NOT enable in production (every visibility query reloads the cache).
+# Production deployments override this file via DYNAMIC_CONFIG_FILE_PATH.
+#
+# References:
+#   - docs/architecture.md §6 — Temporal is the spine for every long op.
+#   - https://docs.temporal.io/references/dynamic-configuration
+
+# Allow up to 255-byte IDs (workflowId, runId, taskQueue, etc.) so the
+# arch §10 event-id scheme (`asset.<workspace>.<asset_id>`) never trips
+# the default 100-byte limit.
+limit.maxIDLength:
+  - value: 255
+    constraints: {}
+
+# Dev-only: force visibility cache refresh on every read so newly
+# registered search attributes show up without a server restart.
+system.forceSearchAttributesCacheRefreshOnRead:
+  - value: true
+    constraints: {}
