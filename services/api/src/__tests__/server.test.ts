@@ -38,6 +38,11 @@ process.env["POSTGRES_PORT"] = "5432";
 process.env["POSTGRES_USER"] = "app";
 process.env["POSTGRES_PASSWORD"] = "dev-only";
 process.env["POSTGRES_DB"] = "vidgen";
+// Force the notifier plugin (T-023) onto its in-memory bus path
+// regardless of what the shell exported.
+delete process.env["NATS_URL"];
+delete process.env["NOVU_API_URL"];
+delete process.env["NOVU_API_KEY"];
 // No KEYCLOAK_ISSUER_URL — the auth plugin installs a stub verifier we
 // will override per-test below.
 

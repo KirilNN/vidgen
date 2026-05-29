@@ -196,6 +196,9 @@ importers:
       '@vidgen/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@vidgen/events':
+        specifier: workspace:*
+        version: link:../../packages/events
       '@vidgen/openapi':
         specifier: workspace:*
         version: link:../../packages/openapi

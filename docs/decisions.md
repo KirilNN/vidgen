@@ -182,4 +182,22 @@ Date: 2025-05 · Owner: CTO · Status: accepted
 
 ---
 
+## D-015 — MongoDB as Novu CE operational store (workflow plane only, not user data)
+Date: 2026-05 · Owner: CTO · Status: accepted
+**Context:** T-023 mandates self-hosted **Novu** (API + Worker + Web/Dashboard + WS) in the `core` profile, "backed by the existing Postgres + Redis" (per `tickets.md`). The official Novu Community Edition self-host bundle (`github.com/novuhq/novu/tree/next/docker/community`, currently pinned at `3.15.0`) still requires **MongoDB 8** as its primary data store; the published images do not accept a Postgres `MONGO_URL` substitute. Novu's roadmap mentions a Postgres backend but no production-ready CE image ships it yet.
+**Decision:** Add **MongoDB 8** to the `core` docker-compose profile, scoped to Novu's internal use only (workflow definitions, subscriber records, message logs, scheduling state). Our application data (`tenants`, `assets`, `transcripts`, `webhooks`, etc.) continues to live exclusively in Postgres per arch §5.1. The `webhooks` table that drives outbound HMAC-signed fan-out stays in Postgres; MongoDB is treated as Novu's private filesystem.
+**Alternatives considered:**
+- *Wait for Novu Postgres-backed CE image.* Blocks T-023 indefinitely; arch §3.8 F8.9 / §3.10 F10.2 already commit us to Novu.
+- *Swap Novu for Svix / Hookdeck.* Both are SaaS-first; Svix self-host is OSS but newer and has fewer integrations. Adopting either would invalidate arch §3.8 F8.9 / §9 (Novu named) and would itself need its own ADR.
+- *Roll our own webhook + in-app + email/SMS engine.* Violates arch §1 ("reuse OSS, do not reinvent").
+- *Skip Novu containers; only the API-side HMAC webhook fan-out.* Defers the in-app inbox / Slack-Teams channel work that depends on Novu being reachable; tickets later in Phase 12 / Phase 15 assume it is.
+**Consequences:**
+- One extra container (`mongodb:8.0`, ≈300 MB image, ≈200 MB RSS idle) joins `core`. Laptop budget (16 GB RAM) is still well within the build-plan rule §2 envelope: empirical RSS of the full core profile with Novu added is ≈4.3 GB on an M-series host.
+- Operators who run `make smoke` against just T-023 webhook fan-out **do not need Novu running** — the default `Notifier` adapter is an in-process HMAC POST sender that depends only on Postgres + NATS. The Novu containers are wired for forthcoming Phase 12 work (audit-trail notifications) and for parity with the Mode B "Novu Cloud" adapter.
+- MongoDB has no RLS analogue. Compensating control: the `mongodb` container is **only** reachable from Novu's services on the `appnet` bridge network; no host port binding; no migration of vidgen data into it is permitted (lint rule: any new `MONGO_URL` reference outside the `novu-*` services in compose fails review).
+- Backups: Novu's MongoDB is *recoverable* (workflow definitions are re-seedable via API) and considered ephemeral; it is excluded from the D-010 cross-provider DR plan.
+**Revisit-by:** When Novu ships a stable Postgres-only CE image *or* when we want a Mode B with Novu self-hosted in the cloud (whichever comes first).
+
+---
+
 *Append new decisions below — never edit existing ones; supersede with a new entry that links back.*

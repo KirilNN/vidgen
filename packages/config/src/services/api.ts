@@ -48,6 +48,31 @@ export const apiEnvSchema = refuseDevSentinelsInProduction(
     TEMPORAL_ADDRESS: z.string().min(1).optional(),
     TEMPORAL_NAMESPACE: z.string().min(1).default("default"),
     NATS_URL: z.string().url().optional(),
+
+    // ---- T-023 Notifier (Novu + webhook fan-out) ---------------------------
+    //
+    // The API's outbound-webhook fan-out has two backends, both opt-in
+    // via env vars:
+    //   - Default ($0): in-process HMAC POST sender. No extra config
+    //     needed beyond `APP_SECRET` (used to derive the per-workspace
+    //     secret encryption key when WEBHOOK_SECRET_ENCRYPTION_KEY is
+    //     blank).
+    //   - Novu: set NOVU_API_URL + NOVU_API_KEY to delegate delivery.
+    //
+    // WEBHOOK_DELIVERY_TIMEOUT_MS bounds how long a single outbound POST
+    // can hang; defaults match Cloudflare Workers' subrequest cap.
+    NOVU_API_URL: z.string().url().optional(),
+    NOVU_API_KEY: z.string().min(1).optional(),
+    WEBHOOK_DELIVERY_TIMEOUT_MS: z.coerce.number().int().min(100).max(60_000).default(10_000),
+    // 32 bytes encoded as 64 lowercase hex chars; blank means "derive
+    // from APP_SECRET via SHA-256".
+    WEBHOOK_SECRET_ENCRYPTION_KEY: z
+      .string()
+      .regex(
+        /^([0-9a-fA-F]{64})?$/,
+        "WEBHOOK_SECRET_ENCRYPTION_KEY must be 64 hex chars (32 bytes) or empty",
+      )
+      .default(""),
   }),
 );
 
